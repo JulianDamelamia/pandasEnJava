@@ -19,6 +19,40 @@ public class NumericCell extends Cell{
             }
         }catch(Exception e){ e.getMessage();}    
     }
-    
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isString() {
+        return false;
+    }
+
+    @Override
+    public boolean isNumeric() {
+        return true;
+    }
+
+    @Override
+    public Boolean asBoolean() {
+       if (value.doubleValue() == 0){
+           return false;
+       }
+       else{
+           return true;
+       }
+    }
+
+    @Override
+    public String asString() {
+        return value.toString();
+    }
+
+    @Override
+    public Number asNumber() {
+        return this.value;
+    }
     
 }

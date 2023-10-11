@@ -19,4 +19,39 @@ public class BooleanCell extends Cell{
             }
         }catch(Exception e){ e.getMessage();}    
     }
+
+    @Override
+    public boolean isBoolean() {
+        return true;
+    }
+
+    @Override
+    public boolean isString() {
+        return false;
+    }
+
+    @Override
+    public boolean isNumeric() {
+        return false;
+    }
+
+    @Override
+    public boolean asBoolean() {
+        return value;
+    }
+
+    @Override
+    public String asString() {
+        return value.toString();
+    }
+
+    @Override
+    public Number asNumber() {
+       if (value){
+           return 1;
+       }
+       else{
+           return 0;
+       }
+    }
 }

@@ -42,7 +42,7 @@ public class NA extends Cell {
     }
 
     @Override
-    public Double asNumeric() {
+    public Number asNumber() {
         return null;
     }
 

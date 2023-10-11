@@ -20,7 +20,7 @@ public abstract class Cell {
     abstract boolean isNumeric();
     abstract boolean isString();
     abstract Boolean asBoolean();
-    abstract Double asNumeric();
+    abstract Number asNumber();
     abstract String asString();
 
 }
