@@ -1,19 +1,21 @@
 package dataframe;
 import java.util.List;
-import dataframe.Column;
+import java.util.Map;
 
-// Realmente no sé si esto debería funcionar como lista de columnas o será más eficiente tener un array 2D de objetos
-// Por un lado, al tener las columnas como objetos, se puede acceder a sus atributos y métodos de forma más sencilla
-// Por otro lado, es más tedioso de implementar y no sé si es más eficiente que un array 2D de objetos
+import dataframe.Matriz;
+import dataframe.cells.Cell;
 
 class DataFrame {
     
-    private List<Column> columns;
-    private String[] cLabels;
-    private String[] rLabels;
-    private DType[] dtypes;
-    private int length;
-    private int width;
+    private List<Integer> columns; // lista de columnas -> [hash1, hash2 , ..., hashN]
+    private Map<String, Integer> cLabels; // labels de columnas-> {'nombre' : hash}
+    private Map<Integer, Integer> cOrder; //  orden de columnas -> { hash : order}
+
+    private List<Integer> rows;
+    private Map<String, Integer> rLabels;
+    private Map<Integer, Integer> rOrder;
+
+    private Matriz<Cell> data;
 }
 
 

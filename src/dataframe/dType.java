@@ -1,9 +1,9 @@
 package dataframe;
 
-public enum DType {
+public enum dType {
     INT,
     FLOAT,
-    BOOLEAN,
-    CHAR
+    BOOL,
+    STR
 }
 

@@ -4,7 +4,7 @@ public class Column {
     private String label;
     private int order;
     private int size;
-    private DType dtype;
+    private dType dtype;
     private Object[] data;
 
  
@@ -15,7 +15,7 @@ public class Column {
     // algo como un "typechecker"?
     // el "dtype" se podría usar para generar un array de objetos del tipo correspondiente? serí útil?
     
-    public Column(String label, int size, int order, DType dtype, Object[] data) {
+    public Column(String label, int size, int order, dType dtype, Object[] data) {
         this.label = label;
         this.size = size;
         this.order = order;
@@ -39,11 +39,11 @@ public class Column {
         this.order = order;
     }
 
-    public DType getDtype() {
+    public dType getDtype() {
             return dtype;
         }
 
-    public void setDtype(DType dtype) {
+    public void setDtype(dType dtype) {
         // implicaría intentar cambiar el tipo de dato de la columna.
         //  Necesita una utilidad auxiliar que realice esta acción y esto sólo llame al método
 
