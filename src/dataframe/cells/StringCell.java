@@ -19,4 +19,43 @@ public class StringCell extends Cell{
             }
         }catch(Exception e){ e.getMessage();}    
     }
+
+    @Override
+    public boolean isBoolean() {
+        return false;
+    }
+
+    @Override
+    public boolean isString() {
+        return true;
+    }
+
+    @Override
+    public boolean isNumeric() {
+        return false;
+    }
+
+    @Override
+    public Boolean asBoolean() {
+       if (value.isEmpty()){
+           return false;
+       }
+       else{
+           return true;
+       }
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    @Override
+    public Double asNumber() {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Cannot convert String to Number: " + value);
+        }
+    }
 }

@@ -46,7 +46,6 @@ public class NA extends Cell {
         return null;
     }
 
-    @Override
     public String asString() {
         return null;
     }

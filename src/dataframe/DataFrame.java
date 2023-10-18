@@ -5,7 +5,7 @@ import java.util.Map;
 import dataframe.Matriz;
 import dataframe.cells.Cell;
 
-class DataFrame {
+public class Dataframe {
     
     private List<Integer> columns; // lista de columnas -> [hash1, hash2 , ..., hashN]
     private Map<String, Integer> cLabels; // labels de columnas-> {'nombre' : hash}
@@ -16,6 +16,11 @@ class DataFrame {
     private Map<Integer, Integer> rOrder;
 
     private Matriz<Cell> data;
+
+    public Dataframe(){
+        this.data = new Matriz<Cell>(1);
+    }
+
 }
 
 

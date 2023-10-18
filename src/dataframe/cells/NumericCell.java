@@ -37,7 +37,7 @@ public class NumericCell extends Cell{
 
     @Override
     public Boolean asBoolean() {
-       if (value.doubleValue() == 0){
+       if (value.doubleValue() == 0.0){
            return false;
        }
        else{
@@ -46,7 +46,7 @@ public class NumericCell extends Cell{
     }
 
     @Override
-    public String asString() {
+    public String toString() {
         return value.toString();
     }
 

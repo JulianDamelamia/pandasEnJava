@@ -36,12 +36,12 @@ public class BooleanCell extends Cell{
     }
 
     @Override
-    public boolean asBoolean() {
+    public Boolean asBoolean() {
         return value;
     }
 
     @Override
-    public String asString() {
+    public String toString() {
         return value.toString();
     }
 

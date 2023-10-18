@@ -21,6 +21,5 @@ public abstract class Cell {
     abstract boolean isString();
     abstract Boolean asBoolean();
     abstract Number asNumber();
-    abstract String asString();
 
 }
