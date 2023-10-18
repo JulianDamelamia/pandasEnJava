@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import dataframe.cells.Cell;
 
 public class Column {
-    private int size;
+    public int size;
     private ArrayList<Cell> content;
 
     public Column(int size) {

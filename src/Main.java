@@ -35,16 +35,25 @@ public class Main {
         labelsMap.put(columna3, "STRING");
 
         Map<Integer, Column> ordenMap = new HashMap<Integer, Column>();
-        ordenMap.put(2, columna1);
-        ordenMap.put(0, columna2);
-        ordenMap.put(1, columna3);
+        ordenMap.put(0, columna1);
+        ordenMap.put(1, columna2);
+        ordenMap.put(2, columna3);
         System.out.println(labelsMap);
         System.out.println(ordenMap);
 
-        for (Integer key : ordenMap.keySet()) {
-            Column column = ordenMap.get(key);
-            String columnName = labelsMap.get(column);
-            System.out.println(column);
+        // for (Integer key : ordenMap.keySet()) {
+        //     Column column = ordenMap.get(key);
+        //     String columnName = labelsMap.get(column);
+        //     System.out.println(column);
+        // }
+        int numRows = ordenMap.get(0).size; // numero de filas. Observacion: columna.size es público de momento
+        for (int i = 0; i < numRows; i++) {
+            for (Integer key : ordenMap.keySet()) {
+                Column column = ordenMap.get(key);
+                String columnName = labelsMap.get(column);
+                System.out.print(column.getContent().get(i) + "\t");
+            }
+            System.out.println();
         }
         // System.out.println(columna1);
         // System.out.println(columna2);
