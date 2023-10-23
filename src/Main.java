@@ -38,25 +38,31 @@ public class Main {
         ordenMap.put(0, columna1);
         ordenMap.put(1, columna2);
         ordenMap.put(2, columna3);
-        System.out.println(labelsMap);
-        System.out.println(ordenMap);
+        // System.out.println(labelsMap);
+        // System.out.println(ordenMap);
 
         // for (Integer key : ordenMap.keySet()) {
         //     Column column = ordenMap.get(key);
         //     String columnName = labelsMap.get(column);
         //     System.out.println(column);
         // }
-        int numRows = ordenMap.get(0).size; // numero de filas. Observacion: columna.size es público de momento
-        for (int i = 0; i < numRows; i++) {
-            for (Integer key : ordenMap.keySet()) {
-                Column column = ordenMap.get(key);
-                String columnName = labelsMap.get(column);
-                System.out.print(column.getContent().get(i) + "\t");
-            }
-            System.out.println();
-        }
+        // int numRows = ordenMap.get(0).size; // numero de filas. Observacion: columna.size es público de momento
+        // for (int i = 0; i < numRows; i++) {
+        //     for (Integer key : ordenMap.keySet()) {
+        //         Column column = ordenMap.get(key);
+        //         String columnName = labelsMap.get(column);
+        //         System.out.print(column.getContent().get(i) + "\t");
+        //     }
+        //     System.out.println();
+        // }
         // System.out.println(columna1);
         // System.out.println(columna2);
         // System.out.println(columna3);
+        
+        dataframe.Dataframe df = new dataframe.Dataframe();
+        df.addColumn(columna1, "NUMERICA");
+        df.addColumn(columna2, "BOOLEANA");
+        df.addColumn(columna3);
+        System.out.println(df);
     }
 }

@@ -35,14 +35,14 @@ public class Column {
         return this.content.get(index);
     }
 
-    public int getSize(){
+    public int size(){
         return this.size;
     }
 
     public ArrayList<Cell> getContent(){
         return this.content;
     }
-
+    @Override
     public String toString(){
         String result = "";
         for (Cell cell : this.content) {
