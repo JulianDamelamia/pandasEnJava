@@ -1,14 +1,14 @@
 package dataframe.cells;
 
-public class NA extends Cell {
+public class NACell extends Cell {
 
-    private static final NA INSTANCE = new NA();
+    private static final NACell INSTANCE = new NACell();
 
-    private NA() {
+    private NACell() {
         super();
     }
 
-    public static NA getInstance() {
+    public static NACell getInstance() {
         return INSTANCE;
     }
     

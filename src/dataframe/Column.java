@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import dataframe.cells.Cell;
 
 public class Column {
-    public int size;
+    private int size;
     private ArrayList<Cell> content;
 
     public Column(int size) {
@@ -22,6 +22,7 @@ public class Column {
         this.content = content;
     }
 
+    //probablemente quiera esto protected para no agregar arrays de largo inválido una vez creado el df
     public void setContent(ArrayList<Cell> content){
         this.content =content;
         this.size = content.size();
@@ -37,6 +38,10 @@ public class Column {
 
     public int size(){
         return this.size;
+    }
+
+    protected void addCell(Cell cell){
+        this.content.add(size, cell);
     }
 
     public ArrayList<Cell> getContent(){
