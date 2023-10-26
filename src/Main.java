@@ -63,7 +63,7 @@ public class Main {
         // System.out.println(columna2);
         // System.out.println(columna3);
         
-        dataframe.Dataframe df = new dataframe.Dataframe();
+        dataframe.DataFrame df = new dataframe.DataFrame();
         df.addColumn(columna1, "NUMERICA");
         df.addColumn(columna2, "BOOLEANA");
         df.addColumn(columna3);
