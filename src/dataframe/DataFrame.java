@@ -8,7 +8,7 @@ import dataframe.Matriz;
 import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 
-public class Dataframe {
+public class DataFrame {
     
     private List<Column> columns; // lista de columnas -> [hash1, hash2 , ..., hashN]
     private Map<Column, String> columnLabelsMap; // labels de columnas-> {'nombre' : hash}
@@ -16,7 +16,7 @@ public class Dataframe {
     private int numRows; // numero de filas
     private int numCols; // numero de columnas
 
-    public Dataframe(){
+    public DataFrame(){
         this.columns = new ArrayList<Column>(1);
         this.columnLabelsMap = new HashMap<Column, String>();
         this.columnOrderMap = new HashMap<Integer, Column>();
