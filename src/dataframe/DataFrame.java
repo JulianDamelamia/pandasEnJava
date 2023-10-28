@@ -43,6 +43,14 @@ public class DataFrame {
         return out;
     }
 
+    public int getCantColumnas(){
+        return numCols;
+    }
+
+    public int getCantFilas(){
+        return numRows;
+    }
+
 
 
     // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
@@ -83,10 +91,10 @@ public class DataFrame {
         }
     }
 
-    @Override
-    public String toString() {
+    
+    public String toString(String separador) {
         String out = "";
-        String sep = " | ";
+        String sep = " " + separador + " ";
         String[] labels = this.listLabels();
         int[] colWidths = new int[labels.length];
         for (int i = 0; i < labels.length; i++) {

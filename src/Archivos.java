@@ -96,20 +96,20 @@ public class Archivos {
         // }
     }
 
-    // public static void exportCSV(String filepath, String[][] celdas) {
-    //     String texto = celdasToString(celdas, ",");
-    //     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
-    //         bufferedWriter.write(texto);
-    //         // Si imprimiera por lineas (String[])
-    //         // for(int i=0; i < lineas.length; i++) {
-    //         //     bufferedWriter.write(lineas[i]);
-    //         //     if (i < lineas.length - 1)
-    //         //         bufferedWriter.newLine();
-    //         // }
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    public static void exportCSV(String filepath, DataFrame df) {
+        String texto = df.toString(",");
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
+            bufferedWriter.write(texto);
+            // Si imprimiera por lineas (String[])
+            // for(int i=0; i < lineas.length; i++) {
+            //     bufferedWriter.write(lineas[i]);
+            //     if (i < lineas.length - 1)
+            //         bufferedWriter.newLine();
+            // }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) throws IOException {
         
         String dirpath = "prueba";
@@ -138,7 +138,7 @@ public class Archivos {
             df = createDfFromParsed(celdas);
             System.out.println(df);
 
-            //exportCSV("IRIS3.csv", celdas);             
+            exportCSV("libro3.csv", df);             
         } catch (CSVParserException e) {
             System.out.println(e.getMessage());
         }
