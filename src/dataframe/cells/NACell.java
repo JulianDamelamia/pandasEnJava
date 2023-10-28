@@ -4,7 +4,7 @@ public class NACell extends Cell {
 
     private static final NACell INSTANCE = new NACell();
 
-    private NACell() {
+    public NACell() {
         super();
     }
 

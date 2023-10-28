@@ -10,7 +10,10 @@ import java.util.List;
 
 import dataframe.Column;
 import dataframe.DataFrame;
+import dataframe.cells.BooleanCell;
 import dataframe.cells.Cell;
+import dataframe.cells.NACell;
+import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
 
 public class Archivos {
@@ -55,14 +58,37 @@ public class Archivos {
     public static DataFrame createDfFromParsed(String[][] celdas) {
         DataFrame df = new DataFrame();
         List<Cell> listaCeldas = new ArrayList<Cell>();
-        // List<Cell> listaCeldasAux = new ArrayList<Cell>();
+        Identificador identif;
+
         int cantCol = celdas.length;
             
         for (String[] fila : celdas) {
             for (String celda : fila) {
-                StringCell row = new StringCell(celda);
+                identif = new Identificador(celda);
+                switch (identif.getType()) {
+                    case "STRING":
+                        StringCell StrCell = new StringCell(celda);
+                        listaCeldas.add(StrCell);
+                    break;
+                    case "NUMERIC":
+                        NumericCell NmbCell = new NumericCell(Float.valueOf(celda));
+                        listaCeldas.add(NmbCell);
+                    break;
+                    case "NA":
+                        NACell NACell = new NACell();
+                        listaCeldas.add(NACell);
+                    break;
+                    case "BOOLEAN":
+                        BooleanCell BlnCell = new BooleanCell(Boolean.valueOf(celda));
+                        listaCeldas.add(BlnCell);
+                    break;
+                    default:
+                        StringCell DftCell = new StringCell(celda);
+                        listaCeldas.add(DftCell);
+                    break;
+                }
                 //System.out.println(celda);
-                listaCeldas.add(row);
+                //listaCeldas.add(cell);
             }
         }
 
@@ -136,7 +162,8 @@ public class Archivos {
             celdas = parserLineas(lineasLeidas);
             DataFrame df = new DataFrame();
             df = createDfFromParsed(celdas);
-            System.out.println(df);
+            System.out.println(df.toString("|"));
+            df.toString();
 
             exportCSV("libro3.csv", df);             
         } catch (CSVParserException e) {
