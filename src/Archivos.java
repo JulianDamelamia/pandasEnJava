@@ -120,14 +120,7 @@ public class Archivos {
             df.addColumn(columnaAux);
         }
 
-    
-        
         return df;
-        
-
-        
-
-
         // Otra forma de iterar...
         // for (int i=0; i < celdas.length; i++) {
         //     for (int j=0; j < celdas[0].length; j++) {
@@ -153,7 +146,7 @@ public class Archivos {
     public static void main(String[] args) throws IOException {
         
         String dirpath = "prueba";
-        String filepath = "./utils/industry.csv";
+        String filepath = "./utils/libro2.csv";
 
 
         File directorio = new File(dirpath);
