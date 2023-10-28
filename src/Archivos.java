@@ -47,6 +47,7 @@ public class Archivos {
             }
         }
         return celdas;
+        
     }
 
     public static void mostrarLineas(List<String> lineas) {
@@ -60,7 +61,7 @@ public class Archivos {
         List<Cell> listaCeldas = new ArrayList<Cell>();
         Identificador identif;
 
-        int cantCol = celdas.length;
+        int cantCol = celdas[0].length;
             
         for (String[] fila : celdas) {
             for (String celda : fila) {
@@ -104,19 +105,28 @@ public class Archivos {
         //     }
         // }
 
+
         for(int j = 0; j < cantCol; j++){
             List<Cell> listaCeldasAux = new ArrayList<Cell>();
             for(int i = 0+j; i < listaCeldas.size(); i += cantCol){
                 if(i <= listaCeldas.size()){
                     System.out.println(i + " , " +  j + " , " +  listaCeldas.size());
-
+                    System.out.print(listaCeldas.get(i).toString()+"\n");
                     listaCeldasAux.add(listaCeldas.get(i));
+
                 }
             }
             Column columnaAux = new Column(new ArrayList<Cell>(listaCeldasAux));
             df.addColumn(columnaAux);
         }
+
+    
+        
         return df;
+        
+
+        
+
 
         // Otra forma de iterar...
         // for (int i=0; i < celdas.length; i++) {
@@ -143,7 +153,7 @@ public class Archivos {
     public static void main(String[] args) throws IOException {
         
         String dirpath = "prueba";
-        String filepath = "./utils/libro1.csv";
+        String filepath = "./utils/industry.csv";
 
 
         File directorio = new File(dirpath);
@@ -169,7 +179,7 @@ public class Archivos {
             System.out.println(df.toString("|"));
             df.toString();
 
-            exportCSV("libro3.csv", df);             
+            exportCSV("indsutry_test.csv", df);             
         } catch (CSVParserException e) {
             System.out.println(e.getMessage());
         }
