@@ -25,5 +25,5 @@ No iniciado: ❌
 - Concatenar estructuras tabulares ❌
 - Ordenar filas de estructura tabular ❌ 
 - Agrupar filas y aplicar funciones de sumarización ❌
-- Rellenar celdas con valores faltantes (NA) 🚧
+- Rellenar celdas con valores faltantes (NA) ✅
 - Seleccionar aleatoriamente un porcentaje de filas ❌
