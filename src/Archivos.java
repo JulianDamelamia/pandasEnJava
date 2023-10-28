@@ -70,9 +70,13 @@ public class Archivos {
                         StringCell StrCell = new StringCell(celda);
                         listaCeldas.add(StrCell);
                     break;
-                    case "NUMERIC":
-                        NumericCell NmbCell = new NumericCell(Float.valueOf(celda));
-                        listaCeldas.add(NmbCell);
+                    case "FLOAT":
+                        NumericCell FltCell = new NumericCell(Float.valueOf(celda));
+                        listaCeldas.add(FltCell);
+                    break;
+                    case "INTEGER":
+                        NumericCell IntCell = new NumericCell(Integer.valueOf(celda));
+                        listaCeldas.add(IntCell);
                     break;
                     case "NA":
                         NACell NACell = new NACell();
