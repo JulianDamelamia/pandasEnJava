@@ -43,6 +43,14 @@ public class DataFrame {
         return out;
     }
 
+    public int getCantColumnas(){
+        return numCols;
+    }
+
+    public int getCantFilas(){
+        return numRows;
+    }
+
 
 
     // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
@@ -83,12 +91,13 @@ public class DataFrame {
         }
     }
 
-    @Override
-    public String toString() {
+    
+    public String toString(String separador) {
         String out = "";
-        String sep = " | ";
+        String sep = " " + separador + " ";
         String[] labels = this.listLabels();
         int[] colWidths = new int[labels.length];
+        
         for (int i = 0; i < labels.length; i++) {
             colWidths[i] = labels[i].length();
             for (int j = 0; j < this.numRows; j++) {
@@ -96,22 +105,31 @@ public class DataFrame {
                 colWidths[i] = Math.max(colWidths[i], cellValue.length());
             }
         }
+        
         for (int i = 0; i < labels.length; i++) {
             out += String.format("%-" + colWidths[i] + "s", labels[i]) + sep;
         }
         out += "\n";
-        for(int row = 0; row < this.numRows; row++) {
+        
+        for (int row = 0; row < this.numRows; row++) {
             for (int i = 0; i < labels.length; i++) {
                 String cellValue = this.columnOrderMap.get(i).getContent().get(row).toString();
                 int padding = colWidths[i] - cellValue.length();
                 int leftPadding = padding / 2;
                 int rightPadding = padding - leftPadding;
-                out += String.format("%" + leftPadding + "s%s%" + rightPadding + "s", "", cellValue, "") + sep;
+                
+                out += String.format("%-" + (leftPadding + cellValue.length() + rightPadding) + "s", cellValue) + sep;
             }
             out += "\n";
         }
+        
         return out;
     }
+    
+    
+    
+
+
 }
 
 
