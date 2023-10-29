@@ -44,13 +44,15 @@ public class DataFrame {
     }
 
     public int getCantColumnas(){
+        String[] labels = this.listLabels();
+        int numCols = labels.length;
         return numCols;
     }
 
     public int getCantFilas(){
+        int numRows = this.columnOrderMap.get(0).size();
         return numRows;
     }
-
 
 
     // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
@@ -66,7 +68,23 @@ public class DataFrame {
     //         System.out.print(column.getContent().get(row) + separatorString);
     //     }
     // }
-    
+//TODO NEW
+    //metodo addColumn que permita crear una columna a partir de una lista de celdas
+    public void addColumn(List<Cell> cells){
+        Column column = new Column(cells);
+        this.columns.add(column);
+        this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
+        this.columnOrderMap.put(this.columnOrderMap.size(), column);
+        this.numCols = this.columnLabelsMap.size();
+        this.numRows = this.columnOrderMap.get(0).size();
+    }
+    //Metodo para obtner la celda
+    public Cell getCell(int col, int row){
+        Column column = this.columnOrderMap.get(col);
+        Cell cell = column.getContent().get(row);
+        return cell;
+    }
+
 
     public void addColumn(Column column){
         this.columns.add(column);
