@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import dataframe.Column;
 import dataframe.DataFrame;
@@ -143,7 +144,7 @@ public class Archivos {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         
         String dirpath = "prueba";
         String filepath = "./utils/libro2.csv";
@@ -195,7 +196,39 @@ public class Archivos {
         // } catch (IOException e) {
         //     e.printStackTrace();
         // }
+    }*/
+
+
+    //New way
+    public static DataFrame readCSV(String filePath) throws IOException {
+        List<String> lineasLeidas = leerLineas(filePath);
+        String[][] celdas;
+        try {
+            celdas = parserLineas(lineasLeidas);
+            return createDfFromParsed(celdas);
+        } catch (CSVParserException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
+    public static void show(DataFrame df) {
+        System.out.println(df.toString("|"));
+    }
+    public static void main(String[] args) throws IOException {
+        String filePath = "./utils/libro2.csv";
+        DataFrame df = readCSV(filePath);
+        if (df != null) {
+            show(df);
+            exportCSV("test1.csv", df);
+        }
+        //Creo un random sample de 10 filas
+        RandomSample randomSample = new RandomSample();
+        DataFrame dfSample = randomSample.sample(df);
+        show(dfSample);
+        //show(dfSample.getRowLabels());
+
+    }
 }
+
 
