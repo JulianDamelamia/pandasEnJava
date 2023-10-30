@@ -50,9 +50,6 @@ public class Column {
         this.content = new ArrayList<>(cells);
     }
 
-    protected void addCell(Cell cell){
-        this.content.add(size, cell);
-    }
 
     public ArrayList<Cell> getContent(){
         return this.content;

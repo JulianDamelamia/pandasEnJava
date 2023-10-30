@@ -102,12 +102,6 @@ public class DataFrame {
     }
 
 
-    public void addEmptyRow() {
-        for (Column column: this.columns) {
-            NACell cell = NACell.getInstance();
-            column.addCell(cell);
-        }
-    }
 
     
     public String toString(String separador) {
