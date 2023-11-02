@@ -15,6 +15,7 @@ import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
+import src.Identificador;
 
 public class Archivos {
     //Importar CSV dentro de DataFrame
@@ -105,7 +106,6 @@ public class Archivos {
         //     }
         // }
 
-
         for(int j = 0; j < cantCol; j++){
             List<Cell> listaCeldasAux = new ArrayList<Cell>();
             for(int i = 0+j; i < listaCeldas.size(); i += cantCol){
@@ -171,7 +171,12 @@ public class Archivos {
             df = createDfFromParsed(celdas);
             System.out.println(df.toString("|"));
             df.toString();
+            String rowLabels = df.getRowLabels();
+            String colLabels = df.getColumnLabels();
 
+            System.out.println("Las labels de las filas son: " + rowLabels);
+            System.out.println("Las labels de las columnas son: " + colLabels);
+            System.out.println("De que tipo es la columna 3? -> " + df.getColumnType(2));
             exportCSV("indsutry_test.csv", df);             
         } catch (CSVParserException e) {
             System.out.println(e.getMessage());
@@ -198,4 +203,3 @@ public class Archivos {
     }
 
 }
-
