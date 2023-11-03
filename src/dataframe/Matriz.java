@@ -44,16 +44,16 @@ public class Matriz<T> {
         this(matriz, etiquetasColumnas);
         if (columnas.get(0).size() != etiquetasFilas.length)
             throw new IllegalArgumentException("La longitud de etiquetas de filas no coincide.");
-        setEtiquetasFilas(etiquetasFilas);
+        setRowLabels(etiquetasFilas);
     }
 
-    public void setEtiquetasFilas(String[] etiquetas) {
+    public void setRowLabels(String[] etiquetas) {
         rowLabels.clear();
         for(int i=0; i < columnas.get(0).size(); i++) {
             rowLabels.put(etiquetas[i], i);
         }
     }
-    public void setEtiquetasFilas(){
+    public void setRowLabels(){
         rowLabels.clear();
         for(Integer i=0; i < columnas.get(0).size(); i++) {
             rowLabels.put(i.toString(), i);

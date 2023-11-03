@@ -9,14 +9,17 @@ import src.Identificador;
 
 public class DataFrame {
     
-    private List<Column> columns; // lista de columnas -> [hash1, hash2 , ..., hashN]
-    private Map<Column, String> columnLabelsMap; // labels de columnas-> {'nombre' : hash}
-    private Map<Integer, Column> columnOrderMap; //  orden de columnas -> { hash : order}
-    private Map<String, Integer> rowLabelsMap; // labels de columnas-> {'nombre' : hash}
-    //private Map<Integer, Integer> rowOrderMap; //  orden de columnas -> { hash : order}
+    private List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
+    private Map<Column, String> columnLabelsMap; // labels de columnas-> { col : 'nombre'}
+    private Map<Integer, Column> columnOrderMap; //  orden de columnas -> { int : col}
+    private Map<String, Integer> rowLabelsMap; // labels de columnas-> {'nombre' : int posicional}
+    // private Map<String, Integer> rowOrderMap; //  orden de columnas -> { hash : int orden}
     private int numRows; // numero de filas
     private int numCols; // numero de columnas
 
+
+    // Constructores 
+    //-TODO: sobrecarga
     public DataFrame(){
         
         /*
@@ -41,36 +44,48 @@ public class DataFrame {
         this.numCols = this.columnLabelsMap.size();
     }
     
-    private String[] listRowLabels(){
-        String[] labels = new String[this.rowLabelsMap.size()];
-        int i = 0;
-        for (String key : this.rowLabelsMap.keySet()){
-            labels[i] = key;
-            i++;
-        }
-        return labels;
+    // Agregar columnas sobrecargado
+    public void addColumn(List<Cell> cells){
+        Column column = new Column(cells);
+        this.columns.add(column);
+        this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
+        this.columnOrderMap.put(this.columnOrderMap.size(), column);
+        this.numCols = this.columnLabelsMap.size();
+        this.numRows = this.columnOrderMap.get(0).size();
     }
+
+    public void addColumn(Column column){
+        this.columns.add(column);
+        this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
+        this.columnOrderMap.put(this.columnOrderMap.size(), column);
+        this.numCols = this.columnLabelsMap.size();
+        this.numRows = this.columnOrderMap.get(0).size();
+    }
+    public void addColumn(Column column, String label){
+        this.columns.add(column);
+        this.columnLabelsMap.put(column, label);
+        this.columnOrderMap.put(this.columnOrderMap.size(), column);
+        this.numCols = this.columnLabelsMap.size();
+        this.numRows = this.columnOrderMap.get(0).size();
+    }
+
     
-    private String[] listColumnLabels(){
-        String[] labels = new String[this.columnLabelsMap.size()];
-        for (Integer key : this.columnOrderMap.keySet()){
-            Column column = this.columnOrderMap.get(key);
-            String columnName = this.columnLabelsMap.get(column);
-            labels[key] = columnName;
-        }
-        return labels;
+    // Getter Celda
+    public Cell getCell(int col, int row){
+        Column column = this.columnOrderMap.get(col);
+        Cell cell = column.getContent().get(row);
+        return cell;
     }
-    public String getColumnLabels(){
-        String[] colLabels = this.listColumnLabels();
-        String out = "";
-        for (String label : colLabels){
-            out += label + " | ";
+
+    // Setters getters labels filas
+    public void setEtiquetasFilas(){
+        rowLabelsMap.clear();
+        for(Integer i=0; i < columns.get(0).size(); i++) {
+            rowLabelsMap.put(i.toString(), i);
         }
-        out += "\n";
-        return out;
     }
-    
-    public String getRowLabels(){
+
+     public String getRowLabels(){
         if(this.rowLabelsMap.size() == 0){
             setEtiquetasFilas();
         }
@@ -82,22 +97,66 @@ public class DataFrame {
         out += "\n";
         return out;
     }
+    private String[] listRowLabels(){
+        String[] labels = new String[this.rowLabelsMap.size()];
+        int i = 0;
+        for (String key : this.rowLabelsMap.keySet()){
+            labels[i] = key;
+            i++;
+        }
+        return labels;
+    }
+    
+    // Setters getters labels columnas
+
+    public void setColumLabels(String[] labels) throws IndexOutOfBoundsException{
+        columnLabelsMap.clear();
+        for (Integer key : this.columnOrderMap.keySet()){
+            Column column = this.columnOrderMap.get(key);
+            String columnName = labels[key];
+            columnLabelsMap.put(column, columnName);
+        }
+    }
+    
+    public String getColumnLabels(){
+        String[] colLabels = this.listColumnLabels();
+        String out = "";
+        for (String label : colLabels){
+            out += label + " | ";
+        }
+        out += "\n";
+        return out;
+    }
+    
+    private String[] listColumnLabels(){
+        String[] labels = new String[this.columnLabelsMap.size()];
+        for (Integer key : this.columnOrderMap.keySet()){
+            Column column = this.columnOrderMap.get(key);
+            String columnName = this.columnLabelsMap.get(column);
+            labels[key] = columnName;
+        }
+        return labels;
+    }
+   
+
+    // Getters dimensiones y tipos
     public int getCantColumnas(){
-        String[] labels = this.listColumnLabels();
-        int numCols = labels.length;
-        return numCols;
+        return this.columns.size();
     }
 
     public int getCantFilas(){
-        int numRows = this.columnOrderMap.get(0).size();
+        int numRows =  this.columns.get(0).size();
         return numRows;
     }
-    public void setEtiquetasFilas(){
-        rowLabelsMap.clear();
-        for(Integer i=0; i < columns.get(0).size(); i++) {
-            rowLabelsMap.put(i.toString(), i);
-        }
+
+    public Integer[] getDimensions() {
+        int numCols = getCantColumnas();
+        int numRows = getCantFilas();
+        return new Integer[]{numRows, numCols};
     }
+    
+
+
     public String getColumnType(int colNumber){
         Identificador identificador = null;
         String[] labels = this.listColumnLabels();
@@ -110,6 +169,7 @@ public class DataFrame {
         }
         return identificador.getType();
     }
+
 
 
     // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
