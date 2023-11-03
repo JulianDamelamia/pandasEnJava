@@ -226,12 +226,13 @@ public class Archivos {
         DataFrame df = readCSV(filePath);
         if (df != null) {
             show(df);
-            exportCSV("test1.csv", df);
+            System.out.println(df.columnLabelsMap.values());
+            // exportCSV("test1.csv", df);
         }
         //Creo un random sample de 10 filas
-        RandomSample randomSample = new RandomSample();
-        DataFrame dfSample = randomSample.sample(df);
-        show(dfSample);
+        // RandomSample randomSample = new RandomSample();
+        // DataFrame dfSample = randomSample.sample(df);
+        // show(dfSample);
         //show(dfSample.getRowLabels());
 
     }

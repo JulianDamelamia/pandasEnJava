@@ -13,13 +13,13 @@ import dataframe.cells.StringCell;
 import src.Identificador;
 public class DataFrame {
     
-    private List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
-    private Map<Column, String> columnLabelsMap; // labels de columnas-> { col : 'nombre'}
-    private Map<Integer, Column> columnOrderMap; //  orden de columnas -> { int : col}
-    private Map<String, Integer> rowLabelsMap; // labels de columnas-> {'nombre' : int posicional}
+    public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
+    public Map<Column, String> columnLabelsMap; // labels de columnas-> { col : 'nombre'}
+    public Map<Integer, Column> columnOrderMap; //  orden de columnas -> { int : col}
+    public Map<String, Integer> rowLabelsMap; // labels de columnas-> {'nombre' : int posicional}
     // private Map<String, Integer> rowOrderMap; //  orden de columnas -> { hash : int orden}
-    private int numRows; // numero de filas
-    private int numCols; // numero de columnas
+    public int numRows; // numero de filas
+    public int numCols; // numero de columnas
 
 
     // Constructores 
@@ -27,20 +27,13 @@ public class DataFrame {
     public DataFrame(){
         this.columns = new ArrayList<Column>(1);
         this.columnLabelsMap = new HashMap<Column, String>();
-        this.rowLabelsMap = new HashMap<String, Integer>();
         this.columnOrderMap = new HashMap<Integer, Column>();
+        this.rowLabelsMap = new HashMap<String, Integer>();
         this.numRows = this.columnOrderMap.size();
         this.numCols = this.columnLabelsMap.size();
     }
     
-    public DataFrame(DataFrame dataframe) {
-        this.columns = new ArrayList<Column>();
-        this.columnLabelsMap = new HashMap<Column, String>(dataframe.columnLabelsMap);
-        this.rowLabelsMap = new HashMap<String, Integer>(dataframe.rowLabelsMap);
-        this.columnOrderMap = new HashMap<Integer, Column>(dataframe.columnOrderMap);
-        this.numRows = this.columnOrderMap.size();
-        this.numCols = this.columnLabelsMap.size();
-    }
+
 
     // Agregar columnas sobrecargado
     public void addColumn(List<Cell> cells){
@@ -68,11 +61,37 @@ public class DataFrame {
     }
 
     
-    // Getter Celda
+    // Getter Setter Celda
     public Cell getCell(int col, int row){
         Column column = this.columnOrderMap.get(col);
         Cell cell = column.getContent().get(row);
         return cell;
+    }
+
+    public void setCell(int col, int row, Cell cell){
+        Column column = this.columnOrderMap.get(col);
+        column.setCell(row, cell);
+    }
+
+    public void setCell(int col, int index, Object value){
+        Column column = this.columnOrderMap.get(col);
+        column.setCell(index, value);
+    }
+
+    public void setCell(String colLabel, int row, Cell cell){
+        Column column = null;
+        for (Map.Entry<Column, String> entry : this.columnLabelsMap.entrySet()) {
+            if (entry.getValue().equals(colLabel)) {
+                column = entry.getKey();
+                break;
+            }
+            else{
+                System.out.println("No se encontró la columna");
+            }
+        }
+        if (column != null) {
+            column.setCell(row, cell);
+        }
     }
 
     // Setters getters labels filas
@@ -109,13 +128,28 @@ public class DataFrame {
 
     public void setColumLabels(String[] labels) throws IndexOutOfBoundsException{
         columnLabelsMap.clear();
-        for (Integer key : this.columnOrderMap.keySet()){
-            Column column = this.columnOrderMap.get(key);
-            String columnName = labels[key];
+        if (labels.length != this.columns.size()){
+            throw new IndexOutOfBoundsException("La cantidad de labels no coincide con la cantidad de columnas");
+        }
+        else{
+            for (int i = 0; i < this.columns.size(); i++){
+            String columnName = labels[i];
+            columnLabelsMap.put(this.columns.get(i), columnName);
+            }
+        }
+        
+    }
+    public void setColumLabels(Map<Column, String> labelsMap){
+        for (Column column : labelsMap.keySet()){
+            String columnName = labelsMap.get(column);
             columnLabelsMap.put(column, columnName);
         }
     }
-    
+
+    public void setColumLabels(Column column, String columnName){
+        columnLabelsMap.put(column, columnName);
+        }
+
     public String getColumnLabels(){
         String[] colLabels = this.listColumnLabels();
         String out = "";
@@ -167,20 +201,68 @@ public class DataFrame {
         }
         return identificador.getType();
     }
+      
+    //SHALLOW COPY
+    private DataFrame(DataFrame dataframe) {
+        this.columns = new ArrayList<Column>();
+        this.columnLabelsMap = new HashMap<Column, String>(dataframe.columnLabelsMap);
+        this.rowLabelsMap = new HashMap<String, Integer>(dataframe.rowLabelsMap);
+        this.columnOrderMap = new HashMap<Integer, Column>(dataframe.columnOrderMap);
+        this.numRows = this.columnOrderMap.size();
+        this.numCols = this.columnLabelsMap.size();
+    }
+    // Deep Copy
+    // public DataFrame copy() {
+    //     DataFrame dfOrigen = this;  // solo para aclarar
+    //     DataFrame copia = new DataFrame(dfOrigen);
 
+    //     copia.columns = new ArrayList<Column>();
+    //     // for(int i = 0; i< dfOrigen.columns.size(); i++){
+    //     //     Column copiaColumn = dfOrigen.columns.get(i).copy();
+    //     //     copia.columns.add(copiaColumn);
+    //     //     copia.columnLabelsMap.put(copiaColumn, dfOrigen.columnLabelsMap.get(dfOrigen.columns.get(i)));
+    //     //     copia.columnOrderMap.put(i, copiaColumn);
+    //     // }
+
+    //     return copia;
+    // }
     public DataFrame copy() {
-        DataFrame dfOrigen = this;  // solo para aclarar
-        DataFrame copia = new DataFrame(dfOrigen);
-
-        copia.columns = new ArrayList<Column>();
-        for(Column column : dfOrigen.columns) {
-            Column newColumn = new Column(column.getContent());
-            copia.addColumn(newColumn);
+        DataFrame copia = new DataFrame();
+        
+        for (Column columnaOriginal : this.columns) {
+            Column columnaCopia;
+            List<Cell> contenidoCopia = new ArrayList<Cell>();
+            for (Cell celdaOriginal : columnaOriginal.getContent()) {
+                // Utiliza el método copy() de Cell para realizar una copia profunda de las celdas
+                Cell celdaCopia = celdaOriginal.copy();
+                contenidoCopia.add(celdaCopia);
+            }
+            columnaCopia = new Column(contenidoCopia);
+            copia.addColumn(columnaCopia);
+            
+            // Copia los mapeos de etiquetas y órdenes de las columnas
+            String label = this.columnLabelsMap.get(columnaOriginal);
+            copia.columnLabelsMap.put(columnaCopia, label);
+            
+            Integer order = this.columnOrderMap.entrySet().stream()
+                                                .filter(entry -> entry.getValue().equals(columnaOriginal))
+                                                .map(Map.Entry::getKey)
+                                                .findFirst()
+                                                .orElse(null);
+            if (order != null) {
+                copia.columnOrderMap.put(order, columnaCopia);
+            }
         }
+
+        // Copia el mapeo de etiquetas de filas
+        copia.rowLabelsMap.putAll(this.rowLabelsMap);
+
+        // Copia el número de filas y columnas
+        copia.numRows = this.numRows;
+        copia.numCols = this.numCols;
 
         return copia;
     }
-
 
     // To String
     public String toString(String separador) {

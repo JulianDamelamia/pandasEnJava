@@ -7,9 +7,20 @@ public class StringCell extends Cell{
         super();
         setValue(value);
     }
+    
+    public StringCell(StringCell original){
+        this(original.getValue());
+     }
+
+   
+    @Override
+    public StringCell copy(){
+        return new StringCell(this);
+    } 
+    
 
     @Override
-    void setValue(Object value) {
+    public void setValue(Object value) {
         try{
             if(value instanceof String){
                 this.value = (String) value;
@@ -20,6 +31,10 @@ public class StringCell extends Cell{
         }catch(Exception e){ e.getMessage();}    
     }
 
+    @Override
+    public String getValue() {
+        return value;
+    }
     @Override
     public boolean isBoolean() {
         return false;

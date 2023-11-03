@@ -25,10 +25,12 @@ public class Main {
         StringCell celda9 = new StringCell("!");
         NACell cell = NACell.getInstance();
         // armo unas columnas de prueba a partir de las celdas
-        Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3)));
+        Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
         Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
         Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
-        Column columna4 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+
+
+
         // armo dos Maps, uno que linkea las columnas con un label
         // y otro que linkea el orden de la columna con la columna en sí
         // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
@@ -66,17 +68,25 @@ public class Main {
         df.addColumn(columna1, "NUMERICA");
         df.addColumn(columna2, "BOOLEANA");
         df.addColumn(columna3);
-        df.addColumn(columna4);
-        // df.addEmptyRow();
-        // df.addEmptyRow();
-        // df.addEmptyRow();
-        System.out.println(df.toString());
-        System.out.println("La cantidad de columnas del DF es: " + df.getCantColumnas());
-        System.out.println("La cantidad de filas del DF es: " + df.getCantFilas());
-       
-        // DataFrame df2 = df.copy();
-        // System.out.println(df2.toString());
-        // System.out.println(df2.equals(df));
+
+        Column columnaClonada = columna1.copy();
+        columnaClonada.setCell(1, 35);
+        System.out.println(columna1);
+        System.out.println(columnaClonada);
+
+       // estos renombres sí andan
+        DataFrame df2 = df.copy();
+        df.setColumLabels(columna1, "NUMERICA renombrada");
+        Cell newcell = new StringCell("TU MAMA");
+        Integer value = 35;
+        df.setCell(0, 1, value );
+        System.out.println("Dataframe 1");
+        System.out.println(df.toString("|"));
+        System.out.println("Dataframe 2");
+        System.out.println(df2.toString("|"));
+
+        System.out.println("son iguales?");
+        System.out.println(df2.equals(df));
 
     }
 }
