@@ -72,7 +72,7 @@ public class DataFrame {
         return out;
     }
     public int getCantColumnas(){
-        String[] labels = this.listLabels();
+        String[] labels = this.listColumnLabels();
         int numCols = labels.length;
         return numCols;
     }
