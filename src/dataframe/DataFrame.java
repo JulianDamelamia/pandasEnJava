@@ -4,13 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
-import dataframe.Matriz;
-import dataframe.cells.BooleanCell;
 import dataframe.cells.Cell;
-import dataframe.cells.NACell;
-import dataframe.cells.NumericCell;
-import dataframe.cells.StringCell;
 import src.Identificador;
+
 public class DataFrame {
     
     private List<Column> columns; // lista de columnas -> [hash1, hash2 , ..., hashN]
@@ -22,6 +18,21 @@ public class DataFrame {
     private int numCols; // numero de columnas
 
     public DataFrame(){
+        
+        /*
+         * Constructor de la clase DataFrame
+         * 
+         * @param columns: lista de columnas
+         * @param columnLabelsMap: diccionario de etiquetas de columnas
+         * @param columnOrderMap: diccionario de orden de columnas
+         * @param rowLabelsMap: diccionario de etiquetas de filas
+         * @param rowOrderMap: diccionario de orden de filas
+         * @param numRows: numero de filas
+         * @param numCols: numero de columnas
+         * 
+         * @return DataFrame
+         * 
+         */
         this.columns = new ArrayList<Column>(1);
         this.columnLabelsMap = new HashMap<Column, String>();
         this.rowLabelsMap = new HashMap<String, Integer>();
@@ -114,8 +125,42 @@ public class DataFrame {
     //         System.out.print(column.getContent().get(row) + separatorString);
     //     }
     // }
-//TODO NEW
-    //metodo addColumn que permita crear una columna a partir de una lista de celdas
+
+
+    // Metodo para obtner la celda
+    public Cell getCell(int col, int row){
+        Column column = this.columnOrderMap.get(col);
+        Cell cell = column.getContent().get(row);
+        return cell;
+    }
+
+    public Column getColumn(int col){
+        /*
+         * Metodo para obtener la columna
+         * 
+         * @param col: numero de columna
+         * 
+         * @return column
+         * 
+         */
+
+        Column column = this.columnOrderMap.get(col);
+        return column;
+    }
+    
+    public List<Column> getColumns(){
+        /*
+         * Metodo para obtener las columnas
+         * 
+         * @param columns: lista de columnas
+         * 
+         * @return columns
+         * 
+         */
+        return this.columns;
+    }
+
+
     public void addColumn(List<Cell> cells){
         Column column = new Column(cells);
         this.columns.add(column);
@@ -124,13 +169,6 @@ public class DataFrame {
         this.numCols = this.columnLabelsMap.size();
         this.numRows = this.columnOrderMap.get(0).size();
     }
-    //Metodo para obtner la celda
-    public Cell getCell(int col, int row){
-        Column column = this.columnOrderMap.get(col);
-        Cell cell = column.getContent().get(row);
-        return cell;
-    }
-
 
     public void addColumn(Column column){
         this.columns.add(column);
@@ -139,6 +177,7 @@ public class DataFrame {
         this.numCols = this.columnLabelsMap.size();
         this.numRows = this.columnOrderMap.get(0).size();
     }
+    
     public void addColumn(Column column, String label){
         this.columns.add(column);
         this.columnLabelsMap.put(column, label);
@@ -146,8 +185,6 @@ public class DataFrame {
         this.numCols = this.columnLabelsMap.size();
         this.numRows = this.columnOrderMap.get(0).size();
     }
-
-
 
     
     public String toString(String separador) {
