@@ -20,9 +20,9 @@ No iniciado: ❌
 - Crear estructuras tabulares desde datos nativos de Java 🚧
 - Modificar estructura tabular ❌
 - Selección parcial de estructura tabular ❌
-- Obtener primeras y últimas filas 🚧
+- Obtener primeras y últimas filas ✅
 - Aplicar filtros a celdas ❌
-- Concatenar estructuras tabulares ❌
+- Concatenar estructuras tabulares ✅
 - Ordenar filas de estructura tabular ❌ 
 - Agrupar filas y aplicar funciones de sumarización ❌
 - Rellenar celdas con valores faltantes (NA) ✅

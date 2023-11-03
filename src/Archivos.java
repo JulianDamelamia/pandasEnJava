@@ -17,7 +17,6 @@ import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
 import src.Identificador;
-import RandomSample.RandomSample;
 
 public class Archivos {
     //Importar CSV dentro de DataFrame
@@ -145,68 +144,16 @@ public class Archivos {
             e.printStackTrace();
         }
     }
-    /*public static void main(String[] args) throws IOException {
-        
-        String dirpath = "prueba";
-        String filepath = "./utils/libro2.csv";
 
-
-        File directorio = new File(dirpath);
-        if (!directorio.exists())
-            directorio.mkdir();
-        
-        // File archivo = new File(filepath);
-        
-        // try {
-        //     if (!archivo.exists())
-        //         archivo.createNewFile();
-        // } catch (IOException e) {
-        //     System.out.println("Verificar la ruta");
-        // }
-
-
-        List<String> lineasLeidas = leerLineas(filepath);
-        String[][] celdas;
-        try {
-            celdas = parserLineas(lineasLeidas);
-            DataFrame df = new DataFrame();
-            df = createDfFromParsed(celdas);
-            System.out.println(df.toString("|"));
-            df.toString();
-            String rowLabels = df.getRowLabels();
-            String colLabels = df.getColumnLabels();
-
-            System.out.println("Las labels de las filas son: " + rowLabels);
-            System.out.println("Las labels de las columnas son: " + colLabels);
-            System.out.println("De que tipo es la columna 3? -> " + df.getColumnType(2));
-            exportCSV("indsutry_test.csv", df);             
-        } catch (CSVParserException e) {
-            System.out.println(e.getMessage());
-        }
-
-        
-        // mostrarLineas(lineasLeidas);
-        // String[] lineas = {
-        //     "linea 1",
-        //     "linea 2",
-        //     "linea 3",
-        //     "linea 4"
-        // };
-
-        // try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
-        //     for(int i=0; i < lineas.length; i++) {
-        //         bufferedWriter.write(lineas[i]);
-        //         if (i < lineas.length - 1)
-        //             bufferedWriter.newLine();
-        //     }
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-    }*/
-
-
-    //New way
     public static DataFrame readCSV(String filePath) throws IOException {
+        /*
+         * Lee un archivo CSV y lo convierte en un DataFrame
+         * 
+         * @param filePath: Ruta del archivo CSV
+         * 
+         * @return DataFrame
+         * 
+         */
         List<String> lineasLeidas = leerLineas(filePath);
         String[][] celdas;
         try {
@@ -218,24 +165,16 @@ public class Archivos {
         }
     }
 
-
     public static void show(DataFrame df) {
+        /*
+        *   Muestra el dataframe en consola
+
+        *   @param df: DataFrame a mostrar
+        *   @return void
+        */
         System.out.println(df.toString("|"));
     }
-    public static void main(String[] args) throws IOException {
-        String filePath = "./utils/libro2.csv";
-        DataFrame df = readCSV(filePath);
-        if (df != null) {
-            show(df);
-            exportCSV("test1.csv", df);
-        }
     
-
-        //Creo un random sample de 10 filas
-        RandomSample randomSample = new RandomSample();
-        DataFrame dfSample = randomSample.sample(df);
-        show(dfSample);
-    }
 }
 
 

@@ -1,78 +1,38 @@
-import dataframe.cells.NumericCell;
-import dataframe.cells.BooleanCell;
-import dataframe.cells.StringCell;
-import dataframe.Column;
-import dataframe.cells.Cell;
-import dataframe.cells.NACell;
+import dataframe.DataFrame;
+import utils_df.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
-        // armo unas celdas de prueba	
-        NumericCell celda1 = new NumericCell(1);
-        NumericCell celda2 = new NumericCell(2);
-        NumericCell celda3 = new NumericCell(3);
-        BooleanCell celda4 = new BooleanCell(true);
-        BooleanCell celda5 = new BooleanCell(false);
-        BooleanCell celda6 = new BooleanCell(true);
-        StringCell celda7 = new StringCell("Hola");
-        StringCell celda8 = new StringCell("Mundo");
-        StringCell celda9 = new StringCell("!");
-        NACell cell = NACell.getInstance();
-        // armo unas columnas de prueba a partir de las celdas
-        Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3)));
-        Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
-        Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
-        Column columna4 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
-        // armo dos Maps, uno que linkea las columnas con un label
-        // y otro que linkea el orden de la columna con la columna en sí
-        // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
-        Map<Column, String> columnLabelsMap = new HashMap<Column, String>();
-        columnLabelsMap.put(columna1, "NUMERICA");
-        columnLabelsMap.put(columna2, "BOOLEANA");
-        columnLabelsMap.put(columna3, "STRING");
+    public static void main(String[] args) throws IOException {
+        String filePath = "./utils/libro2.csv";
+        DataFrame df = Archivos.readCSV(filePath);
+        if (df != null) {
+            Archivos.show(df);
+            //Archivos.exportCSV("test1.csv", df);
+        }
+    
 
-        Map<Integer, Column> columnOrderMap = new HashMap<Integer, Column>();
-        columnOrderMap.put(0, columna1);
-        columnOrderMap.put(1, columna2);
-        columnOrderMap.put(2, columna3);
-        // System.out.println(columnLabelsMap);
-        // System.out.println(columnOrderMap);
+        //Creo un random sample de df
+        RandomSample randomSample = new RandomSample();
+        DataFrame dfSample = randomSample.sample(df);
+        System.out.println("Random Sample");
+        Archivos.show(dfSample);
 
-        // for (Integer key : columnOrderMap.keySet()) {
-        //     Column column = columnOrderMap.get(key);
-        //     String columnName = columnLabelsMap.get(column);
-        //     System.out.println(column);
-        // }
-        // int numRows = columnOrderMap.get(0).size; // numero de filas. Observacion: columna.size es público de momento
-        // for (int i = 0; i < numRows; i++) {
-        //     for (Integer key : columnOrderMap.keySet()) {
-        //         Column column = columnOrderMap.get(key);
-        //         String columnName = columnLabelsMap.get(column);
-        //         System.out.print(column.getContent().get(i) + "\t");
-        //     }
-        //     System.out.println();
-        // }
-        // System.out.println(columna1);
-        // System.out.println(columna2);
-        // System.out.println(columna3);
-        
-        dataframe.DataFrame df = new dataframe.DataFrame();
-        df.addColumn(columna1, "NUMERICA");
-        df.addColumn(columna2, "BOOLEANA");
-        df.addColumn(columna3);
-        df.addColumn(columna4);
-        // df.addEmptyRow();
-        // df.addEmptyRow();
-        // df.addEmptyRow();
-        System.out.println(df);
-        System.out.println("La cantidad de columnas del DF es: " + df.getCantColumnas());
-        System.out.println("La cantidad de filas del DF es: " + df.getCantFilas());
-       
-        
+        // Con df y dfSample los puedo concatenar
+        DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
+        System.out.println("Df Concatenado");
+
+        Archivos.show(dfConcatenado);
+
+        // Veo las primeras filas con el metodo head()
+        DataFrame dfHead = Selection.head(df);
+        System.out.println("Head");
+        Archivos.show(dfHead);
+
+        // Veo las ultimas filas con el metodo tail()
+        DataFrame dfTail = Selection.tail(df);
+        System.out.println("Tail");
+        Archivos.show(dfTail);
     }
 }
