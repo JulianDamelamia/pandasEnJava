@@ -7,6 +7,13 @@ public class NACell extends Cell {
     public NACell() {
         super();
     }
+    public NACell(NACell original){
+        this();
+     }
+    @Override
+    public NACell copy(){
+        return new NACell(this);
+    }
 
     public static NACell getInstance() {
         return INSTANCE;

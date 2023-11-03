@@ -3,13 +3,24 @@ package dataframe.cells;
 public class BooleanCell extends Cell{
     private Boolean value;
 
+    public BooleanCell() {
+        super();
+    }   
+    
     public BooleanCell(Boolean value) {
         super();
         setValue(value);
     }
-
+    
+    public BooleanCell(BooleanCell original){
+        this(original.getValue());
+     }
     @Override
-    void setValue(Object value) {
+    public BooleanCell copy(){
+        return new BooleanCell(this);
+    }
+    @Override
+    public void setValue(Object value) {
         try{
             if(value instanceof Boolean){
                 this.value = (Boolean) value;
@@ -19,7 +30,14 @@ public class BooleanCell extends Cell{
             }
         }catch(Exception e){ e.getMessage();}    
     }
+    public void setValue(Boolean value){
+        this.value = value;
+    }
+    public Boolean getValue(){
+        return this.value;
+    }
 
+    
     @Override
     public boolean isBoolean() {
         return true;
