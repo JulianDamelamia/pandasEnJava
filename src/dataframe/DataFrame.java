@@ -72,10 +72,13 @@ public class DataFrame {
         return out;
     }
     public int getCantColumnas(){
+        String[] labels = this.listLabels();
+        int numCols = labels.length;
         return numCols;
     }
 
     public int getCantFilas(){
+        int numRows = this.columnOrderMap.get(0).size();
         return numRows;
     }
     public void setEtiquetasFilas(){
@@ -97,7 +100,7 @@ public class DataFrame {
         return identificador.getType();
     }
 
-    
+
     // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
     // public void printRow(int row){
     //     for (Integer key : this.columnOrderMap.keySet()) {
@@ -111,7 +114,23 @@ public class DataFrame {
     //         System.out.print(column.getContent().get(row) + separatorString);
     //     }
     // }
-    
+//TODO NEW
+    //metodo addColumn que permita crear una columna a partir de una lista de celdas
+    public void addColumn(List<Cell> cells){
+        Column column = new Column(cells);
+        this.columns.add(column);
+        this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
+        this.columnOrderMap.put(this.columnOrderMap.size(), column);
+        this.numCols = this.columnLabelsMap.size();
+        this.numRows = this.columnOrderMap.get(0).size();
+    }
+    //Metodo para obtner la celda
+    public Cell getCell(int col, int row){
+        Column column = this.columnOrderMap.get(col);
+        Cell cell = column.getContent().get(row);
+        return cell;
+    }
+
 
     public void addColumn(Column column){
         this.columns.add(column);
@@ -129,12 +148,6 @@ public class DataFrame {
     }
 
 
-    public void addEmptyRow() {
-        for (Column column: this.columns) {
-            NACell cell = NACell.getInstance();
-            column.addCell(cell);
-        }
-    }
 
     
     public String toString(String separador) {

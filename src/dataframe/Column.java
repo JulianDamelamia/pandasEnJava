@@ -1,13 +1,18 @@
 package dataframe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dataframe.cells.Cell;
 
 public class Column {
     private int size;
     private ArrayList<Cell> content;
-
+    //Constructor vacio
+    public Column() {
+        this.size = 0;
+        this.content = new ArrayList<Cell>();
+    }
     public Column(int size) {
         this.size = size;
         this.content = new ArrayList<Cell>();
@@ -39,10 +44,12 @@ public class Column {
     public int size(){
         return this.size;
     }
-
-    protected void addCell(Cell cell){
-        this.content.add(size, cell);
+    
+    public Column(List<Cell> cells) {
+        this.size = cells.size();
+        this.content = new ArrayList<>(cells);
     }
+
 
     public ArrayList<Cell> getContent(){
         return this.content;
