@@ -2,6 +2,7 @@ import dataframe.cells.NumericCell;
 import dataframe.cells.BooleanCell;
 import dataframe.cells.StringCell;
 import dataframe.Column;
+import dataframe.DataFrame;
 import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 
@@ -69,10 +70,13 @@ public class Main {
         // df.addEmptyRow();
         // df.addEmptyRow();
         // df.addEmptyRow();
-        System.out.println(df);
+        System.out.println(df.toString());
         System.out.println("La cantidad de columnas del DF es: " + df.getCantColumnas());
         System.out.println("La cantidad de filas del DF es: " + df.getCantFilas());
        
-        
+        // DataFrame df2 = df.copy();
+        // System.out.println(df2.toString());
+        // System.out.println(df2.equals(df));
+
     }
 }
