@@ -17,6 +17,7 @@ import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
 import src.Identificador;
+import RandomSample.RandomSample;
 
 public class Archivos {
     //Importar CSV dentro de DataFrame
@@ -228,12 +229,12 @@ public class Archivos {
             show(df);
             exportCSV("test1.csv", df);
         }
+    
+
         //Creo un random sample de 10 filas
         RandomSample randomSample = new RandomSample();
         DataFrame dfSample = randomSample.sample(df);
         show(dfSample);
-        //show(dfSample.getRowLabels());
-
     }
 }
 
