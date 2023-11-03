@@ -44,6 +44,15 @@ public class DataFrame {
         this.numCols = this.columnLabelsMap.size();
     }
     
+    public DataFrame(DataFrame dataframe) {
+        this.columns = new ArrayList<Column>();
+        this.columnLabelsMap = new HashMap<Column, String>(dataframe.columnLabelsMap);
+        this.rowLabelsMap = new HashMap<String, Integer>(dataframe.rowLabelsMap);
+        this.columnOrderMap = new HashMap<Integer, Column>(dataframe.columnOrderMap);
+        this.numRows = this.columnOrderMap.size();
+        this.numCols = this.columnLabelsMap.size();
+    }
+
     // Agregar columnas sobrecargado
     public void addColumn(List<Cell> cells){
         Column column = new Column(cells);
@@ -78,7 +87,7 @@ public class DataFrame {
     }
 
     // Setters getters labels filas
-    public void setEtiquetasFilas(){
+    public void setRowLabels(){
         rowLabelsMap.clear();
         for(Integer i=0; i < columns.get(0).size(); i++) {
             rowLabelsMap.put(i.toString(), i);
@@ -87,7 +96,7 @@ public class DataFrame {
 
      public String getRowLabels(){
         if(this.rowLabelsMap.size() == 0){
-            setEtiquetasFilas();
+            setRowLabels();
         }
         String[] rowLabels = this.listRowLabels();
         String out = "";
@@ -170,6 +179,18 @@ public class DataFrame {
         return identificador.getType();
     }
 
+    public DataFrame copy() {
+        DataFrame dfOrigen = this;  // solo para aclarar
+        DataFrame copia = new DataFrame(dfOrigen);
+
+        copia.columns = new ArrayList<Column>();
+        for(Column column : dfOrigen.columns) {
+            Column newColumn = new Column(column.getContent());
+            copia.addColumn(newColumn);
+        }
+
+        return copia;
+    }
 
 
     // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
@@ -248,6 +269,10 @@ public class DataFrame {
 
     
     public String toString(String separador) {
+        if (separador == null) {
+            separador = " | ";
+        }
+        
         String out = "";
         String sep = " " + separador + " ";
         String[] labels = this.listColumnLabels();

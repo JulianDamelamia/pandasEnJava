@@ -26,7 +26,10 @@ public class Column {
         this.size = size;
         this.content = content;
     }
-
+    protected Column(Column column) {
+        this.size = column.size;
+        this.content = new ArrayList<Cell>(column.content);
+    }
     //probablemente quiera esto protected para no agregar arrays de largo inválido una vez creado el df
     public void setContent(ArrayList<Cell> content){
         this.content =content;
