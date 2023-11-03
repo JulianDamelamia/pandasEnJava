@@ -53,6 +53,12 @@ public class Matriz<T> {
             rowLabels.put(etiquetas[i], i);
         }
     }
+    public void setEtiquetasFilas(){
+        rowLabels.clear();
+        for(Integer i=0; i < columnas.get(0).size(); i++) {
+            rowLabels.put(i.toString(), i);
+        }
+    }
 
     public void setEtiquetasColumnas(String[] etiquetas) {
         colLabels.clear();

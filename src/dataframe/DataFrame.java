@@ -5,26 +5,42 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import dataframe.Matriz;
+import dataframe.cells.BooleanCell;
 import dataframe.cells.Cell;
 import dataframe.cells.NACell;
-
+import dataframe.cells.NumericCell;
+import dataframe.cells.StringCell;
+import src.Identificador;
 public class DataFrame {
     
     private List<Column> columns; // lista de columnas -> [hash1, hash2 , ..., hashN]
     private Map<Column, String> columnLabelsMap; // labels de columnas-> {'nombre' : hash}
     private Map<Integer, Column> columnOrderMap; //  orden de columnas -> { hash : order}
+    private Map<String, Integer> rowLabelsMap; // labels de columnas-> {'nombre' : hash}
+    //private Map<Integer, Integer> rowOrderMap; //  orden de columnas -> { hash : order}
     private int numRows; // numero de filas
     private int numCols; // numero de columnas
 
     public DataFrame(){
         this.columns = new ArrayList<Column>(1);
         this.columnLabelsMap = new HashMap<Column, String>();
+        this.rowLabelsMap = new HashMap<String, Integer>();
         this.columnOrderMap = new HashMap<Integer, Column>();
         this.numRows = this.columnOrderMap.size();
         this.numCols = this.columnLabelsMap.size();
     }
     
-    private String[] listLabels(){
+    private String[] listRowLabels(){
+        String[] labels = new String[this.rowLabelsMap.size()];
+        int i = 0;
+        for (String key : this.rowLabelsMap.keySet()){
+            labels[i] = key;
+            i++;
+        }
+        return labels;
+    }
+    
+    private String[] listColumnLabels(){
         String[] labels = new String[this.columnLabelsMap.size()];
         for (Integer key : this.columnOrderMap.keySet()){
             Column column = this.columnOrderMap.get(key);
@@ -33,16 +49,28 @@ public class DataFrame {
         }
         return labels;
     }
-    public String getLabels(){
-        String[] labels = this.listLabels();
+    public String getColumnLabels(){
+        String[] colLabels = this.listColumnLabels();
         String out = "";
-        for (String label : labels){
+        for (String label : colLabels){
             out += label + " | ";
         }
         out += "\n";
         return out;
     }
-
+    
+    public String getRowLabels(){
+        if(this.rowLabelsMap.size() == 0){
+            setEtiquetasFilas();
+        }
+        String[] rowLabels = this.listRowLabels();
+        String out = "";
+        for (String label : rowLabels){
+            out += label + " | ";
+        }
+        out += "\n";
+        return out;
+    }
     public int getCantColumnas(){
         String[] labels = this.listLabels();
         int numCols = labels.length;
@@ -52,6 +80,24 @@ public class DataFrame {
     public int getCantFilas(){
         int numRows = this.columnOrderMap.get(0).size();
         return numRows;
+    }
+    public void setEtiquetasFilas(){
+        rowLabelsMap.clear();
+        for(Integer i=0; i < columns.get(0).size(); i++) {
+            rowLabelsMap.put(i.toString(), i);
+        }
+    }
+    public String getColumnType(int colNumber){
+        Identificador identificador = null;
+        String[] labels = this.listColumnLabels();
+        
+        for (int i = 0; i < labels.length; i++) {
+            if(i == colNumber){
+                    String celda = this.columnOrderMap.get(i).getContent().get(1).toString();
+                    identificador = new Identificador(celda);
+            }
+        }
+        return identificador.getType();
     }
 
 
@@ -107,11 +153,11 @@ public class DataFrame {
     public String toString(String separador) {
         String out = "";
         String sep = " " + separador + " ";
-        String[] labels = this.listLabels();
+        String[] labels = this.listColumnLabels();
         int[] colWidths = new int[labels.length];
         
         for (int i = 0; i < labels.length; i++) {
-            colWidths[i] = labels[i].length();
+            colWidths[i] = ("["+labels[i]+"]").length();
             for (int j = 0; j < this.numRows; j++) {
                 String cellValue = this.columnOrderMap.get(i).getContent().get(j).toString();
                 colWidths[i] = Math.max(colWidths[i], cellValue.length());
@@ -119,11 +165,19 @@ public class DataFrame {
         }
         
         for (int i = 0; i < labels.length; i++) {
-            out += String.format("%-" + colWidths[i] + "s", labels[i]) + sep;
+            if(i == 0){
+                out += String.format("%-" + colWidths[i] + "s", "") + sep;    
+            }
+            out += String.format("%-" + colWidths[i] + "s", "[" + labels[i] + "]")  + sep;
         }
         out += "\n";
         
-        for (int row = 0; row < this.numRows; row++) {
+        for (Integer row = 0; row < this.numRows; row++) {
+                this.rowLabelsMap.put(row.toString(), row);
+                int rowPadding = colWidths[0] - row.toString().length();
+                int leftRowPadding = rowPadding / 2;
+                int rightRowPadding = rowPadding - leftRowPadding;
+            out += String.format("%-" + (leftRowPadding + row.toString().length() + rightRowPadding) + "s", "[Fila: " + row + "]") + sep;
             for (int i = 0; i < labels.length; i++) {
                 String cellValue = this.columnOrderMap.get(i).getContent().get(row).toString();
                 int padding = colWidths[i] - cellValue.length();
@@ -137,11 +191,6 @@ public class DataFrame {
         
         return out;
     }
-    
-    
-    
-
-
 }
 
 

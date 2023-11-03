@@ -1,3 +1,4 @@
+package src;
 
 public class Identificador {
     String celda;
@@ -6,7 +7,7 @@ public class Identificador {
     }
     public String getType(){
         if(celda.matches("[a-zA-Z]+")){
-            if(celda.equals("True") || celda.equals("False")){
+            if(celda.equals("True") ||  celda.equals("False") || celda.equals("false") || celda.equals("true")){
                 return "BOOLEAN";
             }
             return "STRING";
