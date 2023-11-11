@@ -166,6 +166,22 @@ public class Archivos {
     }
 
     public static void show(DataFrame df) {
+        System.out.println(df.toString("|"));
+    }
+    public static void main(String[] args) throws IOException {
+        String filePath = "./utils/libro2.csv";
+        DataFrame df = readCSV(filePath);
+        if (df != null) {
+            show(df);
+            System.out.println(df.columnLabelsMap.values());
+            // exportCSV("test1.csv", df);
+        }
+        //Creo un random sample de 10 filas
+        // RandomSample randomSample = new RandomSample();
+        // DataFrame dfSample = randomSample.sample(df);
+        // show(dfSample);
+        //show(dfSample.getRowLabels());
+
         /*
         *   Muestra el dataframe en consola
 
