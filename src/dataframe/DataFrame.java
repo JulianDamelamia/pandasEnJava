@@ -275,29 +275,6 @@ public class DataFrame {
         return copia;
     }
 
-
-    // // sobrecarga de metodo printRow con y sin separador, idk si es necesario
-    // public void printRow(int row){
-    //     for (Integer key : this.columnOrderMap.keySet()) {
-    //         Column column = this.columnOrderMap.get(key);
-    //         System.out.print(column.getContent().get(row) + "\t");
-    //     }
-    // }
-    // public void printRow(int row, String separatorString){
-    //     for (Integer key : this.columnOrderMap.keySet()) {
-    //         Column column = this.columnOrderMap.get(key);
-    //         System.out.print(column.getContent().get(row) + separatorString);
-    //     }
-    // }
-
-
-    // Metodo para obtner la celda
-    public Cell getCell(int col, int row){
-        Column column = this.columnOrderMap.get(col);
-        Cell cell = column.getContent().get(row);
-        return cell;
-    }
-
     public Column getColumn(int col){
         /*
          * Metodo para obtener la columna
@@ -324,33 +301,6 @@ public class DataFrame {
         return this.columns;
     }
 
-
-    public void addColumn(List<Cell> cells){
-        Column column = new Column(cells);
-        this.columns.add(column);
-        this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
-        this.columnOrderMap.put(this.columnOrderMap.size(), column);
-        this.numCols = this.columnLabelsMap.size();
-        this.numRows = this.columnOrderMap.get(0).size();
-    }
-
-    public void addColumn(Column column){
-        this.columns.add(column);
-        this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
-        this.columnOrderMap.put(this.columnOrderMap.size(), column);
-        this.numCols = this.columnLabelsMap.size();
-        this.numRows = this.columnOrderMap.get(0).size();
-    }
-    
-    public void addColumn(Column column, String label){
-        this.columns.add(column);
-        this.columnLabelsMap.put(column, label);
-        this.columnOrderMap.put(this.columnOrderMap.size(), column);
-        this.numCols = this.columnLabelsMap.size();
-        this.numRows = this.columnOrderMap.get(0).size();
-    }
-
-    
     public String toString(String separador) {
         if (separador == null) {
             separador = " | ";
