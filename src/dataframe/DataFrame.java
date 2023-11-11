@@ -221,6 +221,10 @@ public class DataFrame {
         this.numRows = this.columnOrderMap.size();
         this.numCols = this.columnLabelsMap.size();
     }
+
+
+
+    // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
     // Deep Copy
     // public DataFrame copy() {
     //     DataFrame dfOrigen = this;  // solo para aclarar
@@ -235,43 +239,43 @@ public class DataFrame {
 
     //     return copia;
     // }
-    public DataFrame copy() {
-        DataFrame copia = new DataFrame();
+    // public DataFrame copy() {
+    //     DataFrame copia = new DataFrame();
         
-        for (Column columnaOriginal : this.columns) {
-            Column columnaCopia;
-            List<Cell> contenidoCopia = new ArrayList<Cell>();
-            for (Cell celdaOriginal : columnaOriginal.getContent()) {
-                // Utiliza el método copy() de Cell para realizar una copia profunda de las celdas
-                Cell celdaCopia = celdaOriginal.copy();
-                contenidoCopia.add(celdaCopia);
-            }
-            columnaCopia = new Column(contenidoCopia);
-            copia.addColumn(columnaCopia);
+    //     for (Column columnaOriginal : this.columns) {
+    //         Column columnaCopia;
+    //         List<Cell> contenidoCopia = new ArrayList<Cell>();
+    //         for (Cell celdaOriginal : columnaOriginal.getContent()) {
+    //             // Utiliza el método copy() de Cell para realizar una copia profunda de las celdas
+    //             Cell celdaCopia = celdaOriginal.copy();
+    //             contenidoCopia.add(celdaCopia);
+    //         }
+    //         columnaCopia = new Column(contenidoCopia);
+    //         copia.addColumn(columnaCopia);
             
-            // Copia los mapeos de etiquetas y órdenes de las columnas
-            String label = this.columnLabelsMap.get(columnaOriginal);
-            copia.columnLabelsMap.put(columnaCopia, label);
+    //         // Copia los mapeos de etiquetas y órdenes de las columnas
+    //         String label = this.columnLabelsMap.get(columnaOriginal);
+    //         copia.columnLabelsMap.put(columnaCopia, label);
             
-            Integer order = this.columnOrderMap.entrySet().stream()
-                                                .filter(entry -> entry.getValue().equals(columnaOriginal))
-                                                .map(Map.Entry::getKey)
-                                                .findFirst()
-                                                .orElse(null);
-            if (order != null) {
-                copia.columnOrderMap.put(order, columnaCopia);
-            }
-        }
+    //         Integer order = this.columnOrderMap.entrySet().stream()
+    //                                             .filter(entry -> entry.getValue().equals(columnaOriginal))
+    //                                             .map(Map.Entry::getKey)
+    //                                             .findFirst()
+    //                                             .orElse(null);
+    //         if (order != null) {
+    //             copia.columnOrderMap.put(order, columnaCopia);
+    //         }
+    //     }
 
-        // Copia el mapeo de etiquetas de filas
-        copia.rowLabelsMap.putAll(this.rowLabelsMap);
+    //     // Copia el mapeo de etiquetas de filas
+    //     copia.rowLabelsMap.putAll(this.rowLabelsMap);
 
-        // Copia el número de filas y columnas
-        copia.numRows = this.numRows;
-        copia.numCols = this.numCols;
+    //     // Copia el número de filas y columnas
+    //     copia.numRows = this.numRows;
+    //     copia.numCols = this.numCols;
 
-        return copia;
-    }
+    //     return copia;
+    // }
 
     // To String
 
@@ -285,6 +289,11 @@ public class DataFrame {
 
     //     return copia;
     // }
+// Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
+    
+
+
+
     public DataFrame copy() {
         DataFrame copia = new DataFrame();
         
