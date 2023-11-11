@@ -13,32 +13,38 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
-        // armo unas celdas de prueba	
-        NumericCell celda1 = new NumericCell(1);
-        NumericCell celda2 = new NumericCell(2);
-        NumericCell celda3 = new NumericCell(3);
-        BooleanCell celda4 = new BooleanCell(true);
-        BooleanCell celda5 = new BooleanCell(false);
-        BooleanCell celda6 = new BooleanCell(true);
-        StringCell celda7 = new StringCell("Hola");
-        StringCell celda8 = new StringCell("Mundo");
-        StringCell celda9 = new StringCell("!");
-        NACell cell = NACell.getInstance();
-        // armo unas columnas de prueba a partir de las celdas
-        Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
-        Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
-        Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+
+    
+// Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
+    // public static void main(String[] args) {
+    //     // armo unas celdas de prueba	
+    //     NumericCell celda1 = new NumericCell(1);
+    //     NumericCell celda2 = new NumericCell(2);
+    //     NumericCell celda3 = new NumericCell(3);
+    //     BooleanCell celda4 = new BooleanCell(true);
+    //     BooleanCell celda5 = new BooleanCell(false);
+    //     BooleanCell celda6 = new BooleanCell(true);
+    //     StringCell celda7 = new StringCell("Hola");
+    //     StringCell celda8 = new StringCell("Mundo");
+    //     StringCell celda9 = new StringCell("!");
+    //     NACell cell = NACell.getInstance();
+    //     // armo unas columnas de prueba a partir de las celdas
+    //     Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
+    //     Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
+    //     Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
 
 
 
-        // armo dos Maps, uno que linkea las columnas con un label
-        // y otro que linkea el orden de la columna con la columna en sí
-        // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
-        Map<Column, String> columnLabelsMap = new HashMap<Column, String>();
-        columnLabelsMap.put(columna1, "NUMERICA");
-        columnLabelsMap.put(columna2, "BOOLEANA");
-        columnLabelsMap.put(columna3, "STRING");
+    //     // armo dos Maps, uno que linkea las columnas con un label
+    //     // y otro que linkea el orden de la columna con la columna en sí
+    //     // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
+    //     Map<Column, String> columnLabelsMap = new HashMap<Column, String>();
+    //     columnLabelsMap.put(columna1, "NUMERICA");
+    //     columnLabelsMap.put(columna2, "BOOLEANA");
+    //     columnLabelsMap.put(columna3, "STRING");
+// Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
+
+
 
     public static void main(String[] args) throws IOException {
         String filePath = "./utils/libro2.csv";
@@ -57,6 +63,7 @@ public class Main {
         Archivos.show(dfSample);
 
 
+// Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
         // for (Integer key : columnOrderMap.keySet()) {
         //     Column column = columnOrderMap.get(key);
         //     String columnName = columnLabelsMap.get(column);
@@ -75,19 +82,21 @@ public class Main {
         // System.out.println(columna2);
         // System.out.println(columna3);
         
-        dataframe.DataFrame df = new dataframe.DataFrame();
-        df.addColumn(columna1, "NUMERICA");
-        df.addColumn(columna2, "BOOLEANA");
-        df.addColumn(columna3);
+        // dataframe.DataFrame df = new dataframe.DataFrame();
+        // df.addColumn(columna1, "NUMERICA");
+        // df.addColumn(columna2, "BOOLEANA");
+        // df.addColumn(columna3);
 
-        Column columnaClonada = columna1.copy();
-        columnaClonada.setCell(1, 35);
-        System.out.println(columna1);
-        System.out.println(columnaClonada);
+        // Column columnaClonada = columna1.copy();
+        // columnaClonada.setCell(1, 35);
+        // System.out.println(columna1);
+        // System.out.println(columnaClonada);
+// Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
+
 
        // estos renombres sí andan
         DataFrame df2 = df.copy();
-        df.setColumLabels(columna1, "NUMERICA renombrada");
+        //df.setColumLabels(columna1, "NUMERICA renombrada");
         Cell newcell = new StringCell("TU MAMA");
         Integer value = 35;
         df.setCell(0, 1, value );
