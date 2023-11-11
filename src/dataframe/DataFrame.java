@@ -4,13 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
-import dataframe.Matriz;
-import dataframe.cells.BooleanCell;
 import dataframe.cells.Cell;
-import dataframe.cells.NACell;
-import dataframe.cells.NumericCell;
-import dataframe.cells.StringCell;
 import src.Identificador;
+
 public class DataFrame {
     
     public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
@@ -21,10 +17,24 @@ public class DataFrame {
     public int numRows; // numero de filas
     public int numCols; // numero de columnas
 
-
     // Constructores 
     //-TODO: sobrecarga
     public DataFrame(){
+        
+        /*
+         * Constructor de la clase DataFrame
+         * 
+         * @param columns: lista de columnas
+         * @param columnLabelsMap: diccionario de etiquetas de columnas
+         * @param columnOrderMap: diccionario de orden de columnas
+         * @param rowLabelsMap: diccionario de etiquetas de filas
+         * @param rowOrderMap: diccionario de orden de filas
+         * @param numRows: numero de filas
+         * @param numCols: numero de columnas
+         * 
+         * @return DataFrame
+         * 
+         */
         this.columns = new ArrayList<Column>(1);
         this.columnLabelsMap = new HashMap<Column, String>();
         this.columnOrderMap = new HashMap<Integer, Column>();
@@ -215,7 +225,6 @@ public class DataFrame {
     // public DataFrame copy() {
     //     DataFrame dfOrigen = this;  // solo para aclarar
     //     DataFrame copia = new DataFrame(dfOrigen);
-
     //     copia.columns = new ArrayList<Column>();
     //     // for(int i = 0; i< dfOrigen.columns.size(); i++){
     //     //     Column copiaColumn = dfOrigen.columns.get(i).copy();
@@ -265,6 +274,81 @@ public class DataFrame {
     }
 
     // To String
+
+    //     copia.columns = new ArrayList<Column>();
+    //     // for(int i = 0; i< dfOrigen.columns.size(); i++){
+    //     //     Column copiaColumn = dfOrigen.columns.get(i).copy();
+    //     //     copia.columns.add(copiaColumn);
+    //     //     copia.columnLabelsMap.put(copiaColumn, dfOrigen.columnLabelsMap.get(dfOrigen.columns.get(i)));
+    //     //     copia.columnOrderMap.put(i, copiaColumn);
+    //     // }
+
+    //     return copia;
+    // }
+    public DataFrame copy() {
+        DataFrame copia = new DataFrame();
+        
+        for (Column columnaOriginal : this.columns) {
+            Column columnaCopia;
+            List<Cell> contenidoCopia = new ArrayList<Cell>();
+            for (Cell celdaOriginal : columnaOriginal.getContent()) {
+                // Utiliza el método copy() de Cell para realizar una copia profunda de las celdas
+                Cell celdaCopia = celdaOriginal.copy();
+                contenidoCopia.add(celdaCopia);
+            }
+            columnaCopia = new Column(contenidoCopia);
+            copia.addColumn(columnaCopia);
+            
+            // Copia los mapeos de etiquetas y órdenes de las columnas
+            String label = this.columnLabelsMap.get(columnaOriginal);
+            copia.columnLabelsMap.put(columnaCopia, label);
+            
+            Integer order = this.columnOrderMap.entrySet().stream()
+                                                .filter(entry -> entry.getValue().equals(columnaOriginal))
+                                                .map(Map.Entry::getKey)
+                                                .findFirst()
+                                                .orElse(null);
+            if (order != null) {
+                copia.columnOrderMap.put(order, columnaCopia);
+            }
+        }
+
+        // Copia el mapeo de etiquetas de filas
+        copia.rowLabelsMap.putAll(this.rowLabelsMap);
+
+        // Copia el número de filas y columnas
+        copia.numRows = this.numRows;
+        copia.numCols = this.numCols;
+
+        return copia;
+    }
+
+    public Column getColumn(int col){
+        /*
+         * Metodo para obtener la columna
+         * 
+         * @param col: numero de columna
+         * 
+         * @return column
+         * 
+         */
+
+        Column column = this.columnOrderMap.get(col);
+        return column;
+    }
+    
+    public List<Column> getColumns(){
+        /*
+         * Metodo para obtener las columnas
+         * 
+         * @param columns: lista de columnas
+         * 
+         * @return columns
+         * 
+         */
+        return this.columns;
+    }
+
     public String toString(String separador) {
         if (separador == null) {
             separador = " | ";
