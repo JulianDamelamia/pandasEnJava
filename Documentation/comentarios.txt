@@ -1,0 +1,33 @@
+--- Esto es de Archivos.java
+        // Otra forma de iterar...
+        // for (int i=0; i < celdas.length; i++) {
+        //     for (int j=0; j < celdas[0].length; j++) {
+        //         System.out.println(celdas[i][j]);
+        //     }
+        // }
+
+        // for (int i=0; i < celdas.length; i++) {
+        //     for (int j=0; j < celdas[0].length; j++) {
+        //         StringCell celda = new StringCell(celdas[i][j]);
+        //         listaCeldas.add(celda);
+        //         System.out.println(celdas[i][j]);
+        //     }
+        // }
+---- FIN ----
+
+--- Esto es de DataFrame.java ---
+  
+  // To String
+
+  //     copia.columns = new ArrayList<Column>();
+  //     // for(int i = 0; i< dfOrigen.columns.size(); i++){
+  //     //     Column copiaColumn = dfOrigen.columns.get(i).copy();
+  //     //     copia.columns.add(copiaColumn);
+  //     //     copia.columnLabelsMap.put(copiaColumn, dfOrigen.columnLabelsMap.get(dfOrigen.columns.get(i)));
+  //     //     copia.columnOrderMap.put(i, copiaColumn);
+  //     // }
+
+  //     return copia;
+  // }
+
+---- FIN ----

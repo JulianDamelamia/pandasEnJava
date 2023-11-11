@@ -1,25 +1,18 @@
+package utils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
-import dataframe.Column;
-import dataframe.DataFrame;
-import dataframe.cells.BooleanCell;
-import dataframe.cells.Cell;
-import dataframe.cells.NACell;
-import dataframe.cells.NumericCell;
-import dataframe.cells.StringCell;
-import src.Identificador;
+import dataframe.*;
+import dataframe.cells.*;
+import utils_df.Identificador;
 
-public class Archivos {
-    //Importar CSV dentro de DataFrame
+public class Archivos {    
     public static List<String> leerLineas(String filepath) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath))) {
             String linea;
@@ -57,7 +50,7 @@ public class Archivos {
             System.out.println(linea);
         }
     }
-    //desde celdas importadas a dataframe
+
     public static DataFrame createDfFromParsed(String[][] celdas) {
         DataFrame df = new DataFrame();
         List<Cell> listaCeldas = new ArrayList<Cell>();
@@ -94,25 +87,13 @@ public class Archivos {
                         listaCeldas.add(DftCell);
                     break;
                 }
-                //System.out.println(celda);
-                //listaCeldas.add(cell);
             }
         }
-
-        // for (int i=0; i < celdas.length; i++) {
-        //     for (int j=0; j < celdas[0].length; j++) {
-        //         StringCell celda = new StringCell(celdas[i][j]);
-        //         listaCeldas.add(celda);
-        //         System.out.println(celdas[i][j]);
-        //     }
-        // }
 
         for(int j = 0; j < cantCol; j++){
             List<Cell> listaCeldasAux = new ArrayList<Cell>();
             for(int i = 0+j; i < listaCeldas.size(); i += cantCol){
                 if(i <= listaCeldas.size()){
-                    System.out.println(i + " , " +  j + " , " +  listaCeldas.size());
-                    System.out.print(listaCeldas.get(i).toString()+"\n");
                     listaCeldasAux.add(listaCeldas.get(i));
 
                 }
@@ -122,24 +103,12 @@ public class Archivos {
         }
 
         return df;
-        // Otra forma de iterar...
-        // for (int i=0; i < celdas.length; i++) {
-        //     for (int j=0; j < celdas[0].length; j++) {
-        //         System.out.println(celdas[i][j]);
-        //     }
-        // }
     }
 
     public static void exportCSV(String filepath, DataFrame df) {
         String texto = df.toString(",");
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
             bufferedWriter.write(texto);
-            // Si imprimiera por lineas (String[])
-            // for(int i=0; i < lineas.length; i++) {
-            //     bufferedWriter.write(lineas[i]);
-            //     if (i < lineas.length - 1)
-            //         bufferedWriter.newLine();
-            // }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -168,29 +137,6 @@ public class Archivos {
     public static void show(DataFrame df) {
         System.out.println(df.toString("|"));
     }
-    public static void main(String[] args) throws IOException {
-        String filePath = "./utils/libro2.csv";
-        DataFrame df = readCSV(filePath);
-        if (df != null) {
-            show(df);
-            System.out.println(df.columnLabelsMap.values());
-            // exportCSV("test1.csv", df);
-        }
-        //Creo un random sample de 10 filas
-        // RandomSample randomSample = new RandomSample();
-        // DataFrame dfSample = randomSample.sample(df);
-        // show(dfSample);
-        //show(dfSample.getRowLabels());
-
-        /*
-        *   Muestra el dataframe en consola
-
-        *   @param df: DataFrame a mostrar
-        *   @return void
-        */
-        System.out.println(df.toString("|"));
-    }
-    
 }
 
 
