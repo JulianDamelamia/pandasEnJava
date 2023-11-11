@@ -1,6 +1,7 @@
 import dataframe.cells.NumericCell;
 import dataframe.cells.BooleanCell;
 import dataframe.cells.StringCell;
+import utils.Archivos;
 import dataframe.Column;
 import dataframe.DataFrame;
 import dataframe.cells.Cell;
@@ -12,8 +13,6 @@ import utils_df.*;
 import java.io.IOException;
 
 public class Main {
-
-
     
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
     // public static void main(String[] args) {
@@ -33,8 +32,6 @@ public class Main {
     //     Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
     //     Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
 
-
-
     //     // armo dos Maps, uno que linkea las columnas con un label
     //     // y otro que linkea el orden de la columna con la columna en sí
     //     // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
@@ -44,24 +41,20 @@ public class Main {
     //     columnLabelsMap.put(columna3, "STRING");
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
-
-
     public static void main(String[] args) throws IOException {
-        String filePath = "./utils/libro2.csv";
+        String filePath = "./examples/libro2.csv";
         DataFrame df = Archivos.readCSV(filePath);
         if (df != null) {
             Archivos.show(df);
-            //Archivos.exportCSV("test1.csv", df);
+            //Archivos.exportCSV("test5.csv", df);
         }
     
-
-
         //Creo un random sample de df
         RandomSample randomSample = new RandomSample();
-        DataFrame dfSample = randomSample.sample(df);
+        DataFrame dfSample = randomSample.sample(df); //Cambiar el formato de retornar un DF a metodo nativo.
+        
         System.out.println("Random Sample");
         Archivos.show(dfSample);
-
 
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
         // for (Integer key : columnOrderMap.keySet()) {
@@ -93,7 +86,6 @@ public class Main {
         // System.out.println(columnaClonada);
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
-
        // estos renombres sí andan
         DataFrame df2 = df.copy();
         //df.setColumLabels(columna1, "NUMERICA renombrada");
@@ -107,7 +99,6 @@ public class Main {
 
         System.out.println("son iguales?");
         System.out.println(df2.equals(df));
-
 
         // Con df y dfSample los puedo concatenar
         DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
