@@ -51,6 +51,9 @@ public class RandomSample {
 
         return sample;
     }
+
+
+    
     public DataFrame sample(DataFrame df) {
         // Verificar que el porcentaje esté en el rango [0, 1]
 
