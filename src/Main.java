@@ -118,7 +118,12 @@ public class Main {
         System.out.println("son iguales?");
         System.out.println(dfCopy.equals(df));
 
-        
+        //Filtrado
+        String nombreColumna = "nombre_de_tu_columna";
+        DataFrame dfFiltrado = df.filtrarPorCriterio(nombreColumna, criterio);
+        System.out.println("DataFrame filtrado");
+        Archivos.show(dfFiltrado);
+    
 
     }
 }

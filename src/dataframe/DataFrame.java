@@ -2,6 +2,10 @@ package dataframe;
 
 import dataframe.cells.Cell;
 import utils_df.Identificador;
+import utils_df.Validadores;
+
+import java.util.function.Predicate;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -258,6 +262,26 @@ public class DataFrame {
     return labels;
   }
 
+  
+  /**
+   * Retorna el índice de la columna con la etiqueta especificada.
+   * 
+   * @param label la etiqueta de la columna cuyo índice se desea obtener.
+   * @return el índice de la columna con la etiqueta especificada.
+   */
+  public int getColumnIndex(String label) {
+    int index = -1;
+    for (Integer key : this.columnOrderMap.keySet()) {
+      Column column = this.columnOrderMap.get(key);
+      String columnName = this.columnLabelsMap.get(column);
+      if (columnName.equals(label)) {
+        index = key;
+        break;
+      }
+    }
+    return index;
+  }
+
   /**
    * Devuelve la cantidad de columnas del DataFrame.
    * @return la cantidad de columnas del DataFrame.
@@ -309,20 +333,20 @@ public class DataFrame {
 
 
   // metodo que implimenta RandomSample
-  public DataFrame randomSample(float p) {
+  //public DataFrame randomSample(float p) {
     //TODO: IMPLEMTNEAR
-    /*quiero llamar a la funcion sample del paquete utils_df y la clase randomsampe */
-    if (p == null) {
-      float localP = (float) Math.random();
-    }
-
-    // llamo al medotod sample del package utils_df en la clase RandomSample
-    DataFrame df = utils_df.RandomSample.sample(this, p);
-
-    return 
-  }
-
-
+    /*quiero llamar a la funcion sample del paquete utils_df y la clase randomsampe
+    *    if (p == null) {
+    *      float localP = (float) Math.random();
+    *    }
+    *
+    *    // llamo al medotod sample del package utils_df en la clase RandomSample
+    *    DataFrame df = utils_df.RandomSample.sample(this, p);
+    *
+    *    return 
+    *  }
+    */
+      
   //SHALLOW COPY
   private DataFrame(DataFrame dataframe) {
     this.columns = new ArrayList<Column>();
@@ -407,6 +431,49 @@ public class DataFrame {
     
     return this.columns;
   }
+
+  // Filtrado
+  // TODO WIP FILTRADO
+  public DataFrame filtrarPorCriterio(String nombreColumna, String operador, Object valor) {
+    DataFrame resultado = new DataFrame();
+    int columnIndex = getColumnIndex(nombreColumna);  
+    if (columnIndex == -1) {
+      // La columna no existe, puedes manejar este caso según tus necesidades
+      return resultado;
+
+    Column columna = columns.get(columnIndex);
+    // Creo una columna temporal para guardar las cells que pasen el test
+    Column columnaFiltrada = new Column(new ArrayList<Cell>());
+    for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+      Cell cell = columna.getCell(rowIndex);
+      Predicate<Cell> criterio;
+      switch (operador) {
+        case ">":
+          criterio = c -> ((Comparable<T>) valor).compareTo((T) c.getValue()) < 0;
+          break;
+        case "<":
+          criterio = c -> ((Comparable<T>) valor).compareTo((T) c.getValue()) > 0;
+          break;
+        case "==":
+          criterio = c -> ((Comparable<T>) valor).compareTo((T) c.getValue()) == 0;
+          break;
+        default:
+          throw new IllegalArgumentException("Operador no soportado: " + operador);
+      }
+      if (criterio.test(cell)) {
+        for (Column col : columns) {
+          // Agregar celdas de todas las columnas para la fila actual
+          columnaFiltrada.addCell(col.getCell(rowIndex));
+        }
+      }
+    }
+    resultado.addColumn(columnaFiltrada);
+      return resultado;
+   }
+}
+
+
+
 
   /**
    * Returns a string representation of the DataFrame, using the specified separator between columns.

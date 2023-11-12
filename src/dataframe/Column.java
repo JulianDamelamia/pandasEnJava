@@ -3,7 +3,6 @@ package dataframe;
 import dataframe.cells.Cell;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Clase que representa una columna de un DataFrame.
  */
@@ -81,6 +80,15 @@ public class Column {
   }
 
   /**
+   * Agrega una celda al final de la columna.
+   * @param cell la celda a agregar.
+   */
+  public void addCell(Cell cell) {
+    this.content.add(cell);
+    this.size++;
+  }
+
+  /**
    * Establece el contenido de la columna a partir de una lista de celdas.
    * @param content la lista de celdas que conformarán la columna.
    */
@@ -122,6 +130,8 @@ public class Column {
   public ArrayList<Cell> getContent() {
     return this.content;
   }
+
+  
 
   /**
    * Devuelve una representación en cadena de la columna.
