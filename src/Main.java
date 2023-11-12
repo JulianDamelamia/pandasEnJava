@@ -56,6 +56,24 @@ public class Main {
         System.out.println("Random Sample");
         Archivos.show(dfSample);
 
+
+        // Con df y dfSample los puedo concatenar
+        DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
+        System.out.println("Df Concatenado");
+
+        Archivos.show(dfConcatenado);
+
+        // Veo las primeras filas con el metodo head()
+        DataFrame dfHead = Selection.head(df);
+        System.out.println("Head");
+        Archivos.show(dfHead);
+
+        // Veo las ultimas filas con el metodo tail()
+        DataFrame dfTail = Selection.tail(df);
+        System.out.println("Tail");
+        Archivos.show(dfTail);
+
+
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
         // for (Integer key : columnOrderMap.keySet()) {
         //     Column column = columnOrderMap.get(key);
@@ -87,34 +105,20 @@ public class Main {
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
        // estos renombres sí andan
-        DataFrame df2 = df.copy();
+        DataFrame dfCopy = df.copy();
         //df.setColumLabels(columna1, "NUMERICA renombrada");
         Cell newcell = new StringCell("TU MAMA");
         Integer value = 35;
-        df.setCell(0, 1, value );
+        dfCopy.setCell(0, 1, value );
         System.out.println("Dataframe 1");
         System.out.println(df.toString("|"));
         System.out.println("Dataframe 2");
-        System.out.println(df2.toString("|"));
+        System.out.println(dfCopy.toString("|"));
 
         System.out.println("son iguales?");
-        System.out.println(df2.equals(df));
+        System.out.println(dfCopy.equals(df));
 
-        // Con df y dfSample los puedo concatenar
-        DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
-        System.out.println("Df Concatenado");
-
-        Archivos.show(dfConcatenado);
-
-        // Veo las primeras filas con el metodo head()
-        DataFrame dfHead = Selection.head(df);
-        System.out.println("Head");
-        Archivos.show(dfHead);
-
-        // Veo las ultimas filas con el metodo tail()
-        DataFrame dfTail = Selection.tail(df);
-        System.out.println("Tail");
-        Archivos.show(dfTail);
+        
 
     }
 }
