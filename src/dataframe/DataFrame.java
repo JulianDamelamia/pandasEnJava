@@ -42,7 +42,11 @@ public class DataFrame {
     this.numCols = this.columnLabelsMap.size();
   }
 
-  // Agregar columnas sobrecargado
+  /**
+   * Agrega una nueva columna al DataFrame con las celdas especificadas.
+   * 
+   * @param cells la lista de celdas que conforman la nueva columna
+   */
   public void addColumn(List<Cell> cells) {
     Column column = new Column(cells);
     this.columns.add(column);
@@ -52,6 +56,11 @@ public class DataFrame {
     this.numRows = this.columnOrderMap.get(0).size();
   }
 
+  /**
+   * Agrega una columna al DataFrame.
+   * 
+   * @param column la columna a agregar
+   */
   public void addColumn(Column column) {
     this.columns.add(column);
     this.columnLabelsMap.put(column, "Columna " + this.columnLabelsMap.size());
@@ -60,6 +69,12 @@ public class DataFrame {
     this.numRows = this.columnOrderMap.get(0).size();
   }
 
+  /**
+   * Agrega una columna al DataFrame.
+   * 
+   * @param column la columna a agregar
+   * @param label la etiqueta de la columna
+   */
   public void addColumn(Column column, String label) {
     this.columns.add(column);
     this.columnLabelsMap.put(column, label);
@@ -68,24 +83,53 @@ public class DataFrame {
     this.numRows = this.columnOrderMap.get(0).size();
   }
 
-  // Getter Setter Celda
+  // Getters y Setters
+
+  /**
+   * Retorna la celda en la posición especificada.
+   *
+   * @param col la columna de la celda.
+   * @param row la fila de la celda.
+   * @return la celda en la posición especificada.
+   */
   public Cell getCell(int col, int row) {
     Column column = this.columnOrderMap.get(col);
     Cell cell = column.getContent().get(row);
     return cell;
   }
 
+  /**
+   * Establece el valor de una celda en la posición especificada.
+   * 
+   * @param col la columna de la celda
+   * @param row la fila de la celda
+   * @param cell el valor de la celda
+   */
   public void setCell(int col, int row, Cell cell) {
     Column column = this.columnOrderMap.get(col);
     column.setCell(row, cell);
   }
 
+  /**
+   * Establece el valor de una celda en la columna y fila especificadas.
+   * @Autor: Julian
+
+   * @param col el índice de la columna en la que se encuentra la celda.
+   * @param index el índice de la fila en la que se encuentra la celda.
+   * @param value el valor que se establecerá en la celda.
+   */
   public void setCell(int col, int index, Object value) {
-    // @Autor: Julian
     Column column = this.columnOrderMap.get(col);
     column.setCell(index, value);
   }
 
+  /**
+   * Establece el valor de una celda en la fila especificada de la columna con la etiqueta dada.
+   * 
+   * @param colLabel la etiqueta de la columna en la que se establecerá el valor de la celda
+   * @param row el índice de la fila en la que se establecerá el valor de la celda
+   * @param cell el objeto Cell que se establecerá como valor de la celda
+   */
   public void setCell(String colLabel, int row, Cell cell) {
     Column column = null;
     for (Map.Entry<Column, String> entry : this.columnLabelsMap.entrySet()) {
@@ -101,6 +145,9 @@ public class DataFrame {
     }
   }
 
+  /**
+   * Limpia el mapa de etiquetas de fila y luego lo llena con las etiquetas de fila correspondientes a cada índice de fila.
+   */
   public void setRowLabels() {
     rowLabelsMap.clear();
     for (Integer i = 0; i < columns.get(0).size(); i++) {
@@ -108,6 +155,11 @@ public class DataFrame {
     }
   }
 
+  /**
+   * Devuelve una cadena que representa las etiquetas de fila del DataFrame.
+   * Si no se han establecido las etiquetas de fila, se establecen llamando al método setRowLabels().
+   * @return una cadena que representa las etiquetas de fila del DataFrame.
+   */
   public String getRowLabels() {
     if (this.rowLabelsMap.size() == 0) {
       setRowLabels();
@@ -121,6 +173,10 @@ public class DataFrame {
     return out;
   }
 
+  /** //TODO: definir si es un getter....
+   * Devuelve un arreglo de Strings con las etiquetas de las filas del DataFrame.
+   * @return arreglo de Strings con las etiquetas de las filas del DataFrame.
+   */
   private String[] listRowLabels() {
     String[] labels = new String[this.rowLabelsMap.size()];
     int i = 0;
@@ -131,6 +187,12 @@ public class DataFrame {
     return labels;
   }
 
+  /**
+   * Establece las etiquetas de columna para el DataFrame.
+   * 
+   * @param labels un arreglo de Strings con las etiquetas de columna
+   * @throws IndexOutOfBoundsException si la cantidad de etiquetas no coincide con la cantidad de columnas
+   */
   public void setColumLabels(String[] labels) throws IndexOutOfBoundsException {
     columnLabelsMap.clear();
     if (labels.length != this.columns.size()) {
@@ -145,6 +207,11 @@ public class DataFrame {
     }
   }
 
+  /**
+   * Establece las etiquetas de columna para el DataFrame.
+   * 
+   * @param labelsMap un mapa que asocia cada columna con su etiqueta correspondiente.
+   */
   public void setColumLabels(Map<Column, String> labelsMap) {
     for (Column column : labelsMap.keySet()) {
       String columnName = labelsMap.get(column);
@@ -152,10 +219,20 @@ public class DataFrame {
     }
   }
 
+  /**
+   * Establece el nombre de la columna especificada en el mapa de etiquetas de columna.
+   * @param column la columna a la que se le asignará el nombre de la etiqueta.
+   * @param columnName el nombre de la etiqueta de la columna.
+   */
   public void setColumLabels(Column column, String columnName) {
     columnLabelsMap.put(column, columnName);
   }
 
+  /**
+   * Retorna una cadena de caracteres que representa las etiquetas de las columnas del DataFrame.
+   * 
+   * @return una cadena de caracteres con las etiquetas de las columnas separadas por "|".
+   */
   public String getColumnLabels() {
     String[] colLabels = this.listColumnLabels();
     String out = "";
@@ -166,6 +243,11 @@ public class DataFrame {
     return out;
   }
 
+  /** //TODO definir si es un getter...
+   * Retorna un arreglo de Strings con los nombres de las columnas del DataFrame.
+   * 
+   * @return un arreglo de Strings con los nombres de las columnas del DataFrame.
+   */
   private String[] listColumnLabels() {
     String[] labels = new String[this.columnLabelsMap.size()];
     for (Integer key : this.columnOrderMap.keySet()) {
@@ -176,21 +258,41 @@ public class DataFrame {
     return labels;
   }
 
+  /**
+   * Devuelve la cantidad de columnas del DataFrame.
+   * @return la cantidad de columnas del DataFrame.
+   */
   public int getCantColumnas() {
     return this.columns.size();
   }
 
+  /**
+   * Devuelve la cantidad de filas del DataFrame.
+   * @return la cantidad de filas del DataFrame.
+   */
   public int getCantFilas() {
     int numRows = this.columns.get(0).size();
     return numRows;
   }
 
+  /**
+   * Retorna un arreglo con las dimensiones del DataFrame.
+   * El primer elemento del arreglo es la cantidad de filas y el segundo elemento es la cantidad de columnas.
+   *
+   * @return un arreglo de enteros con las dimensiones del DataFrame.
+   */
   public Integer[] getDimensions() {
     int numCols = getCantColumnas();
     int numRows = getCantFilas();
     return new Integer[] { numRows, numCols };
   }
 
+  /**
+   * Devuelve el tipo de dato de la columna especificada.
+   *
+   * @param colNumber el número de la columna cuyo tipo de dato se desea obtener.
+   * @return el tipo de dato de la columna especificada.
+   */
   public String getColumnType(int colNumber) {
     Identificador identificador = null;
     String[] labels = this.listColumnLabels();
@@ -205,6 +307,22 @@ public class DataFrame {
     return identificador.getType();
   }
 
+
+  // metodo que implimenta RandomSample
+  public DataFrame randomSample(float p) {
+    //TODO: IMPLEMTNEAR
+    /*quiero llamar a la funcion sample del paquete utils_df y la clase randomsampe */
+    if (p == null) {
+      float localP = (float) Math.random();
+    }
+
+    // llamo al medotod sample del package utils_df en la clase RandomSample
+    DataFrame df = utils_df.RandomSample.sample(this, p);
+
+    return 
+  }
+
+
   //SHALLOW COPY
   private DataFrame(DataFrame dataframe) {
     this.columns = new ArrayList<Column>();
@@ -216,41 +334,31 @@ public class DataFrame {
     this.numRows = this.columnOrderMap.size();
     this.numCols = this.columnLabelsMap.size();
   }
-
-  // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
-  // Deep Copy
-  // public DataFrame copy() {
-  //     DataFrame dfOrigen = this;  // solo para aclarar
-  //     DataFrame copia = new DataFrame(dfOrigen);
-  //     copia.columns = new ArrayList<Column>();
-  //     // for(int i = 0; i< dfOrigen.columns.size(); i++){
-  //     //     Column copiaColumn = dfOrigen.columns.get(i).copy();
-  //     //     copia.columns.add(copiaColumn);
-  //     //     copia.columnLabelsMap.put(copiaColumn, dfOrigen.columnLabelsMap.get(dfOrigen.columns.get(i)));
-  //     //     copia.columnOrderMap.put(i, copiaColumn);
-  //     // }
-
-  //     return copia;
-  // } @Autor: Julian
-  // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
-
+  
+  /**
+   * Representa un conjunto de datos tabulares con etiquetas de fila y columna.
+   * Cada columna es un objeto Column y cada fila es un objeto Row.
+   * Proporciona métodos para manipular y analizar los datos.
+   *
+   * @return DataFrame
+   */
   public DataFrame copy() {
-    DataFrame copia = new DataFrame();
+    DataFrame CopyDataFrame = new DataFrame();
 
     for (Column columnaOriginal : this.columns) {
       Column columnaCopia;
       List<Cell> contenidoCopia = new ArrayList<Cell>();
       for (Cell celdaOriginal : columnaOriginal.getContent()) {
-        // Utiliza el método copy() de Cell para realizar una copia profunda de las celdas
+        // Utiliza el método copy() de Cell para realizar una CopyDataFrame profunda de las celdas
         Cell celdaCopia = celdaOriginal.copy();
         contenidoCopia.add(celdaCopia);
       }
       columnaCopia = new Column(contenidoCopia);
-      copia.addColumn(columnaCopia);
+      CopyDataFrame.addColumn(columnaCopia);
 
       // Copia los mapeos de etiquetas y órdenes de las columnas
       String label = this.columnLabelsMap.get(columnaOriginal);
-      copia.columnLabelsMap.put(columnaCopia, label);
+      CopyDataFrame.columnLabelsMap.put(columnaCopia, label);
 
       Integer order =
         this.columnOrderMap.entrySet()
@@ -260,46 +368,55 @@ public class DataFrame {
           .findFirst()
           .orElse(null);
       if (order != null) {
-        copia.columnOrderMap.put(order, columnaCopia);
+        CopyDataFrame.columnOrderMap.put(order, columnaCopia);
       }
     }
 
     // Copia el mapeo de etiquetas de filas
-    copia.rowLabelsMap.putAll(this.rowLabelsMap);
+    CopyDataFrame.rowLabelsMap.putAll(this.rowLabelsMap);
 
     // Copia el número de filas y columnas
-    copia.numRows = this.numRows;
-    copia.numCols = this.numCols;
+    CopyDataFrame.numRows = this.numRows;
+    CopyDataFrame.numCols = this.numCols;
 
-    return copia;
+    return CopyDataFrame;
   }
 
+  /**
+  * Metodo para obtener la columna
+  *
+  * @param col: numero de columna
+  *
+  * @return column
+  *
+  **/
   public Column getColumn(int col) {
-    /*
-     * Metodo para obtener la columna
-     *
-     * @param col: numero de columna
-     *
-     * @return column
-     *
-     */
-
     Column column = this.columnOrderMap.get(col);
     return column;
   }
 
+  /**
+  * Metodo para obtener las columnas
+  *
+  * @param columns: lista de columnas
+  *
+  * @return columns
+  *
+  **/
   public List<Column> getColumns() {
-    /*
-     * Metodo para obtener las columnas
-     *
-     * @param columns: lista de columnas
-     *
-     * @return columns
-     *
-     */
+    
     return this.columns;
   }
 
+  /**
+   * Returns a string representation of the DataFrame, using the specified separator between columns.
+   * If the separator is null, the default separator " | " is used.
+   * The string representation includes column labels and row labels.
+   * Each cell value is padded to fit the width of its column.
+   * 
+   * @param separador the separator to use between columns
+   * @return a string representation of the DataFrame
+   */
   public String toString(String separador) {
     if (separador == null) {
       separador = " | ";
