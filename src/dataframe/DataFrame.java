@@ -309,18 +309,18 @@ public class DataFrame {
 
 
   // metodo que implimenta RandomSample
-  public DataFrame randomSample(float p) {
-    //TODO: IMPLEMTNEAR
-    /*quiero llamar a la funcion sample del paquete utils_df y la clase randomsampe */
-    if (p == null) {
-      float localP = (float) Math.random();
-    }
+//   public DataFrame randomSample(float p) {
+//     //TODO: IMPLEMTNEAR
+//     /*quiero llamar a la funcion sample del paquete utils_df y la clase randomsampe */
+//     if (p == null) {
+//       float localP = (float) Math.random();
+//     }
 
-    // llamo al medotod sample del package utils_df en la clase RandomSample
-    DataFrame df = utils_df.RandomSample.sample(this, p);
+//     // llamo al medotod sample del package utils_df en la clase RandomSample
+//     DataFrame df = utils_df.RandomSample.sample(this, p);
 
-    return 
-  }
+//     return 
+//   }
 
 
   //SHALLOW COPY
