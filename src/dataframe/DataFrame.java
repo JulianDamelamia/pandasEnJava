@@ -107,6 +107,7 @@ public class DataFrame {
    */
   public void setCell(int col, int row, Cell cell) {
     Column column = this.columnOrderMap.get(col);
+    // TODO: Hay que verificar de que tipo es la columna y hacer una excepcion en caso de que se cargue una celda que no sea de ese tipo. 
     column.setCell(row, cell);
   }
 
