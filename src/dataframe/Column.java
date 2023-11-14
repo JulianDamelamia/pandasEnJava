@@ -1,6 +1,8 @@
 package dataframe;
 
 import dataframe.cells.Cell;
+import dataframe.cells.NACell;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,4 +137,21 @@ public class Column {
     }
     return result;
   }
+
+  protected void removeCell(int index) {
+    if (index >= 0 && index < size) {
+        content.remove(index);
+        size--;
+    } else {
+        throw new IndexOutOfBoundsException("Índice de celda fuera de rango");
+    }
+  }
+
+  public void removeCellbyNA(int index) {
+    if (index >= 0 && index < size) {
+        content.set(index, new NACell()); // Reemplazar la celda en el índice por un objeto NACell
+    } else {
+        throw new IndexOutOfBoundsException("Índice de celda fuera de rango");
+    }
+}
 }

@@ -16,6 +16,10 @@ public class Identificador {
     this.celda = celda;
   }
 
+  public Identificador(Object objCelda) {
+    this.celda = objCelda.toString();
+  }
+
   /**
    * Este método se utiliza para obtener el tipo de la celda.
    * @return String El tipo de la celda. Puede ser "STRING", "BOOLEAN", "INTEGER", "FLOAT" o "NA".
