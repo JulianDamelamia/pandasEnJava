@@ -1,6 +1,10 @@
 package dataframe;
 
+import dataframe.cells.BooleanCell;
 import dataframe.cells.Cell;
+import dataframe.cells.NACell;
+import dataframe.cells.NumericCell;
+import dataframe.cells.StringCell;
 import utils_df.Identificador;
 
 import java.util.ArrayList;
@@ -41,6 +45,72 @@ public class DataFrame {
     this.numRows = this.columnOrderMap.size();
     this.numCols = this.columnLabelsMap.size();
   }
+
+  public DataFrame(Object[][] matriz) {
+    this.columns = new ArrayList<>();
+    this.columnLabelsMap = new HashMap<>();
+    this.columnOrderMap = new HashMap<>();
+    this.rowLabelsMap = new HashMap<>();
+    this.numRows = 0;
+    this.numCols = 0;
+
+    if (matriz.length > 0) {
+        this.numRows = matriz.length;
+        this.numCols = matriz[0].length;
+
+        // Inicialización de las columnas
+        for (int j = 0; j < this.numCols; j++) {
+            Column newColumn = new Column();
+            ArrayList<Cell> cells = new ArrayList<>();
+            Identificador identif;
+            for (int i = 0; i < this.numRows; i++) {
+              identif = new Identificador(matriz[i][j]);
+              Object obj = matriz[i][j];
+              switch (identif.getType()) {
+                case "STRING":
+                    StringCell strCell = new StringCell(obj.toString());
+                    cells.add(strCell);
+                    break;
+                case "FLOAT":
+                    if (obj instanceof Float) {
+                        NumericCell fltCell = new NumericCell((Float) obj);
+                        cells.add(fltCell);
+                    }
+                    break;
+                case "INTEGER":
+                    if (obj instanceof Integer) {
+                        NumericCell intCell = new NumericCell((Integer) obj);
+                        cells.add(intCell);
+                    }
+                    break;
+                case "NA":
+                    NACell naCell = new NACell();
+                    cells.add(naCell);
+                    break;
+                case "BOOLEAN":
+                    if (obj instanceof Boolean) {
+                        BooleanCell blnCell = new BooleanCell((Boolean) obj);
+                        cells.add(blnCell);
+                    }
+                    break;
+                default:
+                    StringCell defaultCell = new StringCell(obj.toString());
+                    cells.add(defaultCell);
+                    break;
+            }
+            }
+            newColumn.setContent(cells);
+            this.columns.add(newColumn);
+            this.columnLabelsMap.put(newColumn, "Columna " + j); // Puedes cambiar esto por nombres de columnas deseados
+            this.columnOrderMap.put(j, newColumn);
+        }
+
+        // Inicialización de etiquetas de filas
+        for (int i = 0; i < this.numRows; i++) {
+            rowLabelsMap.put(String.valueOf(i), i);
+        }
+    }
+}
 
   /**
    * Agrega una nueva columna al DataFrame con las celdas especificadas.
@@ -250,11 +320,14 @@ public class DataFrame {
    */
   private String[] listColumnLabels() {
     String[] labels = new String[this.columnLabelsMap.size()];
-    for (Integer key : this.columnOrderMap.keySet()) {
-      Column column = this.columnOrderMap.get(key);
-      String columnName = this.columnLabelsMap.get(column);
-      labels[key] = columnName;
-    }
+    this.columnLabelsMap.forEach((column, label) -> {
+        Integer index = this.columnOrderMap.keySet().stream()
+                .filter(key -> this.columnOrderMap.get(key).equals(column))
+                .findFirst().orElse(null);
+        if (index != null && index >= 0 && index < labels.length) {
+            labels[index] = label;
+        }
+    });
     return labels;
   }
 
@@ -308,6 +381,42 @@ public class DataFrame {
   }
 
 
+public void deleteRow(int rowIndex) {
+    // Elimina la fila específica en cada columna
+    for (Column column : columns) {
+        column.removeCell(rowIndex);
+    }
+
+    // Actualiza el mapa de etiquetas de fila y la cantidad de filas
+    rowLabelsMap.remove(String.valueOf(rowIndex));
+    numRows--;
+}
+
+public void deleteColumn(int columnIndex) {
+  // Elimina la columna específica
+  Column removedColumn = columns.remove(columnIndex);
+
+  // Actualiza los mapas y la cantidad de columnas
+  columnLabelsMap.remove(removedColumn);
+  columnOrderMap.remove(columnIndex);
+  numCols--;
+
+  // Recrea el mapa de orden de columnas
+  Map<Integer, Column> newColumnOrderMap = new HashMap<>();
+  for (int i = 0; i < columns.size(); i++) {
+      newColumnOrderMap.put(i, columns.get(i));
+  }
+  columnOrderMap = newColumnOrderMap;
+  
+  // Verifica la salida en la consola para identificar el problema.
+  System.out.println("columnOrderMap después de la eliminación: " + columnOrderMap);
+}
+
+public void deleteCell(int rowIndex,int columnIndex) {
+    // Elimina la celda específica en la columna y fila indicadas
+    columns.get(columnIndex).removeCellbyNA(rowIndex);
+}
+
   // metodo que implimenta RandomSample
   public DataFrame randomSample(float p) {
     //TODO: IMPLEMTNEAR
@@ -319,7 +428,7 @@ public class DataFrame {
     // llamo al medotod sample del package utils_df en la clase RandomSample
     DataFrame df = utils_df.RandomSample.sample(this, p);
 
-    return 
+    return df;
   }
 
 

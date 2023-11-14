@@ -72,6 +72,18 @@ public class Main {
         DataFrame dfTail = Selection.tail(df);
         System.out.println("Tail");
         Archivos.show(dfTail);
+        
+        Archivos.show(df);
+        df.deleteRow(2);
+        System.out.println("-> Con una fila eliminada");
+        Archivos.show(df);
+        df.deleteColumn(2);
+        System.out.println("-> Con una columna eliminada");
+        Archivos.show(df);
+        df.deleteCell(2,3);
+        System.out.println("-> Con la celda (2,3 eliminada)");
+        Archivos.show(df);
+        
 
 
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
@@ -117,8 +129,15 @@ public class Main {
 
         System.out.println("son iguales?");
         System.out.println(dfCopy.equals(df));
-
         
+        Integer[][] m1 = {
+            {11, 2, 3, 4},
+            {5, 1, 7, 8},
+            {5, 1, 3, 9}
+        };
+
+        DataFrame nativo = new DataFrame(m1);
+        System.out.println(nativo.toString("|"));
 
     }
 }
