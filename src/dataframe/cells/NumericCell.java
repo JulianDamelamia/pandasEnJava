@@ -12,6 +12,22 @@ public class NumericCell extends Cell{
         this(original.getValue());
      }
 
+    public boolean isInteger() {
+        return value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Byte;
+    }
+
+    public boolean isFloat() {
+        return value instanceof Float || value instanceof Double;
+    }
+
+    public int getIntValue() {
+        return value.intValue();
+    }
+
+    public float getFloatValue() {
+        return value.floatValue();
+    }
+
    
     @Override
     public NumericCell copy(){
@@ -20,7 +36,7 @@ public class NumericCell extends Cell{
 
     @Override
     public Number getValue() {
-        return value;
+        return value.floatValue();
     }
     
 
