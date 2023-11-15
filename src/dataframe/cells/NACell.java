@@ -1,8 +1,8 @@
 package dataframe.cells;
 
-public class NACell extends Cell {
+public class NACell<O extends Object & Comparable<O>> extends Cell<O>{
 
-    private static final NACell INSTANCE = new NACell();
+    protected static final NACell INSTANCE = new NACell();
 
     public NACell() {
         super();
@@ -18,7 +18,8 @@ public class NACell extends Cell {
     public static NACell getInstance() {
         return INSTANCE;
     }
-    
+
+    @Override
     public boolean isNA() {
         return true;
     }
@@ -57,7 +58,6 @@ public class NACell extends Cell {
         return null;
     }
 
-    @Override
     public void setValue(Object value){
         try {
             replaceNA(value);
@@ -65,6 +65,7 @@ public class NACell extends Cell {
             e.getMessage();
         }
     }
+
 
     public Cell replaceNA(Object value) throws Exception{
         if (value instanceof Boolean){
@@ -78,6 +79,16 @@ public class NACell extends Cell {
         }
         else{
             throw new Exception("El tipo de dato " + value.getClass() + " no es soportado");
+        }
+    }
+
+    @Override
+    public int compareTo(Cell<O> otro) {
+       if(otro.isNA()){
+            return 0;
+        }
+        else{
+            return -1;
         }
     }
 }

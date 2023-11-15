@@ -189,7 +189,7 @@ public class DataFrame {
    * @param index el índice de la fila en la que se encuentra la celda.
    * @param value el valor que se establecerá en la celda.
    */
-  public void setCell(int col, int index, Object value) {
+  public void setCell(int col, int index, Comparable<Object> value) {
     Column column = this.columnOrderMap.get(col);
     column.setCell(index, value);
   }

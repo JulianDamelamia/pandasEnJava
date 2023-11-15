@@ -1,41 +1,32 @@
 package dataframe.cells;
 
-public class NumericCell extends Cell{
-    private Number value;
+public class NumericCell<N extends Number & Comparable<N>> extends Cell<N> {
+    protected N value;
 
-    public NumericCell(Number value) {
+    public NumericCell(N value) {
         super();
         setValue(value);
     }
 
-    public NumericCell(NumericCell original){
+    public NumericCell(NumericCell<N> original){
         this(original.getValue());
      }
 
    
-    @Override //esto no anda, no le den bola
-    public NumericCell copy(){
-        return new NumericCell(this);
+    @Override
+    public NumericCell<N> copy(){
+        return new NumericCell<>(this);
     } 
 
     @Override
-    public Number getValue() {
+    public N getValue() {
         return value;
     }
     
     @Override
-    public void setValue(Object value) {
-        try{
-            if(value instanceof Number){
-                this.value = (Number) value;
-            }
-            else{
-                throw new Exception("Se intentó asignar" + value.getClass() + "a una celda de tipo Numeric");
-            }
-        }catch(Exception e){ e.getMessage();}    
+    public void setValue(N value) {
+        this.value = value;
     }
-
-
 
     @Override
     public boolean isBoolean() {
@@ -50,6 +41,10 @@ public class NumericCell extends Cell{
     @Override
     public boolean isNumeric() {
         return true;
+    }
+    @Override
+    public boolean isNA() {
+        return false;
     }
 
     @Override
@@ -71,5 +66,19 @@ public class NumericCell extends Cell{
     public Number asNumber() {
         return this.value;
     }
-    
+
+    @Override
+    public int compareTo(Cell<N> otro)throws RuntimeException{
+        if (otro.getClass() != this.getClass()) {
+            throw new RuntimeException("No se pueden comparar celdas de distinto tipo");
+        } else {
+            return this.compareToNumeric((NumericCell<N>) otro);
+            }
+    };
+
+    public int compareToNumeric(NumericCell<N> otro){
+        Double valor1 = this.value.doubleValue();
+        Double valor2 = otro.getValue().doubleValue();
+       return valor1.compareTo(valor2);
+    };
 }

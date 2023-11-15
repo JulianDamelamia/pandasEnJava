@@ -1,7 +1,7 @@
 package dataframe.cells;
 
-public class BooleanCell extends Cell{
-    private Boolean value;
+public class BooleanCell extends Cell<Boolean>{
+    protected Boolean value;
 
     public BooleanCell() {
         super();
@@ -15,24 +15,29 @@ public class BooleanCell extends Cell{
     public BooleanCell(BooleanCell original){
         this(original.getValue());
      }
+
     @Override
     public BooleanCell copy(){
         return new BooleanCell(this);
     }
-    @Override
-    public void setValue(Object value) {
-        try{
-            if(value instanceof Boolean){
-                this.value = (Boolean) value;
-            }
-            else{
-                throw new Exception("Se intentó asignar" + value.getClass() + "a una celda de tipo Boolean");
-            }
-        }catch(Exception e){ e.getMessage();}    
-    }
+
     public void setValue(Boolean value){
         this.value = value;
     }
+
+    public void setValue(Object value) {
+        try {
+            if (value instanceof Boolean) {
+                this.value = (Boolean) value;
+            } else {
+                throw new Exception("Se intentó asignar " + value.getClass() + " a una celda de tipo Boolean");
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
+
+
     public Boolean getValue(){
         return this.value;
     }
@@ -54,6 +59,10 @@ public class BooleanCell extends Cell{
     }
 
     @Override
+    public boolean isNA() {
+        return false;
+    }
+    @Override
     public Boolean asBoolean() {
         return value;
     }
@@ -71,5 +80,15 @@ public class BooleanCell extends Cell{
        else{
            return 0;
        }
+    }
+
+    @Override
+    public int compareTo(Cell<Boolean> o) {
+        if(o.isBoolean()){
+            return this.value.compareTo(((BooleanCell)o).getValue());
+        }
+        else{
+            throw new RuntimeException("No se pueden comparar celdas de distinto tipo");
+        }
     }
 }

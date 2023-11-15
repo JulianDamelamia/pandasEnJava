@@ -1,7 +1,7 @@
 package dataframe.cells;
 
-public class StringCell extends Cell{
-    private String value;
+public class StringCell extends Cell<String>{
+    protected String value;
 
     public StringCell(String value) {
         super();
@@ -17,9 +17,11 @@ public class StringCell extends Cell{
     public StringCell copy(){
         return new StringCell(this);
     } 
-    
-
     @Override
+    public void setValue(String value) {
+        this.value = value;
+    }
+    
     public void setValue(Object value) {
         try{
             if(value instanceof String){
@@ -51,6 +53,10 @@ public class StringCell extends Cell{
     }
 
     @Override
+    public boolean isNA() {
+        return false;
+    }
+    @Override
     public Boolean asBoolean() {
        if (value.isEmpty()){
            return false;
@@ -73,4 +79,15 @@ public class StringCell extends Cell{
             throw new RuntimeException("Cannot convert String to Number: " + value);
         }
     }
+
+    @Override
+    public int compareTo(Cell<String> o) {
+        if (o.isString()){
+            return this.value.compareTo(((StringCell) o).getValue());
+        }
+        else{
+            throw new RuntimeException("Cannot compare cells of different types");
+        }
+    }
+
 }

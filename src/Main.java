@@ -4,6 +4,7 @@ import dataframe.cells.StringCell;
 import utils.Archivos;
 import dataframe.Column;
 import dataframe.DataFrame;
+import dataframe.Row;
 import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 
@@ -11,6 +12,7 @@ import dataframe.DataFrame;
 import utils_df.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
     
@@ -42,47 +44,47 @@ public class Main {
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
     public static void main(String[] args) throws IOException {
-        String filePath = "./examples/libro2.csv";
-        DataFrame df = Archivos.readCSV(filePath);
-        if (df != null) {
-            Archivos.show(df);
-            //Archivos.exportCSV("test5.csv", df);
-        }
+        // String filePath = "./examples/libro2.csv";
+        // DataFrame df = Archivos.readCSV(filePath);
+        // if (df != null) {
+        //     Archivos.show(df);
+        //     //Archivos.exportCSV("test5.csv", df);
+        // }
     
-        //Creo un random sample de df
-        RandomSample randomSample = new RandomSample();
-        DataFrame dfSample = randomSample.sample(df); //Cambiar el formato de retornar un DF a metodo nativo.
+        // //Creo un random sample de df
+        // RandomSample randomSample = new RandomSample();
+        // DataFrame dfSample = randomSample.sample(df); //Cambiar el formato de retornar un DF a metodo nativo.
         
-        System.out.println("Random Sample");
-        Archivos.show(dfSample);
+        // System.out.println("Random Sample");
+        // Archivos.show(dfSample);
 
 
-        // Con df y dfSample los puedo concatenar
-        DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
-        System.out.println("Df Concatenado");
+        // // Con df y dfSample los puedo concatenar
+        // DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
+        // System.out.println("Df Concatenado");
 
-        Archivos.show(dfConcatenado);
+        // Archivos.show(dfConcatenado);
 
-        // Veo las primeras filas con el metodo head()
-        DataFrame dfHead = Selection.head(df);
-        System.out.println("Head");
-        Archivos.show(dfHead);
+        // // Veo las primeras filas con el metodo head()
+        // DataFrame dfHead = Selection.head(df);
+        // System.out.println("Head");
+        // Archivos.show(dfHead);
 
-        // Veo las ultimas filas con el metodo tail()
-        DataFrame dfTail = Selection.tail(df);
-        System.out.println("Tail");
-        Archivos.show(dfTail);
+        // // Veo las ultimas filas con el metodo tail()
+        // DataFrame dfTail = Selection.tail(df);
+        // System.out.println("Tail");
+        // Archivos.show(dfTail);
         
-        Archivos.show(df);
-        df.deleteRow(2);
-        System.out.println("-> Con una fila eliminada");
-        Archivos.show(df);
-        df.deleteColumn(2);
-        System.out.println("-> Con una columna eliminada");
-        Archivos.show(df);
-        df.deleteCell(2,3);
-        System.out.println("-> Con la celda (2,3 eliminada)");
-        Archivos.show(df);
+        // Archivos.show(df);
+        // df.deleteRow(2);
+        // System.out.println("-> Con una fila eliminada");
+        // Archivos.show(df);
+        // df.deleteColumn(2);
+        // System.out.println("-> Con una columna eliminada");
+        // Archivos.show(df);
+        // df.deleteCell(2,3);
+        // System.out.println("-> Con la celda (2,3 eliminada)");
+        // Archivos.show(df);
         
 
 
@@ -117,27 +119,57 @@ public class Main {
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
        // estos renombres sí andan
-        DataFrame dfCopy = df.copy();
-        //df.setColumLabels(columna1, "NUMERICA renombrada");
-        Cell newcell = new StringCell("TU MAMA");
-        Integer value = 35;
-        dfCopy.setCell(0, 1, value );
-        System.out.println("Dataframe 1");
-        System.out.println(df.toString("|"));
-        System.out.println("Dataframe 2");
-        System.out.println(dfCopy.toString("|"));
+        // DataFrame dfCopy = df.copy();
+        // //df.setColumLabels(columna1, "NUMERICA renombrada");
+        // Cell newcell = new StringCell("TU MAMA");
+        // Integer value = 35;
+        // dfCopy.setCell(0, 1, value );
+        // System.out.println("Dataframe 1");
+        // System.out.println(df.toString("|"));
+        // System.out.println("Dataframe 2");
+        // System.out.println(dfCopy.toString("|"));
 
-        System.out.println("son iguales?");
-        System.out.println(dfCopy.equals(df));
+        // System.out.println("son iguales?");
+        // System.out.println(dfCopy.equals(df));
         
-        Integer[][] m1 = {
-            {11, 2, 3, 4},
-            {5, 1, 7, 8},
-            {5, 1, 3, 9}
-        };
+        // Integer[][] m1 = {
+        //     {11, 2, 3, 4},
+        //     {5, 1, 7, 8},
+        //     {5, 1, 3, 9}
+        // };
 
-        DataFrame nativo = new DataFrame(m1);
-        System.out.println(nativo.toString("|"));
+        // DataFrame nativo = new DataFrame(m1);
+        // System.out.println(nativo.toString("|"));
 
+        NumericCell celda1 = new NumericCell(1);
+        NumericCell celda2 = new NumericCell(3);
+        NumericCell celda3 = new NumericCell(3);
+        // System.out.println(celda2.getValue());
+        // System.out.println(celda3.getValue());
+        // System.out.println(celda2.compareTo(celda3));
+
+        Row row1 = new Row("row1", new ArrayList<Cell<?>>());
+        Row row2 = new Row("row2", new ArrayList<Cell<?>>());
+        NumericCell Ncell1 = new NumericCell(2);
+       NumericCell Ncell2 = new NumericCell(2);
+       StringCell Scell1 = new StringCell("Z");
+       StringCell Scell2 = new  StringCell("A");
+       BooleanCell Bcell1 = new BooleanCell(true);
+       BooleanCell Bcell2 = new BooleanCell(false);
+
+        row1.addCell(Ncell1);
+        row1.addCell(Scell1);
+        row2.addCell(Ncell2);
+        row2.addCell(Scell2);
+        row1.addCell(Bcell1);
+        row2.addCell(Bcell2);
+        // System.out.println(row1.getCell(0));
+        // System.out.println(row2.getCell(0));
+        // for (Cell<?> cell : row1.getCells()) {
+        //     System.out.println(cell.getValue());
+        // }
+        // System.out.println(row1.toString());
+        // System.out.println(row2.toString());
+        System.out.println(row1.compareTo(row2));
     }
 }
