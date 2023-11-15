@@ -45,44 +45,45 @@ public class Main {
         String filePath = "./examples/libro2.csv";
         DataFrame df = Archivos.readCSV(filePath);
         if (df != null) {
-            Archivos.show(df);
+            df.show();
             //Archivos.exportCSV("test5.csv", df);
         }
     
         //Creo un random sample de df
-        RandomSample randomSample = new RandomSample();
-        DataFrame dfSample = randomSample.sample(df); //Cambiar el formato de retornar un DF a metodo nativo.
+        DataFrame dfSample = df.randomSample(); //Cambiar el formato de retornar un DF a metodo nativo.
+        DataFrame dfSample2 = df.randomSample(0.5);
         
         System.out.println("Random Sample");
-        Archivos.show(dfSample);
+        dfSample.show();
+        System.out.println("Random Sample 2");
+        dfSample2.show();
+        
 
 
         // Con df y dfSample los puedo concatenar
         DataFrame dfConcatenado = DataFrameConcatenator.concatenate(df, dfSample);
         System.out.println("Df Concatenado");
 
-        Archivos.show(dfConcatenado);
+        dfConcatenado.show();
 
         // Veo las primeras filas con el metodo head()
-        DataFrame dfHead = Selection.head(df);
         System.out.println("Head");
-        Archivos.show(dfHead);
+        df.head().show();
 
         // Veo las ultimas filas con el metodo tail()
-        DataFrame dfTail = Selection.tail(df);
         System.out.println("Tail");
-        Archivos.show(dfTail);
+        df.tail().show();
         
-        Archivos.show(df);
+        df.show();
         df.deleteRow(2);
         System.out.println("-> Con una fila eliminada");
-        Archivos.show(df);
+        df.show();
         df.deleteColumn(2);
         System.out.println("-> Con una columna eliminada");
-        Archivos.show(df);
+        df.show();
         df.deleteCell(2,3);
         System.out.println("-> Con la celda (2,3 eliminada)");
-        Archivos.show(df);
+        df.show();
         
 
 
@@ -123,9 +124,9 @@ public class Main {
         Integer value = 35;
         dfCopy.setCell(0, 1, value );
         System.out.println("Dataframe 1");
-        System.out.println(df.toString("|"));
+        df.show();
         System.out.println("Dataframe 2");
-        System.out.println(dfCopy.toString("|"));
+        dfCopy.show();
 
         System.out.println("son iguales?");
         System.out.println(dfCopy.equals(df));
@@ -137,7 +138,7 @@ public class Main {
         };
 
         DataFrame nativo = new DataFrame(m1);
-        System.out.println(nativo.toString("|"));
+        nativo.show();
 
     }
 }

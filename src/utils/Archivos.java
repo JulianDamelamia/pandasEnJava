@@ -134,9 +134,7 @@ public class Archivos {
         }
     }
 
-    public static void show(DataFrame df) {
-        System.out.println(df.toString("|"));
-    }
+    
 }
 
 
