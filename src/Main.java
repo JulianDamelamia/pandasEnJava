@@ -84,6 +84,20 @@ public class Main {
         df.deleteCell(2,3);
         System.out.println("-> Con la celda (2,3 eliminada)");
         df.show();
+
+        System.out.println(df.getColumnLabels());
+        System.out.println("-> El numero mas grande de la columna 0");
+        System.out.println(df.max("Columna 0"));
+        System.out.println("-> La suma de toda la columna 0");
+        System.out.println(df.sum("Columna 0"));
+        System.out.println("-> El numero mas chico la columna 0");
+        System.out.println(df.min("Columna 0"));
+        System.out.println("-> La media de la columna 0");
+        System.out.println(df.mean("Columna 0"));
+        System.out.println("-> La desviacion estandar de la columna 0");
+        System.out.println(df.standardDeviation("Columna 0"));
+        System.out.println("-> La varianza de la columna 0");
+        System.out.println(df.variance("Columna 0"));
         
 
 
