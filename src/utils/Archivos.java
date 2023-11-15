@@ -106,7 +106,7 @@ public class Archivos {
     }
 
     public static void exportCSV(String filepath, DataFrame df) {
-        String texto = df.toString(",");
+        String texto = df.toString(",", true, true);
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
             bufferedWriter.write(texto);
         } catch (IOException e) {

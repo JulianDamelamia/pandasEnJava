@@ -636,7 +636,18 @@ public class DataFrame {
   }
 
   public void show() {
-    System.out.println(this.toString("|"));
+    System.out.println(this.toString("|", false, false));
+  }
+  public void showAllColumns() {
+    System.out.println(this.toString("|", false, true));
+  }
+
+  public void showAllRows(){
+        System.out.println(this.toString("|", true, false));
+  }
+  
+  public void showAll() {
+    System.out.println(this.toString("|", true, true));
   }
 
   /**
@@ -648,64 +659,75 @@ public class DataFrame {
    * @param separador the separator to use between columns
    * @return a string representation of the DataFrame
    */
-  public String toString(String separador) {
+  public String toString(String separador, Boolean showAllRows, Boolean showAllColumns) {
     if (separador == null) {
-      separador = " | ";
+        separador = " | ";
+    }
+    if (showAllRows == null) {
+        showAllRows = false;
+    }
+    if (showAllColumns == null) {
+        showAllColumns = false;
     }
 
     String out = "";
     String sep = " " + separador + " ";
     String[] labels = this.listColumnLabels();
     int[] colWidths = new int[labels.length];
+    int numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
+    int numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
 
-    for (int i = 0; i < labels.length; i++) {
-      colWidths[i] = ("[" + labels[i] + "]").length();
-      for (int j = 0; j < this.numRows; j++) {
-        String cellValue =
-          this.columnOrderMap.get(i).getContent().get(j).toString();
-        colWidths[i] = Math.max(colWidths[i], cellValue.length());
-      }
+    if (showAllRows) {
+        numRowsToShow = this.numRows; // Mostrar todas las filas
+    } else {
+        numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
     }
 
-    for (int i = 0; i < labels.length; i++) {
-      if (i == 0) {
-        out += String.format("%-" + colWidths[i] + "s", "") + sep;
-      }
-      out +=
-        String.format("%-" + colWidths[i] + "s", "[" + labels[i] + "]") + sep;
+    if (showAllColumns) {
+        numColumnsToShow = this.numCols; // Mostrar todas las columnas
+    } else {
+        numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
+    }
+
+    for (int i = 0; i < numColumnsToShow; i++) {
+        colWidths[i] = ("[" + labels[i] + "]").length();
+        for (int j = 0; j < numRowsToShow; j++) {
+            String cellValue = this.columnOrderMap.get(i).getContent().get(j).toString();
+            colWidths[i] = Math.max(colWidths[i], cellValue.length());
+        }
+    }
+
+    for (int i = 0; i < numColumnsToShow; i++) {
+        if (i == 0) {
+            out += String.format("%-" + colWidths[i] + "s", "") + sep;
+        }
+        out += String.format("%-" + colWidths[i] + "s", "[" + labels[i] + "]") + sep;
     }
     out += "\n";
 
-    for (Integer row = 0; row < this.numRows; row++) {
-      this.rowLabelsMap.put(row.toString(), row);
-      int rowPadding = colWidths[0] - row.toString().length();
-      int leftRowPadding = rowPadding / 2;
-      int rightRowPadding = rowPadding - leftRowPadding;
-      out +=
-        String.format(
-          "%-" +
-          (leftRowPadding + row.toString().length() + rightRowPadding) +
-          "s",
-          "[Fila: " + row + "]"
-        ) +
-        sep;
-      for (int i = 0; i < labels.length; i++) {
-        String cellValue =
-          this.columnOrderMap.get(i).getContent().get(row).toString();
-        int padding = colWidths[i] - cellValue.length();
-        int leftPadding = padding / 2;
-        int rightPadding = padding - leftPadding;
+    for (Integer row = 0; row < numRowsToShow; row++) {
+        int rowPadding = colWidths[0] - row.toString().length();
+        int leftRowPadding = rowPadding / 2;
+        int rightRowPadding = rowPadding - leftRowPadding;
+        out += String.format("%-" + (leftRowPadding + row.toString().length() + rightRowPadding) + "s", "[Fila: " + row + "]") + sep;
+        for (int i = 0; i < numColumnsToShow; i++) {
+            String cellValue = this.columnOrderMap.get(i).getContent().get(row).toString();
+            int padding = colWidths[i] - cellValue.length();
+            int leftPadding = padding / 2;
+            int rightPadding = padding - leftPadding;
+            out += String.format("%-" + (leftPadding + cellValue.length() + rightPadding) + "s", cellValue) + sep;
+        }
+        out += "\n";
+    }
 
-        out +=
-          String.format(
-            "%-" + (leftPadding + cellValue.length() + rightPadding) + "s",
-            cellValue
-          ) +
-          sep;
-      }
-      out += "\n";
+    if (this.numRows > 10 && !showAllRows) {
+        out += "\n[Mostrando solo las primeras 10 filas de " + this.numRows + "]";
+    }
+
+    if (this.numCols > 5 && !showAllColumns) {
+        out += "\n[Mostrando solo las primeras 5 columnas de " + this.numCols + "]\n";
     }
 
     return out;
-  }
+}
 }
