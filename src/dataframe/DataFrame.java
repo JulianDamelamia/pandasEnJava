@@ -13,6 +13,7 @@ import java.util.Objects;
 import utils_df.Identificador;
 import utils_df.RandomSample;
 import utils_df.Selection;
+import utils_df.Summarise;
 
 public class DataFrame {
 
@@ -453,8 +454,6 @@ public class DataFrame {
     columns.get(columnIndex).removeCellbyNA(rowIndex);
   }
 
-
-
   public DataFrame randomSample(){
     DataFrame df = RandomSample.sample(this);
     return df;
@@ -564,12 +563,81 @@ public class DataFrame {
     return this.columns;
   }
 
+  public float sum(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.sum(cells);
+  }
 
+  public float sum(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.sum(cells);
+  }
 
+  public float max(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.max(cells);
+  }
+
+  public float max(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.max(cells);
+  }
+
+  public float min(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.min(cells);
+  }
+
+  public float min(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.min(cells);
+  }
+
+  public float mean(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.mean(cells);
+  }
+
+  public float mean(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.mean(cells);
+  }
+
+  public float variance(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.variance(cells);
+  }
+
+  public float variance(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.variance(cells);
+  }
+
+  public float standardDeviation(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.standardDeviation(cells);
+  }
+
+  public float standardDeviation(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.standardDeviation(cells);
+  }
 
   public void show() {
     System.out.println(this.toString("|"));
-}
+  }
 
   /**
    * Returns a string representation of the DataFrame, using the specified separator between columns.
