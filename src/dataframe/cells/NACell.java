@@ -1,6 +1,6 @@
 package dataframe.cells;
 
-public class NACell<O extends Object & Comparable<O>> extends Cell<O>{
+public class NACell extends Cell{
 
     protected static final NACell INSTANCE = new NACell();
 
@@ -83,7 +83,7 @@ public class NACell<O extends Object & Comparable<O>> extends Cell<O>{
     }
 
     @Override
-    public int compareTo(Cell<O> otro) {
+    public int compareTo(Cell otro) {
        if(otro.isNA()){
             return 0;
         }

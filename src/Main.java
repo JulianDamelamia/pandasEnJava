@@ -12,38 +12,42 @@ import dataframe.DataFrame;
 import utils_df.*;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
-    // public static void main(String[] args) {
-    //     // armo unas celdas de prueba	
-    //     NumericCell celda1 = new NumericCell(1);
-    //     NumericCell celda2 = new NumericCell(2);
-    //     NumericCell celda3 = new NumericCell(3);
-    //     BooleanCell celda4 = new BooleanCell(true);
-    //     BooleanCell celda5 = new BooleanCell(false);
-    //     BooleanCell celda6 = new BooleanCell(true);
-    //     StringCell celda7 = new StringCell("Hola");
-    //     StringCell celda8 = new StringCell("Mundo");
-    //     StringCell celda9 = new StringCell("!");
-    //     NACell cell = NACell.getInstance();
-    //     // armo unas columnas de prueba a partir de las celdas
-    //     Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
-    //     Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
-    //     Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+    public static void main(String[] args) {
+        // armo unas celdas de prueba	
+        NumericCell celda1 = new NumericCell(1);
+        NumericCell celda2 = new NumericCell(2);
+        NumericCell celda3 = new NumericCell(3);
+        BooleanCell celda4 = new BooleanCell(true);
+        BooleanCell celda5 = new BooleanCell(false);
+        BooleanCell celda6 = new BooleanCell(true);
+        StringCell celda7 = new StringCell("Hola");
+        StringCell celda8 = new StringCell("Mundo");
+        StringCell celda9 = new StringCell("!");
+        NACell cell = NACell.getInstance();
+        // armo unas columnas de prueba a partir de las celdas
+        Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
+        Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
+        Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
 
-    //     // armo dos Maps, uno que linkea las columnas con un label
-    //     // y otro que linkea el orden de la columna con la columna en sí
-    //     // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
-    //     Map<Column, String> columnLabelsMap = new HashMap<Column, String>();
-    //     columnLabelsMap.put(columna1, "NUMERICA");
-    //     columnLabelsMap.put(columna2, "BOOLEANA");
-    //     columnLabelsMap.put(columna3, "STRING");
+        // armo dos Maps, uno que linkea las columnas con un label
+        // y otro que linkea el orden de la columna con la columna en sí
+        // Decidí no linkear label-orden por la complicación que podría inducir cambiarle el nombre a una columna
+        Map<Column, String> columnLabelsMap = new HashMap<Column, String>();
+        columnLabelsMap.put(columna1, "NUMERICA");
+        columnLabelsMap.put(columna2, "BOOLEANA");
+        columnLabelsMap.put(columna3, "STRING");
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
-    public static void main(String[] args) throws IOException {
+    // public static void main(String[] args) throws IOException {
         // String filePath = "./examples/libro2.csv";
         // DataFrame df = Archivos.readCSV(filePath);
         // if (df != null) {
@@ -107,69 +111,47 @@ public class Main {
         // System.out.println(columna2);
         // System.out.println(columna3);
         
-        // dataframe.DataFrame df = new dataframe.DataFrame();
-        // df.addColumn(columna1, "NUMERICA");
-        // df.addColumn(columna2, "BOOLEANA");
-        // df.addColumn(columna3);
+        dataframe.DataFrame df = new dataframe.DataFrame();
+        df.addColumn(columna1, "NUMERICA");
+        df.addColumn(columna2, "BOOLEANA");
+        df.addColumn(columna3);
 
-        // Column columnaClonada = columna1.copy();
-        // columnaClonada.setCell(1, 35);
-        // System.out.println(columna1);
-        // System.out.println(columnaClonada);
+        Column columnaClonada = columna1.copy();
+        columnaClonada.setCell(1, 35);
+        System.out.println(columna1);
+        System.out.println(columnaClonada);
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
-       // estos renombres sí andan
-        // DataFrame dfCopy = df.copy();
-        // //df.setColumLabels(columna1, "NUMERICA renombrada");
-        // Cell newcell = new StringCell("TU MAMA");
-        // Integer value = 35;
-        // dfCopy.setCell(0, 1, value );
+    //    estos renombres sí andan
+        DataFrame dfCopy = df.copy();
+        //df.setColumLabels(columna1, "NUMERICA renombrada");
+        Cell newcell = new StringCell("TU MAMA");
+        Integer value = 35;
+        dfCopy.setCell(0, 1, value );
         // System.out.println("Dataframe 1");
         // System.out.println(df.toString("|"));
-        // System.out.println("Dataframe 2");
-        // System.out.println(dfCopy.toString("|"));
+        System.out.println("Dataframe 2");
+        System.out.println(dfCopy.toString("|"));
 
         // System.out.println("son iguales?");
         // System.out.println(dfCopy.equals(df));
         
-        // Integer[][] m1 = {
-        //     {11, 2, 3, 4},
-        //     {5, 1, 7, 8},
-        //     {5, 1, 3, 9}
-        // };
+        Integer[][] m1 = {
+            {11, 2, 3, 4},
+            {5, 1, 7, 8},
+            {5, 1, 3, 9}
+        };
 
-        // DataFrame nativo = new DataFrame(m1);
+        DataFrame nativo = new DataFrame(m1);
         // System.out.println(nativo.toString("|"));
 
-        NumericCell celda1 = new NumericCell(1);
-        NumericCell celda2 = new NumericCell(3);
-        NumericCell celda3 = new NumericCell(3);
-        // System.out.println(celda2.getValue());
-        // System.out.println(celda3.getValue());
-        // System.out.println(celda2.compareTo(celda3));
-
-        Row row1 = new Row("row1", new ArrayList<Cell<?>>());
-        Row row2 = new Row("row2", new ArrayList<Cell<?>>());
-        NumericCell Ncell1 = new NumericCell(2);
-       NumericCell Ncell2 = new NumericCell(2);
-       StringCell Scell1 = new StringCell("Z");
-       StringCell Scell2 = new  StringCell("A");
-       BooleanCell Bcell1 = new BooleanCell(true);
-       BooleanCell Bcell2 = new BooleanCell(false);
-
-        row1.addCell(Ncell1);
-        row1.addCell(Scell1);
-        row2.addCell(Ncell2);
-        row2.addCell(Scell2);
-        row1.addCell(Bcell1);
-        row2.addCell(Bcell2);
-        // System.out.println(row1.getCell(0));
-        // System.out.println(row2.getCell(0));
-        // for (Cell<?> cell : row1.getCells()) {
-        //     System.out.println(cell.getValue());
-        // }
-        // System.out.println(row1.toString());
-        // System.out.println(row2.toString());
-        System.out.println(row1.compareTo(row2));
+        System.out.println("Dataframe 2");
+        System.out.println(dfCopy.toString("|"));
+         System.out.println("Dataframe srted");   
+        DataFrame sorted = dfCopy.sort();
+        System.out.println(sorted.toString("|"));
+        System.err.println(sorted.rowLabelsMap.entrySet());
+        
+     
     }
 }

@@ -1,14 +1,14 @@
 package dataframe.cells;
 
-public abstract class Cell<T extends Comparable<T>> implements Comparable<Cell<T>>{
+public abstract class Cell implements Comparable<Cell>{
 //pasé a T extends Comparable<T> para que funcione el compareTo
 
-    protected T value;
+    protected Object value;
 
     public Cell(){
     }
 
-    public Cell(T value){
+    public Cell(Object value){
         this.value = value;
     }
 
@@ -21,7 +21,7 @@ public abstract class Cell<T extends Comparable<T>> implements Comparable<Cell<T
     };
  
 
-    public abstract void setValue(T value);
+    public abstract void setValue(Object value);
 
     abstract boolean isBoolean();
     abstract boolean isNumeric();

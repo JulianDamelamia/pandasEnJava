@@ -78,7 +78,7 @@ public class Column {
    * @param index la posición de la celda a establecer.
    * @param value el valor a establecer en la celda.
    */
-  public void setCell(int index, Comparable<Object> value) {
+  public void setCell(int index, Object value) {
     this.content.get(index).setValue(value);
   }
 

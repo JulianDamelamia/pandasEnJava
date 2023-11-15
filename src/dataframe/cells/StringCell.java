@@ -1,6 +1,6 @@
 package dataframe.cells;
 
-public class StringCell extends Cell<String>{
+public class StringCell extends Cell{
     protected String value;
 
     public StringCell(String value) {
@@ -17,11 +17,12 @@ public class StringCell extends Cell<String>{
     public StringCell copy(){
         return new StringCell(this);
     } 
-    @Override
+    
     public void setValue(String value) {
         this.value = value;
     }
     
+    @Override
     public void setValue(Object value) {
         try{
             if(value instanceof String){
@@ -81,7 +82,7 @@ public class StringCell extends Cell<String>{
     }
 
     @Override
-    public int compareTo(Cell<String> o) {
+    public int compareTo(Cell o) {
         if (o.isString()){
             return this.value.compareTo(((StringCell) o).getValue());
         }

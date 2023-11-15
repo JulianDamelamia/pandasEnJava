@@ -18,9 +18,73 @@ public class DataFrame {
   public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
   public Map<String, Column> columnLabelsMap; // labels de columnas-> { col : 'nombre'}
   public Map<Integer, Column> columnOrderMap; //  orden de columnas -> { int : col}
-  public Map<String, Integer> rowLabelsMap; // labels de columnas-> {'nombre' : int posicional}
+  public Map<String, Integer> rowLabelsMap; // labels de filas -> {'nombre' : int posicional}
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
+ 
+ 
+  public ArrayList<Row> getRows(){
+    ArrayList<Row> rows = new ArrayList<Row>();
+    for (String label: this.rowLabelsMap.keySet()) {
+      Row row = new Row();
+      row.setLabel(label);
+      for (int j = 0; j < this.numCols; j++) {
+        row.addCell(this.getCell(j, rowLabelsMap.get(label)));
+      }
+      rows.add(row);
+    }
+    return rows;
+  }
+
+  public DataFrame sort() {
+    DataFrame sortedDf = this.shallowCopy();
+    HashMap<String, Integer> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
+    sortedDf.rowLabelsMap = sortedMap;
+    return sortedDf;
+  }
+
+  public HashMap<String, Integer> quickSort(ArrayList<Row> rows, int low, int high) {
+    if (low < high) {
+      int pi = particion(rows, low, high);
+      quickSort(rows, low, pi - 1);
+      quickSort(rows, pi + 1, high);
+      };
+
+    HashMap<String, Integer> sortedMap = new HashMap<String, Integer>();
+      
+    for(int i=0; i<rows.size(); i++){
+      sortedMap.put((String)(rows.get(i).label), (Integer) i);
+    }
+    return sortedMap;
+  }
+
+  private int particion (ArrayList<Row> rows, int low, int high) {
+    Row pivot = rows.get(high);
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+      if (rows.get(j).compareTo(pivot) < 0) {
+        i++;
+        Row temp = rows.get(i);
+        rows.set(i, rows.get(j));
+        rows.set(j, temp);
+      }
+    }
+    Row temp = rows.get(i + 1);
+    rows.set(i + 1, rows.get(high));
+    rows.set(high, temp);
+    return i + 1;
+  }
+
+  private DataFrame shallowCopy() {
+    DataFrame copy = new DataFrame();
+    copy.columns = this.columns;
+    copy.columnLabelsMap = this.columnLabelsMap;
+    copy.columnOrderMap = this.columnOrderMap;
+    copy.rowLabelsMap = this.rowLabelsMap;
+    copy.numRows = this.numRows;
+    copy.numCols = this.numCols;
+    return copy;
+  }
 
   // Constructores
   //-TODO: sobrecarga
@@ -170,18 +234,6 @@ public class DataFrame {
   }
 
   /**
-   * Establece el valor de una celda en la posición especificada.
-   * 
-   * @param col la columna de la celda
-   * @param row la fila de la celda
-   * @param cell el valor de la celda
-   */
-  public void setCell(int col, int row, Cell cell) {
-    Column column = this.columnOrderMap.get(col);
-    column.setCell(row, cell);
-  }
-
-  /**
    * Establece el valor de una celda en la columna y fila especificadas.
    * @Autor: Julian
 
@@ -189,7 +241,7 @@ public class DataFrame {
    * @param index el índice de la fila en la que se encuentra la celda.
    * @param value el valor que se establecerá en la celda.
    */
-  public void setCell(int col, int index, Comparable<Object> value) {
+  public void setCell(int col, int index, Object value) {
     Column column = this.columnOrderMap.get(col);
     column.setCell(index, value);
   }
@@ -465,19 +517,6 @@ public void deleteCell(int rowIndex, int columnIndex) {
   //   return df;
   // }
 
-
-  //SHALLOW COPY
-  private DataFrame(DataFrame dataframe) {
-    this.columns = new ArrayList<Column>();
-    this.columnLabelsMap =
-      new HashMap<String, Column>(dataframe.columnLabelsMap);
-    this.rowLabelsMap = new HashMap<String, Integer>(dataframe.rowLabelsMap);
-    this.columnOrderMap =
-      new HashMap<Integer, Column>(dataframe.columnOrderMap);
-    this.numRows = this.columnOrderMap.size();
-    this.numCols = this.columnLabelsMap.size();
-  }
-  
   /**
    * Representa un conjunto de datos tabulares con etiquetas de fila y columna.
    * Cada columna es un objeto Column y cada fila es un objeto Row.
@@ -548,6 +587,7 @@ private <T, E> T getKeyFromValue(Map<T, E> map, E value) {
     return this.columns;
   }
 
+ 
   /**
    * Returns a string representation of the DataFrame, using the specified separator between columns.
    * If the separator is null, the default separator " | " is used.

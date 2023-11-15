@@ -1,6 +1,6 @@
 package dataframe.cells;
 
-public class BooleanCell extends Cell<Boolean>{
+public class BooleanCell extends Cell{
     protected Boolean value;
 
     public BooleanCell() {
@@ -83,7 +83,7 @@ public class BooleanCell extends Cell<Boolean>{
     }
 
     @Override
-    public int compareTo(Cell<Boolean> o) {
+    public int compareTo(Cell o) {
         if(o.isBoolean()){
             return this.value.compareTo(((BooleanCell)o).getValue());
         }
