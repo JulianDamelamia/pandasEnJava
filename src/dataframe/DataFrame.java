@@ -19,11 +19,36 @@ public class DataFrame {
   public Map<String, Column> columnLabelsMap; // labels de columnas-> { col : 'nombre'}
   public Map<Integer, Column> columnOrderMap; //  orden de columnas -> { int : col}
   public Map<String, Integer> rowLabelsMap; // labels de filas -> {'nombre' : int posicional}
+  public Map<Integer, String> rowOrderMap; // orden de filas -> {int posicional : 'nombre'}
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
  
- 
-  public ArrayList<Row> getRows(){
+  public Row getRow(int index){
+    Row row = new Row();
+    row.setLabel(this.rowOrderMap.get(index));
+    for (int j = 0; j < this.numCols; j++) {
+      row.addCell(this.getCell(j, index));
+    }
+    return row;
+  }
+
+  public Row getRow(String label){
+    Row row = new Row();
+    row.setLabel(label);
+    for (int j = 0; j < this.numCols; j++) {
+      row.addCell(this.getCell(j, this.rowLabelsMap.get(label)));
+    }
+    return row;
+  }
+
+  public void setRowLabel(String vieja, String nueva){
+    Integer index = this.rowLabelsMap.get(vieja); // {"0" : 0, "1" : 1, "2" : 2} --> vieja = "0" --> index = 0
+    this.rowLabelsMap.remove(vieja); // {"1" : 1, "2" : 2}
+    this.rowLabelsMap.put(nueva, index); // {"1" : 1, "2" : 2, "nueva" : 0}
+    this.rowOrderMap.put(index, nueva);// rowOrderMap = {0 : "0", 1 : "1", 2 : "2"} --> rowOrderMap = {0 : "nueva", 1 : "1", 2 : "2"}
+  }
+
+  private ArrayList<Row> getRows(){
     ArrayList<Row> rows = new ArrayList<Row>();
     for (String label: this.rowLabelsMap.keySet()) {
       Row row = new Row();
@@ -38,22 +63,22 @@ public class DataFrame {
 
   public DataFrame sort() {
     DataFrame sortedDf = this.shallowCopy();
-    HashMap<String, Integer> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
-    sortedDf.rowLabelsMap = sortedMap;
+    HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
+    sortedDf.rowOrderMap = sortedMap;
     return sortedDf;
   }
 
-  public HashMap<String, Integer> quickSort(ArrayList<Row> rows, int low, int high) {
+  private HashMap<Integer, String> quickSort(ArrayList<Row> rows, int low, int high) {
     if (low < high) {
       int pi = particion(rows, low, high);
       quickSort(rows, low, pi - 1);
       quickSort(rows, pi + 1, high);
       };
 
-    HashMap<String, Integer> sortedMap = new HashMap<String, Integer>();
+    HashMap<Integer, String> sortedMap = new HashMap<>();
       
     for(int i=0; i<rows.size(); i++){
-      sortedMap.put((String)(rows.get(i).label), (Integer) i);
+      sortedMap.put((Integer) i, (String)(rows.get(i).label));
     }
     return sortedMap;
   }
@@ -107,6 +132,7 @@ public class DataFrame {
     this.columnLabelsMap = new HashMap<String, Column>();
     this.columnOrderMap = new HashMap<Integer, Column>();
     this.rowLabelsMap = new HashMap<String, Integer>();
+    this.rowOrderMap = new HashMap<Integer, String>();
     this.numRows = this.columnOrderMap.size();
     this.numCols = this.columnLabelsMap.size();
   }
@@ -116,6 +142,7 @@ public class DataFrame {
     this.columnLabelsMap = new HashMap<>();
     this.columnOrderMap = new HashMap<>();
     this.rowLabelsMap = new HashMap<>();
+    this.rowOrderMap = new HashMap<>();
     this.numRows = 0;
     this.numCols = 0;
 
@@ -171,9 +198,7 @@ public class DataFrame {
         }
 
         // Inicialización de etiquetas de filas
-        for (int i = 0; i < this.numRows; i++) {
-            rowLabelsMap.put(String.valueOf(i), i);
-        }
+        setRowLabels();
     }
 }
 
@@ -189,6 +214,9 @@ public class DataFrame {
     this.columnOrderMap.put(this.columnOrderMap.size(), column);
     this.numCols = this.columnLabelsMap.size();
     this.numRows = this.columnOrderMap.get(0).size();
+    if(this.rowLabelsMap.size() == 0){
+      setRowLabels();
+    }
   }
 
   /**
@@ -202,6 +230,9 @@ public class DataFrame {
     this.columnOrderMap.put(this.columnOrderMap.size(), column);
     this.numCols = this.columnLabelsMap.size();
     this.numRows = this.columnOrderMap.get(0).size();
+    if(this.rowLabelsMap.size() == 0){
+      setRowLabels();
+    }
   }
 
   /**
@@ -280,8 +311,10 @@ public class DataFrame {
    */
   public void setRowLabels() {
     rowLabelsMap.clear();
+    rowOrderMap.clear();
     for (Integer i = 0; i < columns.get(0).size(); i++) {
       rowLabelsMap.put(i.toString(), i);
+      rowOrderMap.put(rowLabelsMap.get(i.toString()), i.toString());
     }
   }
 
@@ -463,6 +496,7 @@ public class DataFrame {
 
     // Actualiza el mapa de etiquetas de fila y la cantidad de filas
     rowLabelsMap.remove(String.valueOf(rowIndex));
+    rowOrderMap.remove(rowIndex);
     numRows--;
 }
 
@@ -545,6 +579,7 @@ public DataFrame copy() {
     }
 
     copyDataFrame.rowLabelsMap.putAll(this.rowLabelsMap);
+    copyDataFrame.rowOrderMap.putAll(this.rowOrderMap);
     copyDataFrame.numRows = this.numRows;
     copyDataFrame.numCols = this.numCols;
 
