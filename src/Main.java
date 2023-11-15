@@ -66,6 +66,9 @@ public class Main {
 
         dfConcatenado.show();
 
+        System.out.println("Df Concatenado COMPLETO");
+        dfConcatenado.showAll();
+
         // Veo las primeras filas con el metodo head()
         System.out.println("Head");
         df.head().show();
@@ -132,27 +135,27 @@ public class Main {
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
        // estos renombres sí andan
-        DataFrame dfCopy = df.copy();
-        //df.setColumLabels(columna1, "NUMERICA renombrada");
-        Cell newcell = new StringCell("TU MAMA");
-        Integer value = 35;
-        dfCopy.setCell(0, 1, value );
-        System.out.println("Dataframe 1");
-        df.show();
-        System.out.println("Dataframe 2");
-        dfCopy.show();
+        // DataFrame dfCopy = df.copy();
+        // //df.setColumLabels(columna1, "NUMERICA renombrada");
+        // Cell newcell = new StringCell("TU MAMA");
+        // Integer value = 35;
+        // dfCopy.setCell(0, 1, value );
+        // System.out.println("Dataframe 1");
+        // df.show();
+        // System.out.println("Dataframe 2");
+        // dfCopy.show();
 
-        System.out.println("son iguales?");
-        System.out.println(dfCopy.equals(df));
+        // System.out.println("son iguales?");
+        // System.out.println(dfCopy.equals(df));
         
-        Integer[][] m1 = {
-            {11, 2, 3, 4},
-            {5, 1, 7, 8},
-            {5, 1, 3, 9}
-        };
+        // Integer[][] m1 = {
+        //     {11, 2, 3, 4},
+        //     {5, 1, 7, 8},
+        //     {5, 1, 3, 9}
+        // };
 
-        DataFrame nativo = new DataFrame(m1);
-        nativo.show();
+        // DataFrame nativo = new DataFrame(m1);
+        // nativo.show();
 
     }
 }
