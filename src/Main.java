@@ -165,5 +165,14 @@ public class Main {
         // System.out.println(copySortedColumna.columnOrderMap);
         copySortedColumna.show();
 
+        System.out.println("seleccion");
+        DataFrame seleccion = dfCopy.select( new String[]{"0", "1"}, new String[]{"TORTUGA3", "NUMERICA"});
+        // System.out.println("Columnas seleccionadas: Tortuga3 y numerica");
+        // System.out.println("filas seleccionadas: 0 y 1 \n");
+        // System.out.println("roworder original "+dfCopy.rowOrderMap);
+        // System.out.println("roworder seleccion "+seleccion.rowOrderMap+ "\n");
+        // System.out.println("colOrder original "+dfCopy.columnOrderMap);
+        // System.out.println("colOrder seleccion "+seleccion.columnOrderMap );
+        seleccion.show();
      }
 }
