@@ -5,6 +5,7 @@ import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
+import utils_df.Criterios;
 import utils_df.Identificador;
 import utils_df.RandomSample;
 import utils_df.Selection;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.util.function.Predicate;
 public class DataFrame {
 
   public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
@@ -25,7 +26,56 @@ public class DataFrame {
   public Map<Integer, String> rowOrderMap; // orden de filas -> {int posicional : 'nombre'}
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
- 
+
+  public DataFrame filter(String colLabel, String operador, Object valor) throws IllegalArgumentException {
+    String[] filasSalida;
+  
+    if (valor instanceof Number) {
+        filasSalida = filteredArray(colLabel, operador, (Number) valor);
+    } else if (valor instanceof String) {
+        filasSalida = filteredArray(colLabel, operador, (String) valor);
+    } else if (valor instanceof Boolean) {
+        filasSalida = filteredArray(colLabel, operador, (Boolean) valor);
+    } else {
+        throw new IllegalArgumentException("El valor debe ser un número, un string o un booleano");
+    }
+    String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    DataFrame dfSalida = this.select(filasSalida, colLabels);
+    return dfSalida;
+  }
+
+  public String[] filteredArray(String colLabel, String operador, Number valor) throws IllegalArgumentException{
+    Cell celdaAuxiliar = new NumericCell(valor);
+    return filterSetup(colLabel, operador, celdaAuxiliar).toArray(String[]::new);
+  }
+
+  public String[] filteredArray(String colLabel, String operador, String valor) throws IllegalArgumentException{
+    Cell celdaAuxiliar = new StringCell(valor);
+    return filterSetup(colLabel, operador, celdaAuxiliar).toArray(String[]::new);
+  }
+
+  public String[] filteredArray(String colLabel, String operador, Boolean valor) throws IllegalArgumentException{
+    Cell celdaAuxiliar = new BooleanCell(valor);
+    return filterSetup(colLabel, operador, celdaAuxiliar).toArray(String[]::new);
+  }
+
+  private List<String> filterSetup(String colLabel, String operador, Cell celdaAuxiliar) throws IllegalArgumentException{
+    Criterios criterios = new Criterios(celdaAuxiliar);
+    Predicate<Cell> condicion = criterios.operadores.get(operador);
+    List<String> filasSalida = new ArrayList<>();
+    if (condicion != null){
+        for( String rowLabel : rowLabelsMap.keySet()){
+              Cell valorAcomparar = this.getColumn(colLabel).getCell(this.rowLabelsMap.get(rowLabel));
+            if ( condicion.test(valorAcomparar) ){
+                filasSalida.add(rowLabel);
+            }
+        }
+      }else{
+          throw new IllegalArgumentException();
+      }
+    return filasSalida;
+  }
+
   public Row getRow(int index){
     Row row = new Row();
     row.setLabel(this.rowOrderMap.get(index));
@@ -114,6 +164,7 @@ public class DataFrame {
 
   public DataFrame select(String[] rowLabels, String[] colLabels) throws IllegalArgumentException{
     DataFrame seleccion = this.shallowCopy();
+    System.out.println("Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto");
     seleccion.columnOrderMap = new HashMap<>();
     int i = 0;
     for(String col: colLabels){
