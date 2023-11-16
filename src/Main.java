@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.crypto.Data;
+
 public class Main {
     
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
@@ -37,6 +39,7 @@ public class Main {
         Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
         Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
         Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+        
 
         // armo dos Maps, uno que linkea las columnas con un label
         // y otro que linkea el orden de la columna con la columna en sí
@@ -111,47 +114,50 @@ public class Main {
         // System.out.println(columna2);
         // System.out.println(columna3);
         
-        dataframe.DataFrame df = new dataframe.DataFrame();
+        DataFrame df = new DataFrame();
         df.addColumn(columna1, "NUMERICA");
         df.addColumn(columna2, "BOOLEANA");
-        df.addColumn(columna3);
+        df.addColumn(columna3,"TORTUGA3");
 
-        Column columnaClonada = columna1.copy();
-        columnaClonada.setCell(1, 35);
-        System.out.println(columna1);
-        System.out.println(columnaClonada);
+        System.out.println(df.rowOrderMap.size());
+
+        Column columna4 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+        df.addColumn(columna4,"label");
+        System.out.println(df.rowOrderMap);
+        df.show();
+        // Column columnaClonada = columna1.copy();
+        // columnaClonada.setCell(1, 35);
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
     //    estos renombres sí andan
         DataFrame dfCopy = df.copy();
+        dfCopy.show();
         //df.setColumLabels(columna1, "NUMERICA renombrada");
-        Cell newcell = new StringCell("TU MAMA");
-        Integer value = 35;
+        // Cell newcell = new StringCell("TU MAMA");
+         Integer value = 35;
         dfCopy.setCell(0, 1, value );
-        // System.out.println("Dataframe 1");
-        // System.out.println(df.toString("|"));
-        System.out.println("Dataframe 2");
-        System.out.println(dfCopy.toString("|"));
+
+        df.show();
+
+        dfCopy.show();
 
         // System.out.println("son iguales?");
         // System.out.println(dfCopy.equals(df));
         
         Integer[][] m1 = {
-            {11, 2, 3, 4},
-            {5, 1, 7, 8},
-            {5, 1, 3, 9}
+            {1, 2, 3, 4},
+            {1, 1, 7, 8},
+            {9, 1, 3, 9}
         };
 
-        DataFrame nativo = new DataFrame(m1);
-        // System.out.println(nativo.toString("|"));
+         DataFrame nativo = new DataFrame(m1);
+        nativo.show();
 
-        System.out.println("Dataframe 2");
-        System.out.println(dfCopy.toString("|"));
-         System.out.println("Dataframe srted");   
-        DataFrame sorted = dfCopy.sort();
-        System.out.println(sorted.toString("|"));
-        System.err.println(sorted.rowLabelsMap.entrySet());
-        
+        DataFrame nativoSorted = nativo.sort();
+        nativoSorted.show();
+
+        DataFrame copySorted = dfCopy.sort();
+        copySorted.show();
      
-    }
+     }
 }
