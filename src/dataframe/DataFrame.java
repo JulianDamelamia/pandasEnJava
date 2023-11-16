@@ -112,6 +112,32 @@ public class DataFrame {
     return sortedMap;
   }
 
+  public DataFrame select(String[] rowLabels, String[] colLabels) throws IllegalArgumentException{
+    DataFrame seleccion = this.shallowCopy();
+    seleccion.columnOrderMap = new HashMap<>();
+    int i = 0;
+    for(String col: colLabels){
+      if(!this.columnLabelsMap.containsKey(col)){
+        throw new IllegalArgumentException("La columna " + col + " no existe");
+      }
+      seleccion.columnOrderMap.put( i, this.columnLabelsMap.get(col));
+      i++;
+    }
+
+    seleccion.rowOrderMap = new HashMap<>();
+    int j = 0;
+    for(String row: rowLabels){
+      if(!this.rowLabelsMap.containsKey(row)){
+        throw new IllegalArgumentException("La fila " + row + " no existe");
+      }
+      seleccion.rowOrderMap.put(j, row);
+      j++;
+      seleccion.numRows = j;
+      seleccion.numCols = i;
+    }
+    return seleccion;
+  }
+
   private int particion (ArrayList<Row> rows, int low, int high) {
     Row pivot = rows.get(high);
     int i = low - 1;
@@ -445,18 +471,10 @@ public class DataFrame {
    * @return un arreglo de Strings con los nombres de las columnas del DataFrame.
    */
   private String[] listColumnLabels() {
-    // String[] labels = new String[this.columnLabelsMap.size()];
-    // for (Integer key : this.columnOrderMap.keySet()) {
-    //   Column column = this.columnOrderMap.get(key);
-    //   String columnName = this.columnLabelsMap.get(column);
-    //   labels[key] = columnName;
-    // }
-    // return labels;
     String[] labels = new String[this.columnOrderMap.size()];
     for (Integer key : this.columnOrderMap.keySet()) {
         Column column = this.columnOrderMap.get(key);
         String columnName = null;
-        
         for (Map.Entry<String, Column> entry : this.columnLabelsMap.entrySet()) {
             if (entry.getValue().equals(column)) {
                 columnName = entry.getKey();
@@ -664,6 +682,11 @@ public class DataFrame {
   public Column getColumn(int col) {
     Column column = this.columnOrderMap.get(col);
     return column;
+  }
+
+  public Column getColumn(String label) {
+  Column column = this.columnLabelsMap.get(label);
+  return column;
   }
 
   /**
