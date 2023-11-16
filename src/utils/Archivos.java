@@ -101,7 +101,7 @@ public class Archivos {
             Column columnaAux = new Column(new ArrayList<Cell>(listaCeldasAux));
             df.addColumn(columnaAux);
         }
-
+        df.setRowLabels();
         return df;
     }
 

@@ -6,6 +6,9 @@ import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
 import utils_df.Identificador;
+import utils_df.RandomSample;
+import utils_df.Selection;
+import utils_df.Summarise;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +103,7 @@ public class DataFrame {
     return i + 1;
   }
 
-  private DataFrame shallowCopy() {
+  public DataFrame shallowCopy() {
     DataFrame copy = new DataFrame();
     copy.columns = this.columns;
     copy.columnLabelsMap = this.columnLabelsMap;
@@ -108,6 +111,7 @@ public class DataFrame {
     copy.rowLabelsMap = this.rowLabelsMap;
     copy.numRows = this.numRows;
     copy.numCols = this.numCols;
+    copy.setRowLabels();
     return copy;
   }
 
@@ -419,7 +423,7 @@ public class DataFrame {
     //   labels[key] = columnName;
     // }
     // return labels;
-    String[] labels = new String[this.columnLabelsMap.size()];
+    String[] labels = new String[this.columnOrderMap.size()];
     for (Integer key : this.columnOrderMap.keySet()) {
         Column column = this.columnOrderMap.get(key);
         String columnName = null;
@@ -536,20 +540,44 @@ public void deleteCell(int rowIndex, int columnIndex) {
     // Elimina la celda específica en la columna y fila indicadas
     columns.get(columnIndex).removeCellbyNA(rowIndex);
 }
+  public DataFrame randomSample(){
+    DataFrame df = RandomSample.sample(this);
+    return df;
+  }
 
-  // metodo que implimenta RandomSample
-//   public DataFrame randomSample(float p) {
-//     //TODO: IMPLEMTNEAR
-//     /*quiero llamar a la funcion sample del paquete utils_df y la clase randomsampe */
-//     if (p == null) {
-//       float localP = (float) Math.random();
-//     }
+  public DataFrame randomSample(double p) {
+    if (p < 0 || p > 1) {
+        System.err.println("El porcentaje debe estar en el rango [0, 1]");
+        return null;
+    }
+    else{
+        DataFrame df = RandomSample.sample(this, p);
+        return df;
+      }
 
-//     // llamo al medotod sample del package utils_df en la clase RandomSample
-//     DataFrame df = utils_df.RandomSample.sample(this, p);
+  }
 
-  //   return df;
-  // }
+    public DataFrame head() {
+    DataFrame df = Selection.head(this);
+    return df;
+  }
+
+  public DataFrame tail() {
+    DataFrame df = Selection.tail(this);
+    return df;
+  }
+
+  //SHALLOW COPY
+  private DataFrame(DataFrame dataframe) {
+    this.columns = new ArrayList<Column>();
+    this.columnLabelsMap =
+      new HashMap<String, Column>(dataframe.columnLabelsMap);
+    this.rowLabelsMap = new HashMap<String, Integer>(dataframe.rowLabelsMap);
+    this.columnOrderMap =
+      new HashMap<Integer, Column>(dataframe.columnOrderMap);
+    this.numRows = this.columnOrderMap.size();
+    this.numCols = this.columnLabelsMap.size();
+  }
 
   /**
    * Representa un conjunto de datos tabulares con etiquetas de fila y columna.
@@ -622,6 +650,92 @@ private <T, E> T getKeyFromValue(Map<T, E> map, E value) {
     return this.columns;
   }
 
+  public float sum(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.sum(cells);
+  }
+
+  public float sum(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.sum(cells);
+  }
+
+  public float max(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.max(cells);
+  }
+
+  public float max(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.max(cells);
+  }
+
+  public float min(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.min(cells);
+  }
+
+  public float min(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.min(cells);
+  }
+
+  public float mean(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.mean(cells);
+  }
+
+  public float mean(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.mean(cells);
+  }
+
+  public float variance(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.variance(cells);
+  }
+
+  public float variance(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.variance(cells);
+  }
+
+  public float standardDeviation(String colLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    List<Cell> cells = column.getContent();
+    return Summarise.standardDeviation(cells);
+  }
+
+  public float standardDeviation(int col) {
+    Column column = this.columnOrderMap.get(col);
+    List<Cell> cells = column.getContent();
+    return Summarise.standardDeviation(cells);
+  }
+
+  public void show() {
+    System.out.println(this.toString("|", false, false));
+  }
+  public void showAllColumns() {
+    System.out.println(this.toString("|", false, true));
+  }
+
+  public void showAllRows(){
+        System.out.println(this.toString("|", true, false));
+  }
+  
+  public void showAll() {
+    System.out.println(this.toString("|", true, true));
+  }
  
   /**
    * Returns a string representation of the DataFrame, using the specified separator between columns.
@@ -632,64 +746,80 @@ private <T, E> T getKeyFromValue(Map<T, E> map, E value) {
    * @param separador the separator to use between columns
    * @return a string representation of the DataFrame
    */
-  public String toString(String separador) {
+  public String toString(String separador, Boolean showAllRows, Boolean showAllColumns) {
     if (separador == null) {
-      separador = " | ";
+        separador = " | ";
+    }
+    if (showAllRows == null) {
+        showAllRows = false;
+    }
+    if (showAllColumns == null) {
+        showAllColumns = false;
     }
 
     String out = "";
     String sep = " " + separador + " ";
     String[] labels = this.listColumnLabels();
     int[] colWidths = new int[labels.length];
+    int numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
+    int numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
 
-    for (int i = 0; i < labels.length; i++) {
-      colWidths[i] = ("[" + labels[i] + "]").length();
-      for (int j = 0; j < this.numRows; j++) {
-        String cellValue =
-          this.columnOrderMap.get(i).getContent().get(j).toString();
-        colWidths[i] = Math.max(colWidths[i], cellValue.length());
-      }
+    if (showAllRows) {
+        numRowsToShow = this.numRows; // Mostrar todas las filas
+    } else {
+        numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
     }
 
-    for (int i = 0; i < labels.length; i++) {
-      if (i == 0) {
-        out += String.format("%-" + colWidths[i] + "s", "") + sep;
-      }
-      out +=
-        String.format("%-" + colWidths[i] + "s", "[" + labels[i] + "]") + sep;
+    if (showAllColumns) {
+        numColumnsToShow = this.numCols; // Mostrar todas las columnas
+    } else {
+        numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
+    }
+
+    for (int i = 0; i < numColumnsToShow; i++) {
+        colWidths[i] = ("[" + labels[i] + "]").length();
+        for (int j = 0; j < numRowsToShow; j++) {
+            String cellValue = this.columnOrderMap.get(i).getContent().get(j).toString();
+            colWidths[i] = Math.max(colWidths[i], cellValue.length());
+        }
+    }
+
+    for (int i = 0; i < numColumnsToShow; i++) {
+        if (i == 0) {
+            out += String.format("%-" + colWidths[i] + "s", "") + sep;
+        }
+        out += String.format("%-" + colWidths[i] + "s", "[" + labels[i] + "]") + sep;
     }
     out += "\n";
 
-    for (Integer row = 0; row < this.numRows; row++) {
-      this.rowLabelsMap.put(row.toString(), row);
-      int rowPadding = colWidths[0] - row.toString().length();
-      int leftRowPadding = rowPadding / 2;
-      int rightRowPadding = rowPadding - leftRowPadding;
-      out +=
-        String.format(
-          "%-" +
-          (leftRowPadding + row.toString().length() + rightRowPadding) +
-          "s",
-          "[Fila: " + row + "]"
-        ) +
-        sep;
-      for (int i = 0; i < labels.length; i++) {
-        String cellValue =
-          this.columnOrderMap.get(i).getContent().get(row).toString();
-        int padding = colWidths[i] - cellValue.length();
-        int leftPadding = padding / 2;
-        int rightPadding = padding - leftPadding;
+    // for (Integer row = 0; row < numRowsToShow; row++) {
+      for (Integer orden : this.rowOrderMap.keySet()) { //rowOrder = {int :  label}
 
-        out +=
-          String.format(
-            "%-" + (leftPadding + cellValue.length() + rightPadding) + "s",
-            cellValue
-          ) +
-          sep;
-      }
-      out += "\n";
+        int rowPadding = colWidths[0] - orden.toString().length();
+        int leftRowPadding = rowPadding / 2;
+        int rightRowPadding = rowPadding - leftRowPadding;
+        out += String.format("%-" + (leftRowPadding + orden.toString().length() + rightRowPadding) + "s", "[Fila: " + orden + "]") + sep;
+        for (int i = 0; i < numColumnsToShow; i++) {
+          // label = rowOrder(i) -- rowOrder = {0 : 'fila 1' , 1 : 'fila 3' , 2 : 'fila 2'}
+          // index = rowlabel(label) -- rowlabel = {'fila 1' : 0 , 'fila 2' : 2 , 'fila 3' : 1}
+          int row = this.rowLabelsMap.get(this.rowOrderMap.get(orden));
+            String cellValue = this.columnOrderMap.get(i).getContent().get(row).toString();
+            int padding = colWidths[i] - cellValue.length();
+            int leftPadding = padding / 2;
+            int rightPadding = padding - leftPadding;
+            out += String.format("%-" + (leftPadding + cellValue.length() + rightPadding) + "s", cellValue) + sep;
+        }
+        out += "\n";
+    }
+
+    if (this.numRows > 10 && !showAllRows) {
+        out += "\n[Mostrando solo las primeras 10 filas de " + this.numRows + "]";
+    }
+
+    if (this.numCols > 5 && !showAllColumns) {
+        out += "\n[Mostrando solo las primeras 5 columnas de " + this.numCols + "]\n";
     }
 
     return out;
-  }
+}
 }

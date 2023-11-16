@@ -37,6 +37,7 @@ public class Main {
         Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
         Column columna2 = new Column(new ArrayList<Cell>(Arrays.asList(celda4, celda5, celda6)));
         Column columna3 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+        
 
         // armo dos Maps, uno que linkea las columnas con un label
         // y otro que linkea el orden de la columna con la columna en sí
@@ -111,10 +112,14 @@ public class Main {
         // System.out.println(columna2);
         // System.out.println(columna3);
         
-        dataframe.DataFrame df = new dataframe.DataFrame();
+        DataFrame df = new DataFrame();
         df.addColumn(columna1, "NUMERICA");
         df.addColumn(columna2, "BOOLEANA");
-        df.addColumn(columna3);
+        df.addColumn(columna3,"TORTUGA3");
+
+        Column columna4 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+        columnLabelsMap.put(columna4, "STRING");
+        df.addColumn(columna4,"label");
 
         Column columnaClonada = columna1.copy();
         columnaClonada.setCell(1, 35);
@@ -131,7 +136,7 @@ public class Main {
         // System.out.println("Dataframe 1");
         // System.out.println(df.toString("|"));
         System.out.println("Dataframe 2");
-        System.out.println(dfCopy.toString("|"));
+        dfCopy.show();
 
         // System.out.println("son iguales?");
         // System.out.println(dfCopy.equals(df));
@@ -146,11 +151,19 @@ public class Main {
         // System.out.println(nativo.toString("|"));
 
         System.out.println("Dataframe 2");
-        System.out.println(dfCopy.toString("|"));
-         System.out.println("Dataframe srted");   
+        System.out.println(df.rowOrderMap);
+        dfCopy.show();
+         System.out.println("Dataframe srted");
+        DataFrame dfCopia2 = dfCopy.shallowCopy();
+         System.out.println(dfCopia2.getRow(2));
+         System.out.println(dfCopia2.rowOrderMap); 
         DataFrame sorted = dfCopy.sort();
-        System.out.println(sorted.toString("|"));
+        sorted.show();
         System.err.println(sorted.rowLabelsMap.entrySet());
+        System.out.println(sorted.rowOrderMap);
+        for (int orden : sorted.rowOrderMap.keySet()){
+            System.out.println(sorted.getRow(sorted.rowOrderMap.get(orden)));
+        }
         
      
     }
