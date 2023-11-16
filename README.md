@@ -19,9 +19,9 @@ No iniciado: ❌
 - Realizar copias profundas de estructuras existentes ✅
 - Crear estructuras tabulares desde datos nativos de Java ✅
 - Modificar estructura tabular ✅
-- Selección parcial de estructura tabular ❌
+- Selección parcial de estructura tabular ✅
 - Obtener primeras y últimas filas ✅
-- Aplicar filtros a celdas ❌
+- Aplicar filtros a celdas ✅
 - Concatenar estructuras tabulares ✅
 - Ordenar filas de estructura tabular  ✅ 
 - Agrupar filas y aplicar funciones de sumarización ✅
