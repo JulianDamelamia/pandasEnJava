@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.crypto.Data;
+
 public class Main {
     
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
@@ -117,54 +119,45 @@ public class Main {
         df.addColumn(columna2, "BOOLEANA");
         df.addColumn(columna3,"TORTUGA3");
 
-        Column columna4 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
-        columnLabelsMap.put(columna4, "STRING");
-        df.addColumn(columna4,"label");
+        System.out.println(df.rowOrderMap.size());
 
-        Column columnaClonada = columna1.copy();
-        columnaClonada.setCell(1, 35);
-        System.out.println(columna1);
-        System.out.println(columnaClonada);
+        Column columna4 = new Column(new ArrayList<Cell>(Arrays.asList(celda7, celda8, celda9)));
+        df.addColumn(columna4,"label");
+        System.out.println(df.rowOrderMap);
+        df.show();
+        // Column columnaClonada = columna1.copy();
+        // columnaClonada.setCell(1, 35);
 // Estos comentarios son de cuando se mergeo con filtrado, fue necesario mergear esta parte para que ande MAIN
 
     //    estos renombres sí andan
         DataFrame dfCopy = df.copy();
+        dfCopy.show();
         //df.setColumLabels(columna1, "NUMERICA renombrada");
-        Cell newcell = new StringCell("TU MAMA");
-        Integer value = 35;
+        // Cell newcell = new StringCell("TU MAMA");
+         Integer value = 35;
         dfCopy.setCell(0, 1, value );
-        // System.out.println("Dataframe 1");
-        // System.out.println(df.toString("|"));
-        System.out.println("Dataframe 2");
+
+        df.show();
+
         dfCopy.show();
 
         // System.out.println("son iguales?");
         // System.out.println(dfCopy.equals(df));
         
         Integer[][] m1 = {
-            {11, 2, 3, 4},
-            {5, 1, 7, 8},
-            {5, 1, 3, 9}
+            {1, 2, 3, 4},
+            {1, 1, 7, 8},
+            {9, 1, 3, 9}
         };
 
-        DataFrame nativo = new DataFrame(m1);
-        // System.out.println(nativo.toString("|"));
+         DataFrame nativo = new DataFrame(m1);
+        nativo.show();
 
-        System.out.println("Dataframe 2");
-        System.out.println(df.rowOrderMap);
-        dfCopy.show();
-         System.out.println("Dataframe srted");
-        DataFrame dfCopia2 = dfCopy.shallowCopy();
-         System.out.println(dfCopia2.getRow(2));
-         System.out.println(dfCopia2.rowOrderMap); 
-        DataFrame sorted = dfCopy.sort();
-        sorted.show();
-        System.err.println(sorted.rowLabelsMap.entrySet());
-        System.out.println(sorted.rowOrderMap);
-        for (int orden : sorted.rowOrderMap.keySet()){
-            System.out.println(sorted.getRow(sorted.rowOrderMap.get(orden)));
-        }
-        
+        DataFrame nativoSorted = nativo.sort();
+        nativoSorted.show();
+
+        DataFrame copySorted = dfCopy.sort();
+        copySorted.show();
      
-    }
+     }
 }

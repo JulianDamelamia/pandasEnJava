@@ -251,6 +251,9 @@ public class DataFrame {
     this.columnOrderMap.put(this.columnOrderMap.size(), column);
     this.numCols = this.columnLabelsMap.size();
     this.numRows = this.columnOrderMap.get(0).size();
+    if(this.rowLabelsMap.size() == 0){
+      setRowLabels();
+    }
   }
 
   // Getters y Setters
@@ -316,7 +319,7 @@ public class DataFrame {
   public void setRowLabels() {
     rowLabelsMap.clear();
     rowOrderMap.clear();
-    for (Integer i = 0; i < columns.get(0).size(); i++) {
+    for (Integer i = 0; i < this.numRows; i++) {
       rowLabelsMap.put(i.toString(), i);
       rowOrderMap.put(rowLabelsMap.get(i.toString()), i.toString());
     }
