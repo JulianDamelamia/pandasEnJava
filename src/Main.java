@@ -31,9 +31,9 @@ public class Main {
         BooleanCell celda4 = new BooleanCell(true);
         BooleanCell celda5 = new BooleanCell(false);
         BooleanCell celda6 = new BooleanCell(true);
-        StringCell celda7 = new StringCell("Hola");
-        StringCell celda8 = new StringCell("Mundo");
-        StringCell celda9 = new StringCell("!");
+        StringCell celda7 = new StringCell("beta");
+        StringCell celda8 = new StringCell("gamma");
+        StringCell celda9 = new StringCell("alfa");
         NACell cell = NACell.getInstance();
         // armo unas columnas de prueba a partir de las celdas
         Column columna1 = new Column(new ArrayList<Cell>(Arrays.asList(celda1, celda2, celda3))); //numerica
@@ -150,14 +150,20 @@ public class Main {
             {9, 1, 3, 9}
         };
 
-         DataFrame nativo = new DataFrame(m1);
-        nativo.show();
+        //  DataFrame nativo = new DataFrame(m1);
+        // nativo.show();
 
-        DataFrame nativoSorted = nativo.sort();
-        nativoSorted.show();
-
+        // DataFrame nativoSorted = nativo.sort();
+        // nativoSorted.show();
+        System.out.println("sin ordenar");
+        dfCopy.show();
+        System.out.println("orden natural");
         DataFrame copySorted = dfCopy.sort();
         copySorted.show();
-     
+        System.out.println("orden por columna Tortuga3");
+        DataFrame copySortedColumna = dfCopy.sort("TORTUGA3");
+        // System.out.println(copySortedColumna.columnOrderMap);
+        copySortedColumna.show();
+
      }
 }

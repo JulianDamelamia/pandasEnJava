@@ -19,7 +19,7 @@ import java.util.Objects;
 public class DataFrame {
 
   public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
-  public Map<String, Column> columnLabelsMap; // labels de columnas-> { col : 'nombre'}
+  public Map<String, Column> columnLabelsMap; // labels de columnas-> { 'nombre': col }
   public Map<Integer, Column> columnOrderMap; //  orden de columnas -> { int : col}
   public Map<String, Integer> rowLabelsMap; // labels de filas -> {'nombre' : int posicional}
   public Map<Integer, String> rowOrderMap; // orden de filas -> {int posicional : 'nombre'}
@@ -68,6 +68,32 @@ public class DataFrame {
     DataFrame sortedDf = this.shallowCopy();
     HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
     sortedDf.rowOrderMap = sortedMap;
+    return sortedDf;
+  }
+  public DataFrame sort(String colLabel) {
+    DataFrame sortedDf = this.shallowCopy();
+    //{"label" : Columna} colLabel
+    // {int : Columna} columnOrderMap
+    Column column = sortedDf.columnLabelsMap.get(colLabel);
+    
+    if(sortedDf.columnOrderMap.get(0) != column){
+      HashMap<Integer, Column> columnOrderAuxiliar = new HashMap<Integer, Column>();
+      columnOrderAuxiliar.putAll(this.columnOrderMap);
+      for (Map.Entry<Integer, Column> parKV : this.columnOrderMap.entrySet()) {
+        if(parKV.getValue().equals(column)){
+          System.out.println("Encontrado! entrada nro " + parKV.getKey());
+          columnOrderAuxiliar.put(parKV.getKey(), this.columnOrderMap.get(0));
+          columnOrderAuxiliar.put(0,column );
+          break;
+        }
+      }
+      sortedDf.columnOrderMap = columnOrderAuxiliar;
+    }
+
+
+    HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
+    sortedDf.rowOrderMap = sortedMap;
+    sortedDf.columnOrderMap = this.columnOrderMap;
     return sortedDf;
   }
 
@@ -507,63 +533,63 @@ public class DataFrame {
     numRows--;
 }
 
-public void deleteColumn(int columnIndex) {
-    // Elimina la columna específica
-    Column removedColumn = columns.remove(columnIndex);
+  public void deleteColumn(int columnIndex) {
+      // Elimina la columna específica
+      Column removedColumn = columns.remove(columnIndex);
 
-    // Elimina la referencia de la columna del mapa de etiquetas de columna
-    String removedLabel = null;
-    for (Map.Entry<String, Column> entry : columnLabelsMap.entrySet()) {
-        if (entry.getValue().equals(removedColumn)) {
-            removedLabel = entry.getKey();
-            break;
-        }
-    }
-
-    if (removedLabel != null) {
-        columnLabelsMap.remove(removedLabel);
-    }
-
-    // Actualiza los mapas y la cantidad de columnas
-    columnOrderMap.remove(columnIndex);
-    numCols--;
-
-    // Recrea el mapa de orden de columnas
-    Map<Integer, Column> newColumnOrderMap = new HashMap<>();
-    for (int i = 0; i < columns.size(); i++) {
-        newColumnOrderMap.put(i, columns.get(i));
-    }
-    columnOrderMap = newColumnOrderMap;
-    
-    // Verifica la salida en la consola para identificar el problema.
-    System.out.println("columnOrderMap después de la eliminación: " + columnOrderMap);
-}
-
-public void deleteCell(int rowIndex, int columnIndex) {
-    // Elimina la celda específica en la columna y fila indicadas
-    columns.get(columnIndex).removeCellbyNA(rowIndex);
-}
-  public DataFrame randomSample(){
-    DataFrame df = RandomSample.sample(this);
-    return df;
-  }
-
-  public DataFrame randomSample(double p) {
-    if (p < 0 || p > 1) {
-        System.err.println("El porcentaje debe estar en el rango [0, 1]");
-        return null;
-    }
-    else{
-        DataFrame df = RandomSample.sample(this, p);
-        return df;
+      // Elimina la referencia de la columna del mapa de etiquetas de columna
+      String removedLabel = null;
+      for (Map.Entry<String, Column> entry : columnLabelsMap.entrySet()) {
+          if (entry.getValue().equals(removedColumn)) {
+              removedLabel = entry.getKey();
+              break;
+          }
       }
 
+      if (removedLabel != null) {
+          columnLabelsMap.remove(removedLabel);
+      }
+
+      // Actualiza los mapas y la cantidad de columnas
+      columnOrderMap.remove(columnIndex);
+      numCols--;
+
+      // Recrea el mapa de orden de columnas
+      Map<Integer, Column> newColumnOrderMap = new HashMap<>();
+      for (int i = 0; i < columns.size(); i++) {
+          newColumnOrderMap.put(i, columns.get(i));
+      }
+      columnOrderMap = newColumnOrderMap;
+      
+      // Verifica la salida en la consola para identificar el problema.
+      System.out.println("columnOrderMap después de la eliminación: " + columnOrderMap);
   }
 
-    public DataFrame head() {
-    DataFrame df = Selection.head(this);
-    return df;
+  public void deleteCell(int rowIndex, int columnIndex) {
+      // Elimina la celda específica en la columna y fila indicadas
+      columns.get(columnIndex).removeCellbyNA(rowIndex);
   }
+  public DataFrame randomSample(){
+      DataFrame df = RandomSample.sample(this);
+      return df;
+    }
+
+  public DataFrame randomSample(double p) {
+  if (p < 0 || p > 1) {
+      System.err.println("El porcentaje debe estar en el rango [0, 1]");
+      return null;
+  }
+  else{
+      DataFrame df = RandomSample.sample(this, p);
+      return df;
+    }
+
+}
+
+  public DataFrame head() {
+  DataFrame df = Selection.head(this);
+  return df;
+}
 
   public DataFrame tail() {
     DataFrame df = Selection.tail(this);
@@ -589,10 +615,10 @@ public void deleteCell(int rowIndex, int columnIndex) {
    *
    * @return DataFrame
    */
-public DataFrame copy() {
-    DataFrame copyDataFrame = new DataFrame();
+  public DataFrame copy() {
+      DataFrame copyDataFrame = new DataFrame();
 
-    for (int i = 0; i < this.numCols; i++) {
+      for (int i = 0; i < this.numCols; i++) {
         Column originalColumn = this.columnOrderMap.get(i);
         String label = getKeyFromValue(this.columnLabelsMap, originalColumn);
 
@@ -607,25 +633,25 @@ public DataFrame copy() {
         copiedColumn.setContent(copiedContent);
 
         copyDataFrame.addColumn(copiedColumn, label);
-    }
+      }
 
-    copyDataFrame.rowLabelsMap.putAll(this.rowLabelsMap);
-    copyDataFrame.rowOrderMap.putAll(this.rowOrderMap);
-    copyDataFrame.numRows = this.numRows;
-    copyDataFrame.numCols = this.numCols;
+      copyDataFrame.rowLabelsMap.putAll(this.rowLabelsMap);
+      copyDataFrame.rowOrderMap.putAll(this.rowOrderMap);
+      copyDataFrame.numRows = this.numRows;
+      copyDataFrame.numCols = this.numCols;
 
-    return copyDataFrame;
-}
+      return copyDataFrame;
+  }
 
-// Método para obtener la clave de un valor en un mapa
-private <T, E> T getKeyFromValue(Map<T, E> map, E value) {
-    for (Map.Entry<T, E> entry : map.entrySet()) {
-        if (Objects.equals(value, entry.getValue())) {
-            return entry.getKey();
-        }
-    }
-    return null;
-}
+  // Método para obtener la clave de un valor en un mapa
+  private <T, E> T getKeyFromValue(Map<T, E> map, E value) {
+      for (Map.Entry<T, E> entry : map.entrySet()) {
+          if (Objects.equals(value, entry.getValue())) {
+              return entry.getKey();
+          }
+      }
+      return null;
+  }
 
   /**
   * Metodo para obtener la columna
