@@ -1,7 +1,7 @@
 # pandasEnJava
 TP final de Algoritmos 1 - UNSAM
 
-ToDo: 2/21
+ToDo: 0/21
 Completo: ✅
 En Progreso: 🚧
 No iniciado: ❌
