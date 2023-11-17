@@ -1,5 +1,8 @@
+import dataframe.Column;
 import dataframe.DataFrame;
 import java.io.IOException;
+import java.util.Map;
+
 import utils_df.RandomSample;
 
 public class App {
@@ -65,5 +68,30 @@ public class App {
     nativo.deleteCell(1,2);
     System.out.println("-> Con la celda (2,3 eliminada)");
     nativo.show(); 
+
+    // Realizo una seleccion parcial
+    DataFrame df_seleccion = df.select( new String[]{"0", "1"}, new String[]{"Columna 0", "Columna 1"}); // select(String[] rowLabels, String[] colLabels) 
+    df_seleccion.show();
+
+   
+// TODO cambiar nombre de getColumnLabels y listcolumnLabels
+
+    // // Pruebo head y tail
+    df.tail();
+    df.head();
+    // df.show();
+    DataFrame df_select_amldito = df.select(new String[] {"6","7","8","9","10"}, new String[] {"Columna 0", "Columna 1", "Columna 2", "Columna 3"});
+
+    System.out.println("\n"+ df_select_amldito.rowOrderMap.toString());
+    System.out.println("\n"+ df_select_amldito.rowLabelsMap.toString());
+    System.out.println("\n"+ df_select_amldito.columnOrderMap.toString());
+    System.out.println("\n"+ df_select_amldito.columnLabelsMap.toString());
+
+
+
+    
+  
   }
+
+
 }
