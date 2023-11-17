@@ -5,12 +5,14 @@ import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
+import utils.Archivos;
 import utils_df.Criterios;
 import utils_df.Identificador;
 import utils_df.RandomSample;
 import utils_df.Selection;
 import utils_df.Summarise;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -309,6 +311,8 @@ public class DataFrame {
     }
 }
 
+ 
+
   /**
    * Agrega una nueva columna al DataFrame con las celdas especificadas.
    * 
@@ -323,7 +327,7 @@ public class DataFrame {
     this.numRows = this.columnOrderMap.get(0).size();
     if(this.rowLabelsMap.size() == 0){
       setRowLabels();
-    }
+    } 
   }
 
   /**
@@ -370,6 +374,14 @@ public class DataFrame {
    */
   public Cell getCell(int col, int row) {
     Column column = this.columnOrderMap.get(col);
+    Cell cell = column.getContent().get(row);
+    return cell;
+  }
+
+  // GetCell sobrecargado que recibe dos etiqeutas con formato string
+  public Cell getCell(String colLabel, String rowLabel) {
+    Column column = this.columnLabelsMap.get(colLabel);
+    Integer row = this.rowLabelsMap.get(rowLabel);
     Cell cell = column.getContent().get(row);
     return cell;
   }
@@ -442,7 +454,6 @@ public class DataFrame {
     for (String label : rowLabels) {
       out += label + " | ";
     }
-    out += "\n";
     return out;
   }
 
@@ -512,7 +523,6 @@ public class DataFrame {
     for (String label : colLabels) {
       out += label + " | ";
     }
-    out += "\n";
     return out;
   }
 
@@ -589,18 +599,35 @@ public class DataFrame {
     return identificador.getType();
   }
 
+  //Metodo que devuelve una lista de los tipos de datos de las columnas
+  public String[] getColumnTypes() {
+    String[] labels = this.listColumnLabels();
+    String[] types = new String[labels.length];
+    Identificador identificador = null;
 
+    for (int i = 0; i < labels.length; i++) {
+      String celda = this.columnOrderMap.get(i).getContent().get(1).toString();
+      identificador = new Identificador(celda);
+      types[i] = identificador.getType();
+    }
+    return types;
+  }
+  // FIX ISSUE //TODO
   public void deleteRow(int rowIndex) {
     // Elimina la fila específica en cada columna
     for (Column column : columns) {
         column.removeCell(rowIndex);
     }
 
+    
     // Actualiza el mapa de etiquetas de fila y la cantidad de filas
     rowLabelsMap.remove(String.valueOf(rowIndex));
     rowOrderMap.remove(rowIndex);
     numRows--;
+    
 }
+
+
 
   public void deleteColumn(int columnIndex) {
       // Elimina la columna específica
@@ -628,10 +655,7 @@ public class DataFrame {
       for (int i = 0; i < columns.size(); i++) {
           newColumnOrderMap.put(i, columns.get(i));
       }
-      columnOrderMap = newColumnOrderMap;
-      
-      // Verifica la salida en la consola para identificar el problema.
-      System.out.println("columnOrderMap después de la eliminación: " + columnOrderMap);
+      columnOrderMap = newColumnOrderMap;      
   }
 
   public void deleteCell(int rowIndex, int columnIndex) {
@@ -925,4 +949,33 @@ public class DataFrame {
 
     return out;
 }
+  // Metodo que invoca el readCSV de archivos
+  public DataFrame readCSV(String path) throws IOException {
+    DataFrame df = Archivos.readCSV(path);
+    return df;
+  }
+  public DataFrame readCSV(String path, String sep) throws IOException {
+    DataFrame df = Archivos.readCSV(path, sep);
+    return df;
+  }
+
+  // Metodo que invoca el exportCSV de archivos //TODO
+  
+
+// Metodo para devolver informacion de dataframe
+public void info() {
+  System.out.println("Información del DataFrame");
+  System.out.println("- Cantidad de filas: " + this.getCantFilas());
+  System.out.println("- Cantidad de columnas: " + this.getCantColumnas());
+  System.out.println("- Etiquetas de filas: " + this.getRowLabels());
+  System.out.println("- Etiquetas de columnas: " + this.getColumnLabels());
+  // 
+  String tipos="";
+  for (String tipo : this.getColumnTypes()) {
+    tipos += tipo + " - | ";
+  }
+  System.out.println("- Tipos de datos:        " + tipos);
+  
+  }
+
 }
