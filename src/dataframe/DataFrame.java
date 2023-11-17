@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 public class DataFrame {
 
   public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
@@ -28,6 +29,7 @@ public class DataFrame {
   public Map<Integer, String> rowOrderMap; // orden de filas -> {int posicional : 'nombre'}
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
+  
 
   public DataFrame filter(String colLabel, String operador, Object valor) throws IllegalArgumentException {
     String[] filasSalida;
@@ -77,6 +79,7 @@ public class DataFrame {
       }
     return filasSalida;
   }
+  
 
   public Row getRow(int index){
     Row row = new Row();
@@ -953,6 +956,10 @@ public class DataFrame {
   public DataFrame readCSV(String path, String sep) throws IOException {
     DataFrame df = Archivos.readCSV(path, sep);
     return df;
+  }
+
+  public void exportCSV(String filepath){
+    Archivos.exportCSV(filepath,this);
   }
 
   // Metodo que invoca el exportCSV de archivos //TODO
