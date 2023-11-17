@@ -26,12 +26,13 @@ public class Archivos {
         }
     }
 
-    public static String[][] parserLineas(List<String> lineas) throws CSVParserException {
+    public static String[][] parserLineas(List<String> lineas, String sep) throws CSVParserException {
+        // TODO hacer el check de sep
         int filas = lineas.size();
         String[][] celdas = null;
         for(int i=0; i < lineas.size(); i++) {
             String linea = lineas.get(i);
-            String[] campos = linea.split(",");
+            String[] campos = linea.split(sep);
             if (celdas == null) {
                 celdas = new String[filas][campos.length];
             }
@@ -114,6 +115,7 @@ public class Archivos {
         }
     }
 
+    //TODO 
     public static DataFrame readCSV(String filePath) throws IOException {
         /*
          * Lee un archivo CSV y lo convierte en un DataFrame
@@ -126,7 +128,7 @@ public class Archivos {
         List<String> lineasLeidas = leerLineas(filePath);
         String[][] celdas;
         try {
-            celdas = parserLineas(lineasLeidas);
+            celdas = parserLineas(lineasLeidas, ",");
             return createDfFromParsed(celdas);
         } catch (CSVParserException e) {
             System.out.println(e.getMessage());
@@ -134,7 +136,24 @@ public class Archivos {
         }
     }
 
+    public static DataFrame readCSV(String filePath, String sep) throws IOException {
+        /*
+         * Lee un archivo CSV y lo convierte en un DataFrame
+         * 
+         * @param filePath: Ruta del archivo CSV
+         * 
+         * @return DataFrame
+         * 
+         */
+        List<String> lineasLeidas = leerLineas(filePath);
+        String[][] celdas;
+        try {
+            celdas = parserLineas(lineasLeidas, sep);
+            return createDfFromParsed(celdas);
+        } catch (CSVParserException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
     
 }
-
-
