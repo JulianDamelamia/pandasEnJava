@@ -65,5 +65,26 @@ public class App {
     nativo.deleteCell(1,2);
     System.out.println("-> Con la celda (2,3 eliminada)");
     nativo.show(); 
+
+    // Exporto a CSV
+    //nativo.exportCSV("test_nativo.csv");
+
+    nativo.select(new String[] {"0","5"}, new String[] {"Columna 0", "Columna 1"}).show();
+
+    // Creo un dataframe con una muestra aleatoria
+    df.show();
+    df.randomSample().show();
+    df.randomSample(0.2).show();
+
+    // Filtrado //TODO 
+    /* */
+    System.out.println("-> Filtrado");
+    //OLD VERSION
+    //df.filter("Columna 0", ">", 5).show(); // TODO Si no hay nada que mostar indicar que esta vacio
+    //df.filter
+    //NEW VERSION
+    //nativo.filter("Columna 0 < 4").show();
+    
+
   }
 }
