@@ -626,9 +626,6 @@ public class DataFrame {
     numRows--;
     
 }
-
-
-
   public void deleteColumn(int columnIndex) {
       // Elimina la columna específica
       Column removedColumn = columns.remove(columnIndex);
@@ -874,16 +871,6 @@ public class DataFrame {
    * @return a string representation of the DataFrame
    */
   public String toString(String separador, Boolean showAllRows, Boolean showAllColumns) {
-    if (separador == null) {
-        separador = " | ";
-    }
-    if (showAllRows == null) {
-        showAllRows = false;
-    }
-    if (showAllColumns == null) {
-        showAllColumns = false;
-    }
-
     String out = "";
     String sep = " " + separador + " ";
     String[] labels = this.listColumnLabels();
@@ -891,6 +878,15 @@ public class DataFrame {
     int numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
     int numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
 
+    if (separador == null) {
+      separador = " | ";
+    }
+    if (showAllRows == null) {
+        showAllRows = false;
+    }
+    if (showAllColumns == null) {
+        showAllColumns = false;
+    }
     if (showAllRows) {
         numRowsToShow = this.numRows; // Mostrar todas las filas
     } else {
@@ -902,6 +898,7 @@ public class DataFrame {
     } else {
         numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
     }
+
 
     for (int i = 0; i < numColumnsToShow; i++) {
         colWidths[i] = ("[" + labels[i] + "]").length();
@@ -918,24 +915,23 @@ public class DataFrame {
         out += String.format("%-" + colWidths[i] + "s", "[" + labels[i] + "]") + sep;
     }
     out += "\n";
-
+    int rowIndex = 0;
     // for (Integer row = 0; row < numRowsToShow; row++) {
       for (Integer orden : this.rowOrderMap.keySet()) { //rowOrder = {int :  label}
 
         int rowPadding = colWidths[0] - orden.toString().length();
         int leftRowPadding = rowPadding / 2;
         int rightRowPadding = rowPadding - leftRowPadding;
+        
         out += String.format("%-" + (leftRowPadding + orden.toString().length() + rightRowPadding) + "s", "[Fila: " + orden + "]") + sep;
         for (int i = 0; i < numColumnsToShow; i++) {
-          // label = rowOrder(i) -- rowOrder = {0 : 'fila 1' , 1 : 'fila 3' , 2 : 'fila 2'}
-          // index = rowlabel(label) -- rowlabel = {'fila 1' : 0 , 'fila 2' : 2 , 'fila 3' : 1}
-          int row = this.rowLabelsMap.get(this.rowOrderMap.get(orden));
-            String cellValue = this.columnOrderMap.get(i).getContent().get(row).toString();
+            String cellValue = this.columnOrderMap.get(i).getContent().get(rowIndex).toString(); 
             int padding = colWidths[i] - cellValue.length();
             int leftPadding = padding / 2;
             int rightPadding = padding - leftPadding;
             out += String.format("%-" + (leftPadding + cellValue.length() + rightPadding) + "s", cellValue) + sep;
         }
+        rowIndex++;
         out += "\n";
     }
 

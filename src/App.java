@@ -20,8 +20,7 @@ public class App {
     //df.exportCSV("test.csv"); //TODO: arreglar el exportCSV
     
     // Creo desde una estructura nativa un dataframe
-    
-    
+
 // TODO CHEQUEAR ESTO
     Integer[][] m2 = {
         {1, 2, 3, 4},
@@ -45,6 +44,12 @@ public class App {
         {1, 2, 3, 4},
         {1, 1, 7, 8},
         {9, 1, 3, 9},
+        {9, 1, 3, 9},
+        {1, 1, 7, 8},
+        {9, 1, 3, 9},
+        {9, 1, 3, 9},
+        {1, 1, 7, 8},
+        {9, 1, 3, 9},
         {9, 1, 3, 9}
 
     };
@@ -59,9 +64,6 @@ public class App {
     nativo.show();
     nativo.deleteCell(1,2);
     System.out.println("-> Con la celda (2,3 eliminada)");
-    nativo.show();
-
-
-
+    nativo.show(); 
   }
 }
