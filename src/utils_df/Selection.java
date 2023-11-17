@@ -11,46 +11,52 @@ import java.util.List;
  */
 public class Selection {
 
+
+
+
   /**
    * Retorna un nuevo DataFrame con las primeras 5 filas de cada columna del DataFrame original.
    * @param df El DataFrame original.
    * @return Un nuevo DataFrame con las primeras 5 filas de cada columna del DataFrame original.
    */
   public static DataFrame head(DataFrame df) {
-    DataFrame dfHead = new DataFrame();
-
     int numRows = Math.min(5, df.getCantFilas()); // Evita desbordamiento si hay menos de 5 filas
+    return selectOperator(df, numRows, true);
+  }
 
-    for (int i = 0; i < df.getCantColumnas(); i++) {
-      Column column = df.getColumn(i);
-      List<Cell> cells = column.getContent();
-      List<Cell> newColumnCells = new ArrayList<>(cells.subList(0, numRows));
-      dfHead.addColumn(newColumnCells);
+  private static DataFrame selectOperator(DataFrame df, int numFilas, boolean primeras) {
+    DataFrame dfSeleccionado = new DataFrame();
+
+    // Calcular los índices de las filas que se seleccionarán
+    int start, end;
+    if (primeras) {
+        start = 0;
+        end = Math.min(numFilas, df.getCantFilas());
+    } else {
+        start = Math.max(0, df.getCantFilas() - numFilas);
+        end = df.getCantFilas();
     }
 
-    return dfHead;
-  }
+    // Seleccionar las filas y columnas correspondientes
+    String[] rowLabels = new String[end - start];
+    for (int row = start; row < end; row++) {
+        rowLabels[row - start] = df.rowLabels()[row];
+    }
+
+    String[] colLabels = df.columnLabels();
+
+    dfSeleccionado = df.select(rowLabels, colLabels);
+
+    return dfSeleccionado;
+}
 
   /**
    * Retorna un nuevo DataFrame con las últimas 5 filas de cada columna del DataFrame original.
    * @param df El DataFrame original.
    * @return Un nuevo DataFrame con las últimas 5 filas de cada columna del DataFrame original.
    */
-  public static DataFrame tail(DataFrame df) {
-    DataFrame dfTail = new DataFrame();
-
+public static DataFrame tail(DataFrame df) {
     int numRows = Math.min(5, df.getCantFilas()); // Evita desbordamiento si hay menos de 5 filas
-
-    for (int i = 0; i < df.getCantColumnas(); i++) {
-      Column column = df.getColumn(i);
-      List<Cell> cells = column.getContent();
-      int startIndex = Math.max(0, cells.size() - numRows); // Asegura que no se inicie desde un índice negativo
-      List<Cell> newColumnCells = new ArrayList<>(
-        cells.subList(startIndex, cells.size())
-      );
-      dfTail.addColumn(newColumnCells);
-    }
-
-    return dfTail;
-  }
+    return selectOperator(df, numRows, false);
+}
 }

@@ -1,5 +1,8 @@
+import dataframe.Column;
 import dataframe.DataFrame;
 import java.io.IOException;
+import java.util.Map;
+
 import utils_df.RandomSample;
 
 public class App {
@@ -7,16 +10,16 @@ public class App {
   public static void main(String[] args) throws IOException {
     DataFrame df = new DataFrame();
     df = df.readCSV("./examples/libro2.csv");
-    df.show();
-    df.info();
+    // df.show();
+    // df.info();
     // Checklist
     // obtener filas y columnas
-    df.getCantColumnas();
-    System.out.println(df.getColumnType(1));
-    System.out.println(df.getColumn(1));
-    System.out.println(df.getCell(1, 1)); // Cambiar para que reciba las etiquetas
-    System.out.println(df.getCell("Columna 0", "0" ));
-    System.out.println(df.getCell("Columna 0", "6" ));
+    // df.getCantColumnas();
+    // System.out.println(df.getColumnType(1));
+    // System.out.println(df.getColumn(1));
+    // System.out.println(df.getCell(1, 1)); // Cambiar para que reciba las etiquetas
+    // System.out.println(df.getCell("Columna 0", "0" ));
+    // System.out.println(df.getCell("Columna 0", "6" ));
     //df.exportCSV("test.csv"); //TODO: arreglar el exportCSV
     
     // Creo desde una estructura nativa un dataframe
@@ -31,14 +34,14 @@ public class App {
 
 
     nativo2.deleteRow(2);
-    System.out.println("-> Con una fila eliminada");
-    nativo2.show();
+    // System.out.println("-> Con una fila eliminada");
+    // nativo2.show();
     nativo2.deleteColumn(2);
-    System.out.println("-> Con una columna eliminada");
-    nativo2.show();
+    // System.out.println("-> Con una columna eliminada");
+    // nativo2.show();
     nativo2.deleteCell(1,2);
-    System.out.println("-> Con la celda (2,3 eliminada)");
-    nativo2.show();
+    // System.out.println("-> Con la celda (2,3 eliminada)");
+    // nativo2.show();
 
     Integer[][] m1 = {
         {1, 2, 3, 4},
@@ -54,16 +57,42 @@ public class App {
 
     };
     DataFrame nativo = new DataFrame(m1);
-    nativo.show();
+    // nativo.show();
+    String[] viejas = new String[]{"0", "1", "2", "3"};
+    String[] nuevas = new String[]{"f0", "f1", "f2", "f3"};
+    for (int i = 0; i < viejas.length; i++) {
+        nativo.setRowLabel(viejas[i], nuevas[i]);
+    }
+//     DataFrame nativoDeleteado = nativo.deleteRow(2);
+//     System.out.println("-> Con una fila eliminada");
+//     nativoDeleteado.show();
+//     // nativo.deleteColumn(2);
+//     // System.out.println("-> Con una columna eliminada");
+//     // nativo.show();
+//     // nativo.deleteCell(1,2);
+//     // System.out.println("-> Con la celda (2,3 eliminada)");
+//     // nativo.show(); 
 
-    nativo.deleteRow(2);
-    System.out.println("-> Con una fila eliminada");
-    nativo.show();
-    nativo.deleteColumn(2);
-    System.out.println("-> Con una columna eliminada");
-    nativo.show();
-    nativo.deleteCell(1,2);
-    System.out.println("-> Con la celda (2,3 eliminada)");
-    nativo.show(); 
+//     // Realizo una seleccion parcial
+//     DataFrame df_seleccion = df.select( new String[]{"0", "1"}, new String[]{"Columna 0", "Columna 1"}); // select(String[] rowLabels, String[] colLabels) 
+//     df_seleccion.show();
+
+   
+// // TODO cambiar nombre de getColumnLabels y listcolumnLabels
+
+//     // // Pruebo head y tail
+//     System.out.println("TAIL()");
+//     df.tail();
+//     System.out.println("\n HEAD()");
+//     df.head();
+    // df.show();
+    DataFrame dfSorted = nativo.shallowCopy();
+    System.out.println("Rows");
+    System.out.println(dfSorted.getRows() + "\n");
+    DataFrame nativoSorted = nativo.sort("Columna 3");
+    nativoSorted.show();
+
   }
+
+
 }

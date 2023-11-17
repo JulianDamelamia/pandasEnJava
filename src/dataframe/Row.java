@@ -42,7 +42,7 @@ public class Row implements Comparable<Row>{
     @Override
     public int compareTo(Row otro){
         int i = 0;
-        while (this.getCell(i).compareTo(otro.getCell(i)) == 0) {
+        while (this.getCell(i).compareTo(otro.getCell(i)) == 0 && i < this.cells.size() - 1) {
            i++;
         }
         return  this.getCell(i).compareTo(otro.getCell(i));
