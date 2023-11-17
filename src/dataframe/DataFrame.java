@@ -6,6 +6,7 @@ import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
 import utils.Archivos;
+import utils.GetKeyFromValue;
 import utils_df.Criterios;
 import utils_df.Identificador;
 import utils_df.RandomSample;
@@ -103,7 +104,7 @@ public class DataFrame {
     this.rowOrderMap.put(index, nueva);// rowOrderMap = {0 : "0", 1 : "1", 2 : "2"} --> rowOrderMap = {0 : "nueva", 1 : "1", 2 : "2"}
   }
 
-  private ArrayList<Row> getRows(){
+  public ArrayList<Row> getRows(){
     ArrayList<Row> rows = new ArrayList<Row>();
     for (String label: this.rowLabelsMap.keySet()) {
       Row row = new Row();
@@ -118,6 +119,8 @@ public class DataFrame {
 
   public DataFrame sort() {
     DataFrame sortedDf = this.shallowCopy();
+    System.out.println("sortedf.numrows : " +sortedDf.numRows);
+    System.out.println("sortedf.numcols : " +sortedDf.numCols);
     HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
     sortedDf.rowOrderMap = sortedMap;
     return sortedDf;
@@ -133,7 +136,6 @@ public class DataFrame {
       columnOrderAuxiliar.putAll(this.columnOrderMap);
       for (Map.Entry<Integer, Column> parKV : this.columnOrderMap.entrySet()) {
         if(parKV.getValue().equals(column)){
-          System.out.println("Encontrado! entrada nro " + parKV.getKey());
           columnOrderAuxiliar.put(parKV.getKey(), this.columnOrderMap.get(0));
           columnOrderAuxiliar.put(0,column );
           break;
@@ -157,43 +159,10 @@ public class DataFrame {
       };
 
     HashMap<Integer, String> sortedMap = new HashMap<>();
-      
     for(int i=0; i<rows.size(); i++){
       sortedMap.put((Integer) i, (String)(rows.get(i).label));
     }
     return sortedMap;
-  }
-
-  public DataFrame select(String[] rowLabels, String[] colLabels) throws IllegalArgumentException{
-    DataFrame seleccion = this.shallowCopy();
-    System.out.println("Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto");
-    seleccion.columnOrderMap = new HashMap<>();
-    int i = 0;
-    for(String col: colLabels){
-      if(!this.columnLabelsMap.containsKey(col)){
-        throw new IllegalArgumentException("La columna " + col + " no existe");
-      }
-      seleccion.columnOrderMap.put( i, this.columnLabelsMap.get(col));
-      i++;
-    }
-
-    seleccion.rowOrderMap = new HashMap<>();
-    int j = 0;
-    for(String row: rowLabels){
-      System.out.println("row: " + row);
-      if(!this.rowLabelsMap.containsKey(row)){
-        throw new IllegalArgumentException("La fila " + row + " no existe");
-      }
-      seleccion.rowOrderMap.put(j, row);
-      System.out.println(seleccion.rowOrderMap.toString());
-      System.out.println(seleccion.rowLabelsMap.toString());
-      j++;
-      seleccion.numRows = j;
-      seleccion.numCols = i;
-    }
-    //seleccion.show();
-    System.out.println("-------------");
-    return seleccion;
   }
 
   private int particion (ArrayList<Row> rows, int low, int high) {
@@ -212,6 +181,35 @@ public class DataFrame {
     rows.set(high, temp);
     return i + 1;
   }
+
+  public DataFrame select(String[] rowLabels, String[] colLabels) throws IllegalArgumentException{
+    DataFrame seleccion = this.shallowCopy();
+    System.out.println("Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto");
+    seleccion.columnOrderMap = new HashMap<>();
+    int i = 0;
+    for(String col: colLabels){
+      if(!this.columnLabelsMap.containsKey(col)){
+        throw new IllegalArgumentException("La columna " + col + " no existe");
+      }
+      seleccion.columnOrderMap.put( i, this.columnLabelsMap.get(col));
+      i++;
+    }
+
+    seleccion.rowOrderMap = new HashMap<>();
+    int j = 0;
+    for(String row: rowLabels){
+      if(!this.rowLabelsMap.containsKey(row)){
+        throw new IllegalArgumentException("La fila " + row + " no existe");
+      }
+      seleccion.rowOrderMap.put(j, row);
+      j++;
+      seleccion.numRows = j;
+      seleccion.numCols = i;
+    }
+    return seleccion;
+  }
+
+
 
   public DataFrame shallowCopy() {
     DataFrame copy = new DataFrame();
@@ -618,19 +616,35 @@ public class DataFrame {
     return types;
   }
   // FIX ISSUE //TODO
-  public void deleteRow(int rowIndex) {
+  public DataFrame deleteRow(int rowIndex) {
     // Elimina la fila específica en cada columna
-    for (Column column : columns) {
-        column.removeCell(rowIndex);
+    DataFrame nuevoDF = new DataFrame();
+    Column columnaAuxiliar; 
+    for (Column column : this.columns) {
+      columnaAuxiliar = column.copy();
+      columnaAuxiliar.removeCell(rowIndex);
+      String colLabel = GetKeyFromValue.getKey(this.columnLabelsMap, column);
+      nuevoDF.addColumn(columnaAuxiliar, colLabel);
     }
+    for(String rowLabel: rowLabelsMap.keySet()){
+      int indiceActual = rowLabelsMap.get(rowLabel);
+      if( indiceActual < rowIndex){
+        nuevoDF.rowLabelsMap.put(rowLabel, indiceActual);
+      }else{
+        nuevoDF.rowLabelsMap.put(rowLabel, indiceActual-1);
+      }
+      int ordenViejo = GetKeyFromValue.getKey(rowOrderMap, rowLabel);
+      if(ordenViejo < rowIndex){
+        nuevoDF.rowOrderMap.put(ordenViejo, rowLabel);
+      }else{
+        nuevoDF.rowOrderMap.put(ordenViejo-1, rowLabel);
+      }
+      }
+    
+    nuevoDF.numRows --;
+    return nuevoDF;
+  }
 
-    
-    // Actualiza el mapa de etiquetas de fila y la cantidad de filas
-    rowLabelsMap.remove(String.valueOf(rowIndex));
-    rowOrderMap.remove(rowIndex);
-    numRows--;
-    
-}
   public void deleteColumn(int columnIndex) {
       // Elimina la columna específica
       Column removedColumn = columns.remove(columnIndex);
@@ -935,7 +949,7 @@ public class DataFrame {
         int rightRowPadding = rowPadding - leftRowPadding;
         
         out += String.format("%-" + (leftRowPadding + orden.toString().length() + rightRowPadding) + "s", "[Fila: " + orden + "]") + sep;
-        for (int i = 0; i < numColumnsToShow; i++) {
+        for (int i = 0; i < numColumnsToShow; i++) {       
             rowIndex = this.rowLabelsMap.get(this.rowOrderMap.get(orden));
             String cellValue = this.columnOrderMap.get(i).getContent().get(rowIndex).toString(); 
             int padding = colWidths[i] - cellValue.length();
