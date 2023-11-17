@@ -180,14 +180,19 @@ public class DataFrame {
     seleccion.rowOrderMap = new HashMap<>();
     int j = 0;
     for(String row: rowLabels){
+      System.out.println("row: " + row);
       if(!this.rowLabelsMap.containsKey(row)){
         throw new IllegalArgumentException("La fila " + row + " no existe");
       }
       seleccion.rowOrderMap.put(j, row);
+      System.out.println(seleccion.rowOrderMap.toString());
+      System.out.println(seleccion.rowLabelsMap.toString());
       j++;
       seleccion.numRows = j;
       seleccion.numCols = i;
     }
+    //seleccion.show();
+    System.out.println("-------------");
     return seleccion;
   }
 
@@ -449,7 +454,7 @@ public class DataFrame {
     if (this.rowLabelsMap.size() == 0) {
       setRowLabels();
     }
-    String[] rowLabels = this.listRowLabels();
+    String[] rowLabels = this.rowLabels();
     String out = "";
     for (String label : rowLabels) {
       out += label + " | ";
@@ -461,7 +466,7 @@ public class DataFrame {
    * Devuelve un arreglo de Strings con las etiquetas de las filas del DataFrame.
    * @return arreglo de Strings con las etiquetas de las filas del DataFrame.
    */
-  private String[] listRowLabels() {
+  public String[] rowLabels() {
     String[] labels = new String[this.rowLabelsMap.size()];
     int i = 0;
     for (String key : this.rowLabelsMap.keySet()) {
@@ -518,7 +523,7 @@ public class DataFrame {
    * @return una cadena de caracteres con las etiquetas de las columnas separadas por "|".
    */
   public String getColumnLabels() {
-    String[] colLabels = this.listColumnLabels();
+    String[] colLabels = this.columnLabels();
     String out = "";
     for (String label : colLabels) {
       out += label + " | ";
@@ -531,7 +536,7 @@ public class DataFrame {
    * 
    * @return un arreglo de Strings con los nombres de las columnas del DataFrame.
    */
-  private String[] listColumnLabels() {
+  public String[] columnLabels() {
     String[] labels = new String[this.columnOrderMap.size()];
     for (Integer key : this.columnOrderMap.keySet()) {
         Column column = this.columnOrderMap.get(key);
@@ -587,7 +592,7 @@ public class DataFrame {
    */
   public String getColumnType(int colNumber) {
     Identificador identificador = null;
-    String[] labels = this.listColumnLabels();
+    String[] labels = this.columnLabels();
 
     for (int i = 0; i < labels.length; i++) {
       if (i == colNumber) {
@@ -601,7 +606,7 @@ public class DataFrame {
 
   //Metodo que devuelve una lista de los tipos de datos de las columnas
   public String[] getColumnTypes() {
-    String[] labels = this.listColumnLabels();
+    String[] labels = this.columnLabels();
     String[] types = new String[labels.length];
     Identificador identificador = null;
 
@@ -676,14 +681,18 @@ public class DataFrame {
 
 }
 
-  public DataFrame head() {
+  public void head() {
+    //TODO que acepte un parametros de cuantas filas 
+    // 
   DataFrame df = Selection.head(this);
-  return df;
+  df.show();
 }
 
-  public DataFrame tail() {
+  public void tail() {
+        //TODO que acepte un parametros de cuantas filas 
+
     DataFrame df = Selection.tail(this);
-    return df;
+    df.show();
   }
 
   //SHALLOW COPY
@@ -861,6 +870,8 @@ public class DataFrame {
     System.out.println(this.toString("|", true, true));
   }
  
+
+
   /**
    * Returns a string representation of the DataFrame, using the specified separator between columns.
    * If the separator is null, the default separator " | " is used.
@@ -873,7 +884,7 @@ public class DataFrame {
   public String toString(String separador, Boolean showAllRows, Boolean showAllColumns) {
     String out = "";
     String sep = " " + separador + " ";
-    String[] labels = this.listColumnLabels();
+    String[] labels = this.columnLabels();
     int[] colWidths = new int[labels.length];
     int numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
     int numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
@@ -925,13 +936,14 @@ public class DataFrame {
         
         out += String.format("%-" + (leftRowPadding + orden.toString().length() + rightRowPadding) + "s", "[Fila: " + orden + "]") + sep;
         for (int i = 0; i < numColumnsToShow; i++) {
+            rowIndex = this.rowLabelsMap.get(this.rowOrderMap.get(orden));
             String cellValue = this.columnOrderMap.get(i).getContent().get(rowIndex).toString(); 
             int padding = colWidths[i] - cellValue.length();
             int leftPadding = padding / 2;
             int rightPadding = padding - leftPadding;
             out += String.format("%-" + (leftPadding + cellValue.length() + rightPadding) + "s", cellValue) + sep;
         }
-        rowIndex++;
+        //rowIndex++;
         out += "\n";
     }
 
