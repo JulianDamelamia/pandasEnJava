@@ -47,8 +47,8 @@ public class App {
     Integer[][] m1 = {
         {1, 2, 3, -1},
         {2, 4, 6,-2},
-        {3, 6, 9, -3},
-        {4, 8, 12, -4},
+        {4, 6, 9, -3},
+        {3, 8, 12, -4},
         {5, 10, 15, -5},
         {6, 12, 18, -6},
         {7, 14, 21, -7},
@@ -71,7 +71,7 @@ public class App {
 //     // nativo.show();
 //     // nativo.deleteCell(1,2);
 //     // System.out.println("-> Con la celda (2,3 eliminada)");
-//     // nativo.show(); 
+        nativo.exportCSV("test_nativo.csv");
 
 //     // Realizo una seleccion parcial
 //     DataFrame df_seleccion = df.select( new String[]{"0", "1"}, new String[]{"Columna 0", "Columna 1"}); // select(String[] rowLabels, String[] colLabels) 
@@ -86,15 +86,18 @@ public class App {
     System.out.println("\n HEAD()");
     df.head();
     df.show();
-    DataFrame dfSorted = nativo.shallowCopy();
+    
+    DataFrame dfSorted = nativo.sort();
+    dfSorted.show();
+    dfSorted.exportCSV("test_nativo.csv");
     System.out.println("Rows");
     System.out.println(dfSorted.getRows() + "\n");
     // DataFrame nativoSorted = nativo.sort("Columna 3");
     // nativoSorted.show();
   // nativo.filter("Columna 1", "!=", 4).show();
     
-  //  nativo.filter("Columna 0 > 2 and Columna 3 > -4").show();
-  //  nativo.exportCSV("test_nativo.csv");
+    nativo.filter("Columna 0 = 3 or Columna 3 < -9").show();
+    //nativo.exportCSV("test_nativo.csv");
 }
 
 
