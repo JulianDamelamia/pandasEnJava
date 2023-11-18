@@ -14,7 +14,7 @@ public class Criterios {
         operadores = new HashMap<>();
         operadores.put("<", e -> e.compareTo(valor) < 0);
         operadores.put(">", e -> e.compareTo(valor) > 0);
-        operadores.put("=", e -> e.compareTo(valor) == 0);
+        operadores.put("==", e -> e.compareTo(valor) == 0);
         operadores.put("!" , e-> e.compareTo(valor) != 0 );
         operadores.put("<=", e -> e.compareTo(valor) <= 0);
         operadores.put(">=", e -> e.compareTo(valor) >= 0);

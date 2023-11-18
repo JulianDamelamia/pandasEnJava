@@ -61,8 +61,7 @@ public class Archivos {
             
         for (String[] fila : celdas) {
             for (String celda : fila) {
-                identif = new Identificador(celda);
-                switch (identif.getType()) {
+                switch (Identificador.getType(celda)) {
                     case "STRING":
                         StringCell StrCell = new StringCell(celda);
                         listaCeldas.add(StrCell);

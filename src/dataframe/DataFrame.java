@@ -6,6 +6,7 @@ import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
 import utils.Archivos;
+import dataframe.Condition;
 import utils_df.Criterios;
 import utils_df.Identificador;
 import utils_df.RandomSample;
@@ -13,7 +14,10 @@ import utils_df.Selection;
 import utils_df.Summarise;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,93 @@ public class DataFrame {
   public Map<Integer, String> rowOrderMap; // orden de filas -> {int posicional : 'nombre'}
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
+
+public DataFrame filter(String Conditions) throws IllegalArgumentException, ParseException {
+    List<String> filasSalida = new ArrayList<>(rowLabelsMap.keySet());
+    List<String> filasFiltradas;
+    String[] condiciones = Conditions.split("\\b( and | or )\\b");
+    for (String condicion : condiciones) {
+        String[] parts = condicion.split("\\s*(<=|>=|<|>|==|!)\\s*");
+        String colLabel = parts[0];
+        String operador = condicion.replaceAll(".*\\s*(<=|>=|<|>|==|!)\\s*.*", "$1");
+        //Object valor = Integer.parseInt(parts[1]);
+        String tipo = Identificador.getType(parts[1]);
+        switch (tipo) {
+          case "STRING":
+            String auxString = parts[1];
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxString);
+          break;
+          case "FLOAT":
+            Number auxFloat = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxFloat);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "INTEGER":
+            Number auxInt = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxInt);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "BOOLEAN":
+            Boolean auxBoolean = Boolean.parseBoolean(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxBoolean);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          default:
+          break;
+        }
+        // System.out.println(colLabel);
+        // System.out.println(operador);
+        // System.out.println(valor);
+
+        // if (isNumeric(valor)) {
+        //   valor = Double.parseDouble(valor.toString()); // Convertir a número si es numérico
+        // } else if (valor instanceof String) {
+        //   // El valor ya es una cadena
+        // } else if (valor instanceof Boolean) {
+        //   // El valor ya es un booleano
+        // } else {
+        //   throw new IllegalArgumentException("El valor debe ser un número, una cadena o un booleano");
+        // }
+
+        // List<String> filasFiltradas = filterSingleCondition(colLabel, operador, valor);
+        
+    }
+
+    String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    DataFrame dfSalida = this.select(filasSalida.toArray(new String[0]), colLabels);
+    return dfSalida;
+}
+
+private boolean isNumeric(Object valor) {
+  if (valor instanceof String) {
+      String str = (String) valor;
+      try {
+          Double.parseDouble(str); // Intenta convertir la cadena a un número
+          return true; // Si no lanza excepción, la cadena es numérica
+      } catch (NumberFormatException e) {
+          return false; // La cadena no representa un número
+      }
+  }
+  return false; // No es una cadena
+}
+
+public List<String> filterSingleCondition(String colLabel, String operador, Object valor) throws IllegalArgumentException {
+    String[] filasSalida;
+  
+    if (valor instanceof Number) {
+        filasSalida = filteredArray(colLabel, operador, (Number) valor);
+    } else if (valor instanceof String) {
+        filasSalida = filteredArray(colLabel, operador, (String) valor);
+    } else if (valor instanceof Boolean) {
+        filasSalida = filteredArray(colLabel, operador, (Boolean) valor);
+    } else {
+        throw new IllegalArgumentException("El valor debe ser un número, un string o un booleano");
+    }
+    // String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    // DataFrame dfSalida = this.select(filasSalida, colLabels);
+    List<String> listaSalida = Arrays.asList(filasSalida); 
+    return listaSalida;
+  }
 
   public DataFrame filter(String colLabel, String operador, Object valor) throws IllegalArgumentException {
     String[] filasSalida;
@@ -263,11 +354,9 @@ public class DataFrame {
         for (int j = 0; j < this.numCols; j++) {
             Column newColumn = new Column();
             ArrayList<Cell> cells = new ArrayList<>();
-            Identificador identif;
             for (int i = 0; i < this.numRows; i++) {
-              identif = new Identificador(matriz[i][j]);
               Object obj = matriz[i][j];
-              switch (identif.getType()) {
+              switch (Identificador.getType(matriz[i][j].toString())) {
                 case "STRING":
                     StringCell strCell = new StringCell(obj.toString());
                     cells.add(strCell);
@@ -586,29 +675,26 @@ public class DataFrame {
    * @return el tipo de dato de la columna especificada.
    */
   public String getColumnType(int colNumber) {
-    Identificador identificador = null;
     String[] labels = this.listColumnLabels();
 
     for (int i = 0; i < labels.length; i++) {
       if (i == colNumber) {
         String celda =
           this.columnOrderMap.get(i).getContent().get(1).toString();
-        identificador = new Identificador(celda);
+        return Identificador.getType(celda);
       }
     }
-    return identificador.getType();
+    return "No se encontró la celda";
   }
 
   //Metodo que devuelve una lista de los tipos de datos de las columnas
   public String[] getColumnTypes() {
     String[] labels = this.listColumnLabels();
     String[] types = new String[labels.length];
-    Identificador identificador = null;
 
     for (int i = 0; i < labels.length; i++) {
       String celda = this.columnOrderMap.get(i).getContent().get(1).toString();
-      identificador = new Identificador(celda);
-      types[i] = identificador.getType();
+      types[i] = Identificador.getType(celda);
     }
     return types;
   }

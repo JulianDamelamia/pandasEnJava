@@ -24,7 +24,7 @@ public class Identificador {
    * Este método se utiliza para obtener el tipo de la celda.
    * @return String El tipo de la celda. Puede ser "STRING", "BOOLEAN", "INTEGER", "FLOAT" o "NA".
    */
-  public String getType() {
+  public static String getType(String celda) {
     if (celda.matches("[a-zA-Z]+")) {
       if (
         celda.equals("True") ||
