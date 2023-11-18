@@ -15,7 +15,7 @@ public class Criterios {
         operadores.put("<", e -> e.compareTo(valor) < 0);
         operadores.put(">", e -> e.compareTo(valor) > 0);
         operadores.put("=", e -> e.compareTo(valor) == 0);
-        operadores.put("!" , e-> e.compareTo(valor) != 0 );
+        operadores.put("!=", e -> e.compareTo(valor) != 0 );
         operadores.put("<=", e -> e.compareTo(valor) <= 0);
         operadores.put(">=", e -> e.compareTo(valor) >= 0);
     } 

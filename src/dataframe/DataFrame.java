@@ -14,7 +14,10 @@ import utils_df.Selection;
 import utils_df.Summarise;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,81 @@ public class DataFrame {
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
 
+public DataFrame filter(String Conditions) throws IllegalArgumentException, ParseException {
+    List<String> filasSalida = new ArrayList<>(rowLabelsMap.keySet());
+    List<String> filasFiltradas;
+    String[] condiciones = Conditions.split("\\b( and | or )\\b");
+    for (String condicion : condiciones) {
+        String[] parts = condicion.split("\\s*(<=|>=|!=|<|>|=)\\s*");
+        String colLabel = parts[0];
+        String operador = condicion.replaceAll(".*?(<=|>=|!=|<|>|=).*", "$1");
+        //Object valor = Integer.parseInt(parts[1]);
+        String tipo = Identificador.getType(parts[1]);
+        switch (tipo) {
+          case "STRING":
+            String auxString = parts[1];
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxString);
+          break;
+          case "FLOAT":
+            Number auxFloat = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxFloat);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "INTEGER":
+            Number auxInt = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxInt);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "BOOLEAN":
+            Boolean auxBoolean = Boolean.parseBoolean(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxBoolean);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          default:
+          break;
+        }
+        // System.out.println(colLabel);
+        // System.out.println(operador);
+        // System.out.println(valor);
+
+        // if (isNumeric(valor)) {
+        //   valor = Double.parseDouble(valor.toString()); // Convertir a número si es numérico
+        // } else if (valor instanceof String) {
+        //   // El valor ya es una cadena
+        // } else if (valor instanceof Boolean) {
+        //   // El valor ya es un booleano
+        // } else {
+        //   throw new IllegalArgumentException("El valor debe ser un número, una cadena o un booleano");
+        // }
+
+        // List<String> filasFiltradas = filterSingleCondition(colLabel, operador, valor);
+        
+    }
+
+    String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    DataFrame dfSalida = this.select(filasSalida.toArray(new String[0]), colLabels);
+    return dfSalida;
+}
+
+
+public List<String> filterSingleCondition(String colLabel, String operador, Object valor) throws IllegalArgumentException {
+    String[] filasSalida;
+  
+    if (valor instanceof Number) {
+        filasSalida = filteredArray(colLabel, operador, (Number) valor);
+    } else if (valor instanceof String) {
+        filasSalida = filteredArray(colLabel, operador, (String) valor);
+    } else if (valor instanceof Boolean) {
+        filasSalida = filteredArray(colLabel, operador, (Boolean) valor);
+    } else {
+        throw new IllegalArgumentException("El valor debe ser un número, un string o un booleano");
+    }
+    // String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    // DataFrame dfSalida = this.select(filasSalida, colLabels);
+    List<String> listaSalida = Arrays.asList(filasSalida); 
+    return listaSalida;
+  }
+  
   public DataFrame filter(String colLabel, String operador, Object valor) throws IllegalArgumentException {
     String[] filasSalida;
   

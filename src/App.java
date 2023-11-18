@@ -1,13 +1,14 @@
 import dataframe.Column;
 import dataframe.DataFrame;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Map;
 
 import utils_df.RandomSample;
 
 public class App {
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, IllegalArgumentException, ParseException {
     DataFrame df = new DataFrame();
     df = df.readCSV("./examples/libro2.csv");
     // df.show();
@@ -44,17 +45,16 @@ public class App {
     // nativo2.show();
 
     Integer[][] m1 = {
-        {1, 2, 3, 4},
-        {1, 1, 7, 8},
-        {9, 1, 3, 9},
-        {9, 1, 3, 9},
-        {1, 1, 7, 8},
-        {9, 1, 3, 9},
-        {9, 1, 3, 9},
-        {1, 1, 7, 8},
-        {9, 1, 3, 9},
-        {9, 1, 3, 9}
-
+        {1, 2, 3, -1},
+        {2, 4, 6,-2},
+        {3, 6, 9, -3},
+        {4, 8, 12, -4},
+        {5, 10, 15, -5},
+        {6, 12, 18, -6},
+        {7, 14, 21, -7},
+        {8, 16, 24, -8},
+        {9, 18, 27, -9},
+        {10, 20, 30, -10}
     };
     DataFrame nativo = new DataFrame(m1);
     // nativo.show();
@@ -89,10 +89,13 @@ public class App {
     DataFrame dfSorted = nativo.shallowCopy();
     System.out.println("Rows");
     System.out.println(dfSorted.getRows() + "\n");
-    DataFrame nativoSorted = nativo.sort("Columna 3");
-    nativoSorted.show();
-
-  }
+    // DataFrame nativoSorted = nativo.sort("Columna 3");
+    // nativoSorted.show();
+  // nativo.filter("Columna 1", "!=", 4).show();
+    
+   nativo.filter("Columna 0 > 2 and Columna 3 > -4").show();
+  
+}
 
 
 }
