@@ -80,12 +80,12 @@ public class App {
    
 // // TODO cambiar nombre de getColumnLabels y listcolumnLabels
 
-//     // // Pruebo head y tail
-//     System.out.println("TAIL()");
-//     df.tail();
-//     System.out.println("\n HEAD()");
-//     df.head();
-    // df.show();
+    // // Pruebo head y tail
+    System.out.println("TAIL()");
+    df.tail();
+    System.out.println("\n HEAD()");
+    df.head();
+    df.show();
     DataFrame dfSorted = nativo.shallowCopy();
     System.out.println("Rows");
     System.out.println(dfSorted.getRows() + "\n");
@@ -93,8 +93,8 @@ public class App {
     // nativoSorted.show();
   // nativo.filter("Columna 1", "!=", 4).show();
     
-   nativo.filter("Columna 0 > 2 and Columna 3 > -4").show();
-  
+  //  nativo.filter("Columna 0 > 2 and Columna 3 > -4").show();
+  //  nativo.exportCSV("test_nativo.csv");
 }
 
 

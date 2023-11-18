@@ -1060,7 +1060,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   }
 
   // Metodo que invoca el exportCSV de archivos //TODO
-  
+  public void exportCSV(String filepath){
+    Archivos.exportCSV(filepath,this);
+  }
 
 // Metodo para devolver informacion de dataframe
 public void info() {
