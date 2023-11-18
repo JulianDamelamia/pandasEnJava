@@ -226,7 +226,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   }
 
   public DataFrame sort() {
-    DataFrame sortedDf = this.copy();
+    DataFrame sortedDf = this.shallowCopy();
     System.out.println("sortedf.numrows : " +sortedDf.numRows);
     System.out.println("sortedf.numcols : " +sortedDf.numCols);
     HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
