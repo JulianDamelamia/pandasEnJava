@@ -2,18 +2,18 @@ import dataframe.DataFrame;
 import java.io.IOException;
 import java.text.ParseException;
 
-import utils_df.RandomSample;
+import javax.xml.crypto.Data;
 
 public class App {
 
   public static void main(String[] args) throws IOException, IllegalArgumentException, ParseException {
     DataFrame df = new DataFrame();
-    df = df.readCSV("./examples/libro2.csv");
+    df = df.readCSV("./examples/anticoncepcion_indonesia.csv");
     df.show();
     df.info();
     // Checklist
     // obtener filas y columnas
-    df.getCantColumnas();
+    df.getColumnNumber();
     System.out.println(df.getColumnType(1));
     System.out.println(df.getColumn(1));
     System.out.println(df.getCell(1, 1)); // Cambiar para que reciba las etiquetas
@@ -31,7 +31,6 @@ public class App {
     };
     DataFrame nativo2 = new DataFrame(m2);
 
-
     nativo2.deleteRow(2);
     System.out.println("-> Con una fila eliminada");
     nativo2.show();
@@ -46,14 +45,8 @@ public class App {
         {1, 2, 3, 4},
         {1, 1, 7, 8},
         {9, 1, 3, 9},
-        {9, 1, 3, 9},
+        {1, 2, 3, 4},
         {1, 1, 7, 8},
-        {9, 1, 3, 9},
-        {9, 1, 3, 9},
-        {1, 1, 7, 8},
-        {9, 1, 3, 9},
-        {9, 1, 3, 9}
-
     };
     DataFrame nativo = new DataFrame(m1);
     nativo.show();
@@ -77,7 +70,13 @@ public class App {
     df.show();
     df.randomSample().show();
     df.randomSample(0.2).show();
-    nativo.filter("Columna 0 = 1 and Columna 3 = 8").show();
+
+    DataFrame concatenado = df.concatenate(df, df.randomSample(0.5));
+    System.out.println("DataFrame concatenado!");
+    concatenado.show();
+    
+    nativo.filter("Columna 0 != 10 and Columna 3 != 8").show();
+    nativo.show();
     //nativo.exportCSV("test_nativo.csv");
 }
 

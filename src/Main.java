@@ -1,18 +1,10 @@
 import dataframe.cells.NumericCell;
 import dataframe.cells.BooleanCell;
 import dataframe.cells.StringCell;
-import utils.Archivos;
 import dataframe.Column;
 import dataframe.DataFrame;
-import dataframe.Row;
 import dataframe.cells.Cell;
 import dataframe.cells.NACell;
-
-import dataframe.DataFrame;
-import utils_df.*;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -147,11 +139,20 @@ public class Main {
         Integer[][] m1 = {
             {1, 2, 3, 4},
             {1, 1, 7, 8},
+            {9, 1, 3, 9},
+            {1, 2, 3, 4},
+            {1, 1, 7, 8},
+            {9, 1, 3, 9},
+            {1, 2, 3, 4},
+            {1, 1, 7, 8},
+            {9, 1, 3, 9},
+            {1, 2, 3, 4},
+            {1, 1, 7, 8},
             {9, 1, 3, 9}
         };
 
-        //  DataFrame nativo = new DataFrame(m1);
-        // nativo.show();
+         DataFrame nativo = new DataFrame(m1);
+        nativo.show();
 
         // DataFrame nativoSorted = nativo.sort();
         // nativoSorted.show();
@@ -174,8 +175,11 @@ public class Main {
         // System.out.println("colOrder original "+dfCopy.columnOrderMap);
         // System.out.println("colOrder seleccion "+seleccion.columnOrderMap );
         // seleccion.show();
-        System.out.println("\n Filtrado");
-        DataFrame filtrado = df.filter("TORTUGA3", ">=", "beta");
-        filtrado.show();
+        // System.out.println("\n Filtrado");
+        // DataFrame filtrado = df.filter("TORTUGA3", ">=", "beta");
+        // filtrado.show();
+
+        DataFrame random = nativo.randomSample(0.5);
+        random.show();
      }
 }

@@ -62,7 +62,7 @@ public class Column {
    * Crea una copia de la columna actual.
    * @return una nueva columna que es una copia de la columna actual.
    */
-  public Column copy() {
+  protected Column copy() {
     Column copyColumn = new Column(this);
     copyColumn.content = new ArrayList<Cell>(size);
     for (Cell cell : this.content) {
@@ -78,7 +78,7 @@ public class Column {
    * @param index la posición de la celda a establecer.
    * @param value el valor a establecer en la celda.
    */
-  public void setCell(int index, Object value) {
+  protected void setCell(int index, Object value) {
     this.content.get(index).setValue(value);
   }
 
@@ -96,7 +96,7 @@ public class Column {
    * @param index la posición de la celda a obtener.
    * @return la celda en la posición especificada.
    */
-  public Cell getCell(int index) {
+  protected Cell getCell(int index) {
     return this.content.get(index);
   }
 
@@ -104,7 +104,7 @@ public class Column {
    * Obtiene el tamaño de la columna.
    * @return el tamaño de la columna.
    */
-  public int size() {
+  protected int size() {
     return this.size;
   }
 
@@ -147,7 +147,7 @@ public class Column {
     }
   }
 
-  public void removeCellbyNA(int index) {
+  protected void removeCellbyNA(int index) {
     if (index >= 0 && index < size) {
         content.set(index, new NACell()); // Reemplazar la celda en el índice por un objeto NACell
     } else {

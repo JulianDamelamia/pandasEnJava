@@ -1,4 +1,4 @@
-package utils_df;
+package dataframe.utils_df;
 
 import dataframe.cells.Cell;
 import dataframe.cells.NumericCell;

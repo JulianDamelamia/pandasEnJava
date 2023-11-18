@@ -1,4 +1,4 @@
-package utils_df;
+package dataframe.utils_df;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,7 +19,7 @@ public class RandomSample {
     // Método que a partir de un DataFrame y un porcentaje de filas, devuelve un DataFrame con las filas al azar
     public static DataFrame sample(DataFrame df, double p) {
         // Obtener el número de filas del DataFrame original
-        int numRows = df.getCantFilas();
+        int numRows = df.getRowNumber();
 
         // Calcular cuántas filas se seleccionarán
         int numSampleRows = (int) (numRows * p);
@@ -31,7 +31,7 @@ public class RandomSample {
         ArrayList<Integer> randomIndices = generateRandomIndices(numRows, numSampleRows);
 
         // Agregar las columnas al DataFrame de la muestra
-        for (int i = 0; i < df.getCantColumnas(); i++) {
+        for (int i = 0; i < df.getColumnNumber(); i++) {
             // Crear una columna para la muestra
             Column sampleColumn = new Column();
             ArrayList<Cell> cells = new ArrayList<Cell>();  // Create a new list of cells for each column

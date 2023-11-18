@@ -1,42 +1,38 @@
 package dataframe;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import dataframe.cells.Cell;
-import dataframe.cells.NumericCell;
-import dataframe.cells.StringCell;
 
 // Esta es una clase auxiliar que será consumida únicamente cuando sea necesario ordenar o filtrar
 public class Row implements Comparable<Row>{
-    public String label;
-    public ArrayList<Cell> cells;
+    protected String label;
+    protected ArrayList<Cell> cells;
 
-    public Row() {
+    protected Row() {
         this.label = "";
         this.cells = new ArrayList<Cell>();
     }
-    public Row(String label, ArrayList<Cell> cells) {
+    protected Row(String label, ArrayList<Cell> cells) {
         this.label = label;
         this.cells = cells;
     }
-    public void addCell(Cell cell) {
+    protected void addCell(Cell cell) {
         cells.add(cell);
     }
-    public String getLabel() {
+    protected String getLabel() {
         return label;
     }
-    public ArrayList<Cell> getCells() {
+    protected ArrayList<Cell> getCells() {
         return cells;
     }
 
-    public Cell getCell(int index) {
+    protected Cell getCell(int index) {
         return cells.get(index);
     }
-    public void setLabel(String label) {
+    protected void setLabel(String label) {
         this.label = label;
     }
-    public void setCells(ArrayList<Cell> cells) {
+    protected void setCells(ArrayList<Cell> cells) {
         this.cells = cells;
     }
     @Override

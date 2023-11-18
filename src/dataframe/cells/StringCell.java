@@ -11,14 +11,13 @@ public class StringCell extends Cell{
     public StringCell(StringCell original){
         this(original.getValue());
      }
-
-   
+     
     @Override
     public StringCell copy(){
         return new StringCell(this);
     } 
     
-    public void setValue(String value) {
+    protected void setValue(String value) {
         this.value = value;
     }
     

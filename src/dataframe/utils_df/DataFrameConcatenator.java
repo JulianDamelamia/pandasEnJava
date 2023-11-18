@@ -1,4 +1,4 @@
-package utils_df;
+package dataframe.utils_df;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class DataFrameConcatenator {
 
         
         //Iterar sobre las columnas de los dos dataframes y crear una nueva columna en el dataframe concatenado
-        for (int i = 0; i < df1.getCantColumnas(); i++) {
+        for (int i = 0; i < df1.getColumnNumber(); i++) {
             // Obtener la columna del dataframe 1
             Column column1 = df1.getColumn(i);
             // Obtener la columna del dataframe 2
@@ -52,24 +52,13 @@ public class DataFrameConcatenator {
 
     private static boolean haveSameColumnsAndRowLabels(DataFrame df1, DataFrame df2) {
         // Verificar si las estructuras tienen la misma cantidad de columnas
-        if (df1.getCantColumnas() != df2.getCantColumnas()) {
+        if (df1.getColumnNumber() != df2.getColumnNumber()) {
             // Imprimo en consola la cantidad de columnas de cada df
-            System.out.println("Cantidad de columnas de df1: " + df1.getCantColumnas());
-            System.out.println("Cantidad de columnas de df2: " + df2.getCantColumnas());
+            System.out.println("Cantidad de columnas de df1: " + df1.getColumnNumber());
+            System.out.println("Cantidad de columnas de df2: " + df2.getColumnNumber());
 
             return false;
         }
-
-    
-
-        // Verificar si las columnas tienen los mismos nombres
-        /*for (int i = 0; i < df1.getCantColumnas(); i++) {
-            if (!df1.getColumnLabels().equals(df2.getColumnLabels())) {
-                return false;
-            }
-        }
-        */
-
         return true;
     }
 
