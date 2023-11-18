@@ -25,7 +25,15 @@ public class Identificador {
    * @return String El tipo de la celda. Puede ser "STRING", "BOOLEAN", "INTEGER", "FLOAT" o "NA".
    */
   public String getType() {
-    if (celda.matches("[a-zA-Z]+")) {
+    return operadorGetType(this.celda);
+  }
+
+  public static String getType(String celda) {
+    return operadorGetType(celda);
+  }
+
+  private static String operadorGetType(String celda) {
+        if (celda.matches("[a-zA-Z]+")) {
       if (
         celda.equals("True") ||
         celda.equals("False") ||

@@ -14,12 +14,17 @@ import utils_df.Selection;
 import utils_df.Summarise;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 public class DataFrame {
 
   public List<Column> columns; // lista de columnas -> [col1, col2 , ..., colN]
@@ -30,6 +35,109 @@ public class DataFrame {
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
 
+public DataFrame filter(String Conditions) throws IllegalArgumentException, ParseException {
+    List<String> filasSalida = new ArrayList<>(rowLabelsMap.keySet());
+    List<String> filasSalidaAux = new ArrayList<>();
+    List<String> filasFiltradas;
+    String[] condiciones = Conditions.split("\\b( and | or )\\b");
+    Pattern pattern = Pattern.compile("\\b(?:and|or)\\b");
+    Matcher matcher = pattern.matcher(Conditions);
+    String expresion = null;
+
+    if (matcher.find()) {
+      expresion = matcher.group(); // Obtener la palabra "and" o "or" encontrada
+    }
+
+    if(expresion.equals("and")){
+      for (String condicion : condiciones) {
+        String[] parts = condicion.split("\\s*(<=|>=|!=|<|>|=)\\s*");
+        String colLabel = parts[0];
+        String operador = condicion.replaceAll(".*?(<=|>=|!=|<|>|=).*", "$1");
+        String tipo = Identificador.getType(parts[1]);
+        switch (tipo) {
+          case "STRING":
+            String auxString = parts[1];
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxString);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "FLOAT":
+            Number auxFloat = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxFloat);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "INTEGER":
+            Number auxInt = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxInt);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          case "BOOLEAN":
+            Boolean auxBoolean = Boolean.parseBoolean(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxBoolean);
+            filasSalida.retainAll(filasFiltradas);
+          break;
+          default:
+          break;
+        }
+      }
+    }else if (expresion.equals("or")){
+      for (String condicion : condiciones) {
+        String[] parts = condicion.split("\\s*(<=|>=|!=|<|>|=)\\s*");
+        String colLabel = parts[0];
+        String operador = condicion.replaceAll(".*?(<=|>=|!=|<|>|=).*", "$1");
+        String tipo = Identificador.getType(parts[1]);
+        switch (tipo) {
+          case "STRING":
+            String auxString = parts[1];
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxString);
+            filasSalidaAux.addAll(filasFiltradas);
+          break;
+          case "FLOAT":
+            Number auxFloat = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxFloat);
+            filasSalidaAux.addAll(filasFiltradas);
+          break;
+          case "INTEGER":
+            Number auxInt = NumberFormat.getInstance().parse(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxInt);
+            filasSalidaAux.addAll(filasFiltradas);
+          break;
+          case "BOOLEAN":
+            Boolean auxBoolean = Boolean.parseBoolean(parts[1]);
+            filasFiltradas = filterSingleCondition(colLabel, operador, auxBoolean);
+            filasSalidaAux.addAll(filasFiltradas);
+          break;
+          default:
+          break;
+        }
+      }
+      filasSalida.retainAll(filasSalidaAux);
+      
+    }
+  
+    String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    DataFrame dfSalida = this.select(filasSalida.toArray(new String[0]), colLabels);
+    return dfSalida;
+}
+
+
+public List<String> filterSingleCondition(String colLabel, String operador, Object valor) throws IllegalArgumentException {
+    String[] filasSalida;
+  
+    if (valor instanceof Number) {
+        filasSalida = filteredArray(colLabel, operador, (Number) valor);
+    } else if (valor instanceof String) {
+        filasSalida = filteredArray(colLabel, operador, (String) valor);
+    } else if (valor instanceof Boolean) {
+        filasSalida = filteredArray(colLabel, operador, (Boolean) valor);
+    } else {
+        throw new IllegalArgumentException("El valor debe ser un número, un string o un booleano");
+    }
+    // String[] colLabels = this.columnLabelsMap.keySet().toArray(new String[0]);
+    // DataFrame dfSalida = this.select(filasSalida, colLabels);
+    List<String> listaSalida = Arrays.asList(filasSalida); 
+    return listaSalida;
+  }
+  
   public DataFrame filter(String colLabel, String operador, Object valor) throws IllegalArgumentException {
     String[] filasSalida;
   
@@ -118,7 +226,7 @@ public class DataFrame {
   }
 
   public DataFrame sort() {
-    DataFrame sortedDf = this.shallowCopy();
+    DataFrame sortedDf = this.copy();
     System.out.println("sortedf.numrows : " +sortedDf.numRows);
     System.out.println("sortedf.numcols : " +sortedDf.numCols);
     HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
@@ -982,7 +1090,10 @@ public class DataFrame {
   }
 
   // Metodo que invoca el exportCSV de archivos //TODO
-  
+  public void exportCSV(String filepath){
+    Archivos.exportCSV(filepath,this);
+    System.out.println("Archivo guardado con exito.");
+  }
 
 // Metodo para devolver informacion de dataframe
 public void info() {
