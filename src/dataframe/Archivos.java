@@ -1,4 +1,4 @@
-package utils;
+package dataframe;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import dataframe.*;
 import dataframe.cells.*;
-import utils_df.Identificador;
+import dataframe.utils.CSVParserException;
+import dataframe.utils_df.Identificador;
 
 public class Archivos {    
-    public static List<String> leerLineas(String filepath) throws IOException {
+    private static List<String> leerLineas(String filepath) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath))) {
             String linea;
             List<String> lineas = new LinkedList<>();
@@ -26,7 +26,7 @@ public class Archivos {
         }
     }
 
-    public static String[][] parserLineas(List<String> lineas, String sep) throws CSVParserException {
+    private static String[][] parserLineas(List<String> lineas, String sep) throws CSVParserException {
         // TODO hacer el check de sep
         int filas = lineas.size();
         String[][] celdas = null;
@@ -46,13 +46,7 @@ public class Archivos {
         
     }
 
-    public static void mostrarLineas(List<String> lineas) {
-        for (String linea : lineas) {
-            System.out.println(linea);
-        }
-    }
-
-    public static DataFrame createDfFromParsed(String[][] celdas) {
+    private static DataFrame createDfFromParsed(String[][] celdas) {
         DataFrame df = new DataFrame();
         List<Cell> listaCeldas = new ArrayList<Cell>();
         Identificador identif;
@@ -106,7 +100,7 @@ public class Archivos {
         return df;
     }
 
-    public static void exportCSV(String filepath, DataFrame df) {
+    protected static void exportCSV(String filepath, DataFrame df) {
         String texto = df.toString(",", true, true);
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
             bufferedWriter.write(texto);
@@ -115,8 +109,7 @@ public class Archivos {
         }
     }
 
-    //TODO 
-    public static DataFrame readCSV(String filePath) throws IOException {
+    protected static DataFrame readCSV(String filePath) throws IOException {
         /*
          * Lee un archivo CSV y lo convierte en un DataFrame
          * 
@@ -136,7 +129,7 @@ public class Archivos {
         }
     }
 
-    public static DataFrame readCSV(String filePath, String sep) throws IOException {
+    protected static DataFrame readCSV(String filePath, String sep) throws IOException {
         /*
          * Lee un archivo CSV y lo convierte en un DataFrame
          * 

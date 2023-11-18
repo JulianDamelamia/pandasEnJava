@@ -40,7 +40,7 @@ public class NumericCell extends Cell{
     }
     
 
-    public void setValue(Number value) {
+    protected void setValue(Number value) {
         this.value = value;
     }
     

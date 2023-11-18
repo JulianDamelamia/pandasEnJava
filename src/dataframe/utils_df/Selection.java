@@ -1,18 +1,11 @@
-package utils_df;
+package dataframe.utils_df;
 
-import dataframe.Column;
 import dataframe.DataFrame;
-import dataframe.cells.Cell;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Clase que contiene métodos para seleccionar filas de un DataFrame.
  */
 public class Selection {
-
-
-
 
   /**
    * Retorna un nuevo DataFrame con las primeras 5 filas de cada columna del DataFrame original.
@@ -20,7 +13,7 @@ public class Selection {
    * @return Un nuevo DataFrame con las primeras 5 filas de cada columna del DataFrame original.
    */
   public static DataFrame head(DataFrame df) {
-    int numRows = Math.min(5, df.getCantFilas()); // Evita desbordamiento si hay menos de 5 filas
+    int numRows = Math.min(5, df.getRowNumber()); // Evita desbordamiento si hay menos de 5 filas
     return selectOperator(df, numRows, true);
   }
 
@@ -31,10 +24,10 @@ public class Selection {
     int start, end;
     if (primeras) {
         start = 0;
-        end = Math.min(numFilas, df.getCantFilas());
+        end = Math.min(numFilas, df.getRowNumber());
     } else {
-        start = Math.max(0, df.getCantFilas() - numFilas);
-        end = df.getCantFilas();
+        start = Math.max(0, df.getRowNumber() - numFilas);
+        end = df.getRowNumber();
     }
 
     // Seleccionar las filas y columnas correspondientes
@@ -56,7 +49,7 @@ public class Selection {
    * @return Un nuevo DataFrame con las últimas 5 filas de cada columna del DataFrame original.
    */
 public static DataFrame tail(DataFrame df) {
-    int numRows = Math.min(5, df.getCantFilas()); // Evita desbordamiento si hay menos de 5 filas
+    int numRows = Math.min(5, df.getRowNumber()); // Evita desbordamiento si hay menos de 5 filas
     return selectOperator(df, numRows, false);
 }
 }

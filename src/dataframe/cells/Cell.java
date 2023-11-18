@@ -12,7 +12,7 @@ public abstract class Cell implements Comparable<Cell>{
         this.value = value;
     }
 
-    public Object getValue() {
+    protected Object getValue() {
         return value;
     }
 
