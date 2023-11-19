@@ -1,5 +1,7 @@
 package dataframe.utils_df;
 
+import dataframe.exceptions.TipoNoIdentificadoException;
+
 /**
  * La clase Identificador se utiliza para identificar el tipo de una celda.
  */
@@ -24,9 +26,15 @@ public class Identificador {
    * Este método se utiliza para obtener el tipo de la celda.
    * @return String El tipo de la celda. Puede ser "STRING", "BOOLEAN", "INTEGER", "FLOAT" o "NA".
    */
-  public String getType() {
-    return operadorGetType(this.celda);
-  }
+public String getType() throws TipoNoIdentificadoException {
+    String type = operadorGetType(this.celda);
+    
+    if (!type.equals("STRING") && !type.equals("BOOLEAN") && !type.equals("INTEGER") && !type.equals("FLOAT") && !type.equals("NA")) {
+        throw new TipoNoIdentificadoException();
+    }
+
+    return type;
+}
 
   public static String getType(String celda) {
     return operadorGetType(celda);

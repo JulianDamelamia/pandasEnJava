@@ -9,7 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dataframe.cells.*;
-import dataframe.utils.CSVParserException;
+import dataframe.exceptions.CSVParserException;
+import dataframe.exceptions.TipoNoIdentificadoException;
 import dataframe.utils_df.Identificador;
 
 public class Archivos {    
@@ -46,7 +47,7 @@ public class Archivos {
         
     }
 
-    private static DataFrame createDfFromParsed(String[][] celdas) {
+    private static DataFrame createDfFromParsed(String[][] celdas) throws NumberFormatException, TipoNoIdentificadoException {
         DataFrame df = new DataFrame();
         List<Cell> listaCeldas = new ArrayList<Cell>();
         Identificador identif;

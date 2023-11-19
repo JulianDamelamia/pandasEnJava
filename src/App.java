@@ -2,7 +2,6 @@ import dataframe.DataFrame;
 import java.io.IOException;
 import java.text.ParseException;
 
-import javax.xml.crypto.Data;
 
 public class App {
 
@@ -47,6 +46,7 @@ public class App {
         {9, 1, 3, 9},
         {1, 2, 3, 4},
         {1, 1, 7, 8},
+        {1, 1, 7, 8}
     };
     DataFrame nativo = new DataFrame(m1);
     nativo.show();
@@ -76,7 +76,7 @@ public class App {
     concatenado.show();
     
     nativo.filter("Columna 0 != 10 and Columna 3 != 8").show();
-    nativo.show();
+    nativo.showDebugging();
     //nativo.exportCSV("test_nativo.csv");
 }
 

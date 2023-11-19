@@ -5,9 +5,10 @@ import dataframe.cells.Cell;
 import dataframe.cells.NACell;
 import dataframe.cells.NumericCell;
 import dataframe.cells.StringCell;
-import dataframe.utils.GetKeyFromValue;
+import dataframe.exceptions.TipoNoIdentificadoException;
 import dataframe.utils_df.Criterios;
 import dataframe.utils_df.DataFrameConcatenator;
+import dataframe.utils_df.GetKeyFromValue;
 import dataframe.utils_df.Identificador;
 import dataframe.utils_df.RandomSample;
 import dataframe.utils_df.Selection;
@@ -33,6 +34,8 @@ public class DataFrame {
   public Map<Integer, String> rowOrderMap; // orden de filas -> {int posicional : 'nombre'}
   public int numRows; // numero de filas
   public int numCols; // numero de columnas
+
+  
 
   // Constructores
   //-TODO: sobrecarga
@@ -60,7 +63,7 @@ public class DataFrame {
     this.numCols = this.columnLabelsMap.size();
   }
 
-  public DataFrame(Object[][] matriz) {
+  public DataFrame(Object[][] matriz) throws TipoNoIdentificadoException {
     this.columns = new ArrayList<>();
     this.columnLabelsMap = new HashMap<>();
     this.columnOrderMap = new HashMap<>();
@@ -136,6 +139,10 @@ public DataFrame filter(String Conditions) throws IllegalArgumentException, Pars
 
     if (matcher.find()) {
       expresion = matcher.group(); // Obtener la palabra "and" o "or" encontrada
+    }
+
+    if (expresion == null) {
+      throw new IllegalArgumentException("Expresión de filtro inválida");
     }
 
     if(expresion.equals("and")){
@@ -287,6 +294,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   public Row getRow(String label){
     Row row = new Row();
     row.setLabel(label);
+    if (!this.rowLabelsMap.containsKey(label)) {
+      throw new IllegalArgumentException("La etiqueta de fila proporcionada no existe en el DataFrame");
+    }
     for (int j = 0; j < this.numCols; j++) {
       row.addCell(this.getCell(j, this.rowLabelsMap.get(label)));
     }
@@ -381,6 +391,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     System.out.println("Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto");
     seleccion.columnOrderMap = new HashMap<>();
     int i = 0;
+    
     for(String col: colLabels){
       if(!this.columnLabelsMap.containsKey(col)){
         throw new IllegalArgumentException("La columna " + col + " no existe");
@@ -501,6 +512,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    * @param value el valor que se establecerá en la celda.
    */
   public void setCell(int col, int index, Object value) {
+    if (col < 0 || col >= this.numCols || index < 0 || index >= this.numRows) {
+      throw new IllegalArgumentException("Índice de columna o fila fuera de rango");
+    }
     Column column = this.columnOrderMap.get(col);
     column.setCell(index, value);
   }
@@ -514,11 +528,12 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    */
   public void setCell(String colLabel, int row, Cell cell) {
     Column column = this.columnLabelsMap.get(colLabel);
-    
-    if (column != null) {
-        column.setCell(row, cell);
-    } else {
-        System.out.println("No se encontró la columna");
+    if (column == null) {
+      throw new IllegalArgumentException("No se encontró la columna con la etiqueta especificada");
+    }
+
+    if (row < 0 || row >= this.numRows) {
+        throw new IllegalArgumentException("Índice de fila fuera de rango");
     }
   }
 
@@ -678,8 +693,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    *
    * @param colNumber el número de la columna cuyo tipo de dato se desea obtener.
    * @return el tipo de dato de la columna especificada.
+   * @throws TipoNoIdentificadoException
    */
-  public String getColumnType(int colNumber) {
+  public String getColumnType(int colNumber) throws TipoNoIdentificadoException {
     Identificador identificador = null;
     String[] labels = this.columnLabels();
 
@@ -694,7 +710,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   }
 
   //Metodo que devuelve una lista de los tipos de datos de las columnas
-  public String[] getColumnTypes() {
+  public String[] getColumnTypes() throws TipoNoIdentificadoException {
     String[] labels = this.columnLabels();
     String[] types = new String[labels.length];
     Identificador identificador = null;
@@ -941,6 +957,14 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   public void show() {
     System.out.println(this.toString("|", false, false));
   }
+
+  public void showDebugging() {
+    long startTime = System.nanoTime();
+    System.out.println(this.toString("|", false, false));
+    long endTime = System.nanoTime();
+    System.out.println("[DEBUG: this process took " + (endTime - startTime) + " ns]");
+  }
+
   public void showAllColumns() {
     System.out.println(this.toString("|", false, true));
   }
@@ -971,7 +995,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     int[] colWidths = new int[labels.length];
     int numRowsToShow = Math.min(this.numRows, 10); // Mostrar solo las primeras 10 filas
     int numColumnsToShow = Math.min(this.numCols, 5); // Mostrar solo las primeras 5 columnas
-
+    
     if (separador == null) {
       separador = " | ";
     }
@@ -1057,7 +1081,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   }
 
 // Metodo para devolver informacion de dataframe
-public void info() {
+public void info() throws TipoNoIdentificadoException {
   System.out.println("Información del DataFrame");
   System.out.println("- Cantidad de filas: " + this.getRowNumber());
   System.out.println("- Cantidad de columnas: " + this.getColumnNumber());
