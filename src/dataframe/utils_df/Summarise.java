@@ -2,6 +2,8 @@ package dataframe.utils_df;
 
 import dataframe.cells.Cell;
 import dataframe.cells.NumericCell;
+import dataframe.exceptions.ColumnaNoNumericaException;
+
 import java.util.List;
 
 public class Summarise {
@@ -27,7 +29,7 @@ public class Summarise {
         }
 
         if (!numericCellsFound) {
-            throw new IllegalArgumentException("La columna no contiene valores numéricos.");
+            throw new ColumnaNoNumericaException();
         }
 
         return max;
@@ -54,7 +56,7 @@ public class Summarise {
         }
 
         if (!numericCellsFound) {
-            throw new IllegalArgumentException("La columna no contiene valores numéricos.");
+            throw new ColumnaNoNumericaException();
         }
 
         return min;
@@ -81,7 +83,7 @@ public class Summarise {
         }
 
         if (!numericCellsFound) {
-            throw new IllegalArgumentException("La columna no contiene valores numéricos.");
+            throw new ColumnaNoNumericaException();
         }
 
         return sum;
@@ -108,7 +110,7 @@ public class Summarise {
         }
 
         if (count == 0) {
-            throw new IllegalArgumentException("La columna no contiene valores numéricos.");
+            throw new ColumnaNoNumericaException();
         }
 
         return sum / count;
@@ -136,7 +138,7 @@ public class Summarise {
         }
 
         if (count == 0) {
-            throw new IllegalArgumentException("La columna no contiene valores numéricos.");
+            throw new ColumnaNoNumericaException();
         }
 
         return temp / count;
