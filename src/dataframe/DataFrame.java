@@ -958,13 +958,6 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     System.out.println(this.toString("|", false, false));
   }
 
-  public void showDebugging() {
-    long startTime = System.nanoTime();
-    System.out.println(this.toString("|", false, false));
-    long endTime = System.nanoTime();
-    System.out.println("[DEBUG: this process took " + (endTime - startTime) + " ns]");
-  }
-
   public void showAllColumns() {
     System.out.println(this.toString("|", false, true));
   }

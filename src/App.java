@@ -6,6 +6,7 @@ import java.text.ParseException;
 public class App {
 
   public static void main(String[] args) throws IOException, IllegalArgumentException, ParseException {
+    long startTime = System.nanoTime();
     DataFrame df = new DataFrame();
     df = df.readCSV("./examples/anticoncepcion_indonesia.csv");
     df.show();
@@ -76,8 +77,11 @@ public class App {
     concatenado.show();
     
     nativo.filter("Columna 0 != 10 and Columna 3 != 8").show();
-    nativo.showDebugging();
+    nativo.show();
     //nativo.exportCSV("test_nativo.csv");
+    long endTime = System.nanoTime();
+    System.out.println("[DEBUG: this process took " + (endTime - startTime) + " ns]");
+  
 }
 
 
