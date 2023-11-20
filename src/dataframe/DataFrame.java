@@ -450,7 +450,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
 
 
-    HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
+  HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
     sortedDf.rowOrderMap = sortedMap;
     sortedDf.columnOrderMap = this.columnOrderMap;
     return sortedDf;
@@ -535,8 +535,6 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
     return seleccion;
   }
-
-
   /**
    * Realiza una copia superficial del DataFrame actual.
    * 
@@ -553,8 +551,6 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     copy.setRowLabels();
     return copy;
   }
-
-
 
   /**
    * Agrega una nueva columna al DataFrame con las celdas especificadas.

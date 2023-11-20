@@ -41,7 +41,7 @@ public String getType() throws TipoNoIdentificadoException {
   }
 
   private static String operadorGetType(String celda) {
-        if (celda.matches("[a-zA-Z]+")) {
+      if (celda.matches("[a-zA-Z]+")) {
       if (
         celda.equals("True") ||
         celda.equals("False") ||

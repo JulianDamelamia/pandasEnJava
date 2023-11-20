@@ -12,18 +12,14 @@ public class App {
     df.show();
     df.info();
     // Checklist
-    // obtener filas y columnas
     df.getColumnNumber();
     System.out.println(df.getColumnType(1));
     System.out.println(df.getColumn(1));
     System.out.println(df.getCell(1, 1)); // Cambiar para que reciba las etiquetas
     System.out.println(df.getCell("Columna 0", "0" ));
     System.out.println(df.getCell("Columna 0", "6" ));
-    //df.exportCSV("test.csv"); //TODO: arreglar el exportCSV
     
     // Creo desde una estructura nativa un dataframe
-
-// TODO CHEQUEAR ESTO
     Integer[][] m2 = {
         {1, 2, 3, 4},
         {9, 1, 3, 9},
@@ -81,7 +77,7 @@ public class App {
     //nativo.exportCSV("test_nativo.csv");
     long endTime = System.nanoTime();
     System.out.println("[DEBUG: this process took " + (endTime - startTime) + " ns]");
-  
+    df.exportCSV("test.csv");
 }
 
 
