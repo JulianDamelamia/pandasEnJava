@@ -37,10 +37,7 @@ public class DataFrame {
 
   
 
-  // Constructores
-  //-TODO: sobrecarga
-  public DataFrame() {
-    /*
+  /**
      * Constructor de la clase DataFrame
      *
      * @param columns: lista de columnas
@@ -54,6 +51,8 @@ public class DataFrame {
      * @return DataFrame
      *
      */
+  public DataFrame() {
+    
     this.columns = new ArrayList<Column>(1);
     this.columnLabelsMap = new HashMap<String, Column>();
     this.columnOrderMap = new HashMap<Integer, Column>();
@@ -63,6 +62,14 @@ public class DataFrame {
     this.numCols = this.columnLabelsMap.size();
   }
 
+  /**
+   * Clase que representa un DataFrame en Java.
+   * Un DataFrame es una estructura de datos tabular que contiene filas y columnas.
+   * Cada columna puede contener diferentes tipos de datos, como cadenas, números, booleanos, etc.
+   * Esta clase proporciona métodos para manipular y analizar los datos en el DataFrame.
+   * 
+   * @param matriz una matriz de objetos que representan los datos del DataFrame.
+   */
   public DataFrame(Object[][] matriz) throws TipoNoIdentificadoException {
     this.columns = new ArrayList<>();
     this.columnLabelsMap = new HashMap<>();
@@ -128,6 +135,13 @@ public class DataFrame {
     }
 }
 
+/**
+ * Clase que representa un DataFrame en Java.
+ * Un DataFrame es una estructura de datos tabular que organiza los datos en filas y columnas.
+ * Proporciona métodos para filtrar y seleccionar datos.
+ * 
+ * @param Condicion una query que representa la condición de filtrado.
+ */
 public DataFrame filter(String Conditions) throws IllegalArgumentException, ParseException {
     List<String> filasSalida = new ArrayList<>(rowLabelsMap.keySet());
     List<String> filasSalidaAux = new ArrayList<>();
@@ -217,6 +231,15 @@ public DataFrame filter(String Conditions) throws IllegalArgumentException, Pars
 }
 
 
+/**
+ * Filtra las filas del DataFrame según una condición dada en una columna específica.
+ * 
+ * @param colLabel el nombre de la columna en la que se aplicará la condición de filtrado
+ * @param operador el operador de comparación a utilizar en la condición de filtrado
+ * @param valor el valor con el que se compararán los elementos de la columna
+ * @return una lista de las filas que cumplen con la condición de filtrado
+ * @throws IllegalArgumentException si el valor no es un número, un string o un booleano
+ */
 public List<String> filterSingleCondition(String colLabel, String operador, Object valor) throws IllegalArgumentException {
     String[] filasSalida;
   
@@ -233,6 +256,17 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return listaSalida;
   }
   
+  /**
+  * Clase que representa un DataFrame en Java.
+  *
+  * Filtra el DataFrame en base a un valor dado en una columna específica.
+   * 
+   * @param colLabel  Etiqueta de la columna en la que se realizará el filtro.
+   * @param operador  Operador de comparación a utilizar en el filtro.
+   * @param valor     Valor a comparar en el filtro.
+   * @return          Un nuevo DataFrame que contiene solo las filas que cumplen con el filtro.
+   * @throws IllegalArgumentException Si el valor no es un número, un string o un booleano.
+   */
   public DataFrame filter(String colLabel, String operador, Object valor) throws IllegalArgumentException {
     String[] filasSalida;
   
@@ -250,21 +284,57 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return dfSalida;
   }
 
+  /**
+   * Filters the array based on the specified column label, operator, and value.
+   * 
+   * @param colLabel the label of the column to filter
+   * @param operador the operator to use for filtering (e.g., "==", "<", ">")
+   * @param valor the value to compare against
+   * @return an array of filtered values
+   * @throws IllegalArgumentException if the column label is invalid or the operator is not supported
+   */
   public String[] filteredArray(String colLabel, String operador, Number valor) throws IllegalArgumentException{
     Cell celdaAuxiliar = new NumericCell(valor);
     return filterSetup(colLabel, operador, celdaAuxiliar).toArray(String[]::new);
   }
 
+  /**
+   * Filters the array based on the specified column label, operator, and value.
+   * 
+   * @param colLabel the label of the column to filter
+   * @param operador the operator to use for filtering (e.g., "=", "<", ">")
+   * @param valor the value to compare against
+   * @return the filtered array as an array of strings
+   * @throws IllegalArgumentException if the column label is invalid or the operator is not supported
+   */
   public String[] filteredArray(String colLabel, String operador, String valor) throws IllegalArgumentException{
     Cell celdaAuxiliar = new StringCell(valor);
     return filterSetup(colLabel, operador, celdaAuxiliar).toArray(String[]::new);
   }
 
+  /**
+   * Filters the array based on the specified column label, operator, and value.
+   * 
+   * @param colLabel the label of the column to filter
+   * @param operador the operator to use for filtering
+   * @param valor the value to compare against
+   * @return the filtered array as an array of strings
+   * @throws IllegalArgumentException if the column label is invalid or the operator is not supported
+   */
   public String[] filteredArray(String colLabel, String operador, Boolean valor) throws IllegalArgumentException{
     Cell celdaAuxiliar = new BooleanCell(valor);
     return filterSetup(colLabel, operador, celdaAuxiliar).toArray(String[]::new);
   }
 
+  /**
+   * Filtra las filas del DataFrame según un criterio de comparación en una columna específica.
+   * 
+   * @param colLabel el nombre de la columna en la que se realizará la comparación
+   * @param operador el operador de comparación a utilizar
+   * @param celdaAuxiliar la celda auxiliar que contiene el valor de referencia para la comparación
+   * @return una lista de las filas que cumplen con el criterio de comparación
+   * @throws IllegalArgumentException si el operador de comparación no es válido
+   */
   private List<String> filterSetup(String colLabel, String operador, Cell celdaAuxiliar) throws IllegalArgumentException{
     Criterios criterios = new Criterios(celdaAuxiliar);
     Predicate<Cell> condicion = criterios.operadores.get(operador);
@@ -282,6 +352,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return filasSalida;
   }
 
+  /**
+   * Represents a row in a DataFrame.
+   */
   public Row getRow(int index){
     Row row = new Row();
     row.setLabel(this.rowOrderMap.get(index));
@@ -291,6 +364,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return row;
   }
 
+  /**
+   * Represents a row in a DataFrame.
+   */
   public Row getRow(String label){
     Row row = new Row();
     row.setLabel(label);
@@ -303,6 +379,12 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return row;
   }
 
+  /**
+   * Sets the label of a row in the DataFrame.
+   * 
+   * @param vieja The old label of the row.
+   * @param nueva The new label to assign to the row.
+   */
   public void setRowLabel(String vieja, String nueva){
     Integer index = this.rowLabelsMap.get(vieja); // {"0" : 0, "1" : 1, "2" : 2} --> vieja = "0" --> index = 0
     this.rowLabelsMap.remove(vieja); // {"1" : 1, "2" : 2}
@@ -310,6 +392,12 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     this.rowOrderMap.put(index, nueva);// rowOrderMap = {0 : "0", 1 : "1", 2 : "2"} --> rowOrderMap = {0 : "nueva", 1 : "1", 2 : "2"}
   }
 
+  /**
+   * Returns an ArrayList of Row objects representing the rows in the DataFrame.
+   * Each Row object contains the label and cells of a row in the DataFrame.
+   *
+   * @return An ArrayList of Row objects representing the rows in the DataFrame.
+   */
   private ArrayList<Row> getRows(){
     ArrayList<Row> rows = new ArrayList<Row>();
     for (String label: this.rowLabelsMap.keySet()) {
@@ -323,6 +411,13 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return rows;
   }
 
+  /**
+   * Sorts the DataFrame in ascending order.
+   * This method creates a new DataFrame object with the sorted data.
+   * The sorting is performed based on the values in the rows.
+   * 
+   * @return A new DataFrame object with the sorted data.
+   */
   public DataFrame sort() {
     DataFrame sortedDf = this.shallowCopy();
     System.out.println("sortedf.numrows : " +sortedDf.numRows);
@@ -331,6 +426,12 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     sortedDf.rowOrderMap = sortedMap;
     return sortedDf;
   }
+  /**
+   * Crea una copia del DataFrame ordenado según la columna especificada.
+   * 
+   * @param colLabel Etiqueta de la columna por la que se ordenará el DataFrame.
+   * @return Una nueva instancia de DataFrame ordenada por la columna especificada.
+   */
   public DataFrame sort(String colLabel) {
     DataFrame sortedDf = this.shallowCopy();
     Column column = sortedDf.columnLabelsMap.get(colLabel);
@@ -349,12 +450,19 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
 
 
-    HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
+  HashMap<Integer, String> sortedMap = quickSort(sortedDf.getRows(), 0, sortedDf.numRows - 1);
     sortedDf.rowOrderMap = sortedMap;
     sortedDf.columnOrderMap = this.columnOrderMap;
     return sortedDf;
   }
-
+  /**
+   * Ordena recursivamente una lista de filas utilizando el algoritmo QuickSort.
+   * 
+   * @param rows Lista de filas a ordenar.
+   * @param low Índice inferior del rango a ordenar.
+   * @param high Índice superior del rango a ordenar.
+   * @return Un mapa ordenado de enteros (índices) y etiquetas de fila.
+   */
   private HashMap<Integer, String> quickSort(ArrayList<Row> rows, int low, int high) {
     if (low < high) {
       int pi = particion(rows, low, high);
@@ -368,7 +476,14 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
     return sortedMap;
   }
-
+  /**
+   * Realiza la partición en una lista de filas para el algoritmo QuickSort.
+   * 
+   * @param rows Lista de filas a particionar.
+   * @param low Índice inferior del rango de partición.
+   * @param high Índice superior del rango de partición.
+   * @return Índice de la fila pivote después de la partición.
+   */
   private int particion (ArrayList<Row> rows, int low, int high) {
     Row pivot = rows.get(high);
     int i = low - 1;
@@ -385,10 +500,17 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     rows.set(high, temp);
     return i + 1;
   }
-
+  /**
+   * Crea y devuelve una vista superficial del DataFrame original basada en las etiquetas de fila y columna proporcionadas.
+   * Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto.
+   * @param rowLabels Arreglo de etiquetas de fila para la selección.
+   * @param colLabels Arreglo de etiquetas de columna para la selección.
+   * @return Una vista superficial del DataFrame original basada en las etiquetas proporcionadas.
+   * @throws IllegalArgumentException Si alguna de las etiquetas de fila o columna no existe en el DataFrame original.
+   */
   public DataFrame select(String[] rowLabels, String[] colLabels) throws IllegalArgumentException{
     DataFrame seleccion = this.shallowCopy();
-    System.out.println("Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto");
+    // Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto.
     seleccion.columnOrderMap = new HashMap<>();
     int i = 0;
     
@@ -413,10 +535,12 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
     return seleccion;
   }
-
-
-
-  protected DataFrame shallowCopy() {
+  /**
+   * Realiza una copia superficial del DataFrame actual.
+   * 
+   * @return Una copia superficial del DataFrame actual.
+   */
+  public DataFrame shallowCopy() {
     DataFrame copy = new DataFrame();
     copy.columns = this.columns;
     copy.columnLabelsMap = this.columnLabelsMap;
@@ -427,8 +551,6 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     copy.setRowLabels();
     return copy;
   }
-
-
 
   /**
    * Agrega una nueva columna al DataFrame con las celdas especificadas.
@@ -480,8 +602,6 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
   }
 
-  // Getters y Setters
-
   /**
    * Retorna la celda en la posición especificada.
    *
@@ -494,8 +614,13 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     Cell cell = column.getContent().get(row);
     return cell;
   }
-
-  // GetCell sobrecargado que recibe dos etiqeutas con formato string
+  /**
+   * Obtiene la celda ubicada en la intersección de la columna y fila especificadas por las etiquetas dadas.
+   * 
+   * @param colLabel La etiqueta de la columna de la celda.
+   * @param rowLabel La etiqueta de la fila de la celda.
+   * @return La celda ubicada en la intersección de la columna y fila especificadas.
+   */
   public Cell getCell(String colLabel, String rowLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     Integer row = this.rowLabelsMap.get(rowLabel);
@@ -538,7 +663,9 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   }
 
   /**
-   * Limpia el mapa de etiquetas de fila y luego lo llena con las etiquetas de fila correspondientes a cada índice de fila.
+   * Establece las etiquetas de fila para la estructura tabular.
+   * Las etiquetas de fila se asignan de manera consecutiva, comenzando desde cero hasta el número de filas menos uno.
+   * Este método se utiliza internamente para inicializar las etiquetas de fila cuando se crea un nuevo DataFrame.
    */
   public void setRowLabels() {
     rowLabelsMap.clear();
@@ -635,7 +762,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return out;
   }
 
-  /** //TODO definir si es un getter...
+  /** 
    * Retorna un arreglo de Strings con los nombres de las columnas del DataFrame.
    * 
    * @return un arreglo de Strings con los nombres de las columnas del DataFrame.
@@ -709,7 +836,14 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return identificador.getType();
   }
 
-  //Metodo que devuelve una lista de los tipos de datos de las columnas
+  /**
+   * Devuelve una lista de los tipos de datos de las columnas de la estructura tabular.
+   * Se identifica el tipo de dato de cada columna basándose en el contenido de la segunda celda de cada columna.
+   * Se utiliza un objeto Identificador para identificar y determinar el tipo de dato de cada celda.
+   *
+   * @return Un array de Strings con los tipos de datos de las columnas.
+   * @throws TipoNoIdentificadoException Si no se puede identificar el tipo de dato de alguna columna.
+   */
   public String[] getColumnTypes() throws TipoNoIdentificadoException {
     String[] labels = this.columnLabels();
     String[] types = new String[labels.length];
@@ -722,7 +856,16 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
     return types;
   }
+  
 
+  
+  /**
+   * Deletes a specific row from the DataFrame.
+   *
+   * @param rowIndex The index of the row to be deleted.
+   * @return A new DataFrame with the specified row removed.
+   * @throws IndexOutOfBoundsException If the rowIndex is out of bounds.
+   */
   public DataFrame deleteRow(int rowIndex) {
     // Elimina la fila específica en cada columna
     DataFrame nuevoDF = new DataFrame();
@@ -752,6 +895,13 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return nuevoDF;
   }
 
+  /**
+   * Deletes a specific column from the DataFrame.
+   *
+   * @param columnIndex the index of the column to be deleted
+   * 
+   * @throws IndexOutOfBoundsException if the columnIndex is out of range
+   */
   public void deleteColumn(int columnIndex) {
       // Elimina la columna específica
       Column removedColumn = columns.remove(columnIndex);
@@ -781,15 +931,33 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
       columnOrderMap = newColumnOrderMap;      
   }
 
+  /**
+   * Deletes the specific cell at the given row and column index.
+   *
+   * @param rowIndex    the index of the row containing the cell to be deleted
+   * @param columnIndex the index of the column containing the cell to be deleted
+   * @throws IndexOutOfBoundsException if the row or column index is out of bounds
+   */
   public void deleteCell(int rowIndex, int columnIndex) {
       // Elimina la celda específica en la columna y fila indicadas
       columns.get(columnIndex).removeCellbyNA(rowIndex);
   }
+  
+  /**
+   * Genera un dataframe con una muestra aleatoria
+   * 
+   * @return a DataFrame object representing the random sample.
+   */
   public DataFrame randomSample(){
       DataFrame df = RandomSample.sample(this);
       return df;
     }
 
+  /**
+   * Genera un dataframe con una muestra aleatoria en base a un porcentaje dado.
+   * 
+   * @return a DataFrame object representing the random sample.
+  */
   public DataFrame randomSample(double p) {
   if (p < 0 || p > 1) {
       System.err.println("El porcentaje debe estar en el rango [0, 1]");
@@ -800,18 +968,38 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
       return df;
     }
 
-}
+  }
 
+  /**
+   * Muestra las 5 primeras filas del dataframe.
+   *
+   * 
+   * @throws IllegalArgumentException if n is negative
+   */
   public void head() {
   DataFrame df = Selection.head(this);
   df.show();
-}
+  }
 
+  /**
+   * Muestra las últimas 5 filas del dataframe.
+   *
+   * 
+   * @throws IllegalArgumentException if n is negative
+   */
   public void tail() {
     DataFrame df = Selection.tail(this);
     df.show();
   }
 
+  /**
+   * Concatenacion de dos DataFrames.
+   *
+   * @param df1 the first DataFrame to be concatenated
+   * @param df2 the second DataFrame to be concatenated
+   * @return the concatenated DataFrame
+   * @throws NullPointerException if either df1 or df2 is null
+   */
   public DataFrame concatenate(DataFrame df1, DataFrame df2){
     return DataFrameConcatenator.concatenate(df1, df2);
   }
@@ -863,7 +1051,14 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     Column column = this.columnOrderMap.get(col);
     return column;
   }
-
+  /**
+  * Metodo para obtener la columna
+  *
+  * @param label: nombre de la columna
+  *
+  * @return column
+  *
+  **/
   public Column getColumn(String label) {
   Column column = this.columnLabelsMap.get(label);
   return column;
@@ -882,90 +1077,195 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     return this.columns;
   }
 
+  /**
+   * Calculates the sum of the values in the specified column.
+   *
+   * @param col the index of the column to calculate the sum for
+   * @return the sum of the values in the specified column
+   * @throws NullPointerException if the column is null
+   */
   public float sum(int col) {
     Column column = this.columnOrderMap.get(col);
     List<Cell> cells = column.getContent();
     return Summarise.sum(cells);
   }
 
+  /**
+   * Calculates the sum of the values in the specified column.
+   *
+   * @param colLabel the label of the column to calculate the sum for
+   * @return the sum of the values in the column
+   * @throws NullPointerException if the specified column label is not found
+   */
   public float sum(String colLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     List<Cell> cells = column.getContent();
     return Summarise.sum(cells);
   }
 
+  /**
+   * Returns the maximum value in the specified column of the DataFrame.
+   *
+   * @param colLabel the label of the column to find the maximum value in
+   * @return the maximum value in the specified column
+   * @throws NullPointerException if the specified column label is not found in the DataFrame
+   */
   public float max(String colLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     List<Cell> cells = column.getContent();
     return Summarise.max(cells);
   }
 
+  /**
+   * Returns the maximum value in the specified column of the DataFrame.
+   *
+   * @param col the index of the column
+   * @return the maximum value in the column
+   * @throws IndexOutOfBoundsException if the column index is out of range
+   */
   public float max(int col) {
     Column column = this.columnOrderMap.get(col);
     List<Cell> cells = column.getContent();
     return Summarise.max(cells);
   }
 
+  /**
+   * Returns the minimum value of the specified column in the DataFrame.
+   *
+   * @param colLabel the label of the column to calculate the minimum value from
+   * @return the minimum value of the specified column
+   * @throws NullPointerException if the specified column label is not found in the DataFrame
+   */
   public float min(String colLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     List<Cell> cells = column.getContent();
     return Summarise.min(cells);
   }
 
+  /**
+   * Returns the minimum value of the specified column in the DataFrame.
+   *
+   * @param col the index of the column
+   * @return the minimum value of the column
+   * @throws IndexOutOfBoundsException if the column index is out of range
+   */
   public float min(int col) {
     Column column = this.columnOrderMap.get(col);
     List<Cell> cells = column.getContent();
     return Summarise.min(cells);
   }
 
+  /**
+   * Calculates the mean value of a specified column in the DataFrame.
+   *
+   * @param colLabel the label of the column to calculate the mean value for
+   * @return the mean value of the specified column
+   * @throws NullPointerException if the column label is not found in the DataFrame
+   */
   public float mean(String colLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     List<Cell> cells = column.getContent();
     return Summarise.mean(cells);
   }
 
+  /**
+   * Calculates the mean value of a column in the DataFrame.
+   *
+   * @param col The index of the column to calculate the mean value.
+   * @return The mean value of the specified column.
+   * @throws IndexOutOfBoundsException If the column index is out of range.
+   */
   public float mean(int col) {
     Column column = this.columnOrderMap.get(col);
     List<Cell> cells = column.getContent();
     return Summarise.mean(cells);
   }
 
+  /**
+   * Calculates the variance of a column in the DataFrame.
+   *
+   * @param colLabel the label of the column to calculate the variance for
+   * @return the variance of the column
+   * @throws NullPointerException if the column label is not found in the DataFrame
+   */
   public float variance(String colLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     List<Cell> cells = column.getContent();
     return Summarise.variance(cells);
   }
 
+  /**
+   * Calculates the variance of a column in the DataFrame.
+   *
+   * @param col The index of the column to calculate the variance for.
+   * @return The variance of the column.
+   * @throws IndexOutOfBoundsException If the column index is out of bounds.
+   */
   public float variance(int col) {
     Column column = this.columnOrderMap.get(col);
     List<Cell> cells = column.getContent();
     return Summarise.variance(cells);
   }
 
+  /**
+   * Calculates the standard deviation of the values in the specified column.
+   *
+   * @param colLabel the label of the column to calculate the standard deviation for
+   * @return the standard deviation of the values in the specified column
+   * @throws NullPointerException if the specified column label is null
+   */
   public float standardDeviation(String colLabel) {
     Column column = this.columnLabelsMap.get(colLabel);
     List<Cell> cells = column.getContent();
     return Summarise.standardDeviation(cells);
   }
 
+  /**
+   * Calculates the standard deviation of a column in the DataFrame.
+   *
+   * @param col the index of the column to calculate the standard deviation for
+   * @return the standard deviation of the column
+   * @throws NullPointerException if the column is null
+   */
   public float standardDeviation(int col) {
     Column column = this.columnOrderMap.get(col);
     List<Cell> cells = column.getContent();
     return Summarise.standardDeviation(cells);
   }
 
+  /**
+   * Displays the DataFrame by printing it to the console.
+   *
+   * @param None
+   * @return None
+   * @throws None
+   */
   public void show() {
     System.out.println(this.toString("|", false, false));
   }
 
+  /**
+   * Prints all columns of the DataFrame.
+   *
+   * @param None
+   * @return None
+   * @throws None
+   */
   public void showAllColumns() {
     System.out.println(this.toString("|", false, true));
   }
 
+  /**
+   * Displays all rows of the DataFrame.
+   */
   public void showAllRows(){
         System.out.println(this.toString("|", true, false));
   }
   
+  /**
+   * Prints the contents of the DataFrame.
+   *
+   */
   public void showAll() {
     System.out.println(this.toString("|", true, true));
   }
@@ -1048,45 +1348,72 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
 
     if (this.numRows > 10 && !showAllRows) {
-        out += "\n[Mostrando solo las primeras 10 filas de " + this.numRows + "]";
+        out += "\n[Mostrando solo las primeras 10 filas de " + this.numRows + "]\n";
     }
 
     if (this.numCols > 5 && !showAllColumns) {
-        out += "\n[Mostrando solo las primeras 5 columnas de " + this.numCols + "]\n";
+        out += "[Mostrando solo las primeras 5 columnas de " + this.numCols + "]\n";
     }
 
     return out;
-}
-  // Metodo que invoca el readCSV de archivos
+  }
+  
+  /**
+   * Reads a CSV file and returns a DataFrame object.
+   *
+   * @param path the path of the CSV file to be read
+   * @return the DataFrame object representing the data in the CSV file
+   * @throws IOException if an I/O error occurs while reading the file
+   */
   public DataFrame readCSV(String path) throws IOException {
     DataFrame df = Archivos.readCSV(path);
-    return df;
-  }
-  public DataFrame readCSV(String path, String sep) throws IOException {
-    DataFrame df = Archivos.readCSV(path, sep);
+    System.out.println("Archivo CSV leido con exito.");
     return df;
   }
 
-  // Metodo que invoca el exportCSV de archivos //TODO
+  /**
+   * Reads a CSV file and returns a DataFrame object.
+   *
+   * @param path the path of the CSV file to be read
+   * @param sep the separator used in the CSV file
+   * @return a DataFrame object containing the data from the CSV file
+   * @throws IOException if an I/O error occurs while reading the file
+   */
+  public DataFrame readCSV(String path, String sep) throws IOException {
+    DataFrame df = Archivos.readCSV(path, sep);
+    System.out.println("Archivo CSV leido con exito.");
+    return df;
+  }
+
+  /**
+   * Exporta el DataFrame a un archivo CSV en la ubicación especificada.
+   * 
+   * @param filepath la ruta del archivo CSV donde se guardará el DataFrame
+   * @throws IOException si ocurre un error al escribir en el archivo
+   */
   public void exportCSV(String filepath){
     Archivos.exportCSV(filepath,this);
     System.out.println("Archivo guardado con exito.");
   }
 
-// Metodo para devolver informacion de dataframe
-public void info() throws TipoNoIdentificadoException {
-  System.out.println("Información del DataFrame");
-  System.out.println("- Cantidad de filas: " + this.getRowNumber());
-  System.out.println("- Cantidad de columnas: " + this.getColumnNumber());
-  System.out.println("- Etiquetas de filas: " + this.getRowLabels());
-  System.out.println("- Etiquetas de columnas: " + this.getColumnLabels());
-  // 
-  String tipos="";
-  for (String tipo : this.getColumnTypes()) {
-    tipos += tipo + " - | ";
-  }
-  System.out.println("- Tipos de datos:        " + tipos);
-  
+
+  /**
+   * Imprime información del DataFrame.
+   *
+   * @throws TipoNoIdentificadoException si se encuentra un tipo de dato no identificado.
+   */
+  public void info() throws TipoNoIdentificadoException {
+    System.out.println("Información del DataFrame");
+    System.out.println("- Cantidad de filas: " + this.getRowNumber());
+    System.out.println("- Cantidad de columnas: " + this.getColumnNumber());
+    System.out.println("- Etiquetas de filas: " + this.getRowLabels());
+    System.out.println("- Etiquetas de columnas: " + this.getColumnLabels());
+    // 
+    String tipos="";
+    for (String tipo : this.getColumnTypes()) {
+      tipos += tipo + " - | ";
+    }
+    System.out.println("- Tipos de datos:        " + tipos);
   }
 
 }
