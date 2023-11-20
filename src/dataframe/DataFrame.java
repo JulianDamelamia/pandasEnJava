@@ -502,7 +502,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
   }
   /**
    * Crea y devuelve una vista superficial del DataFrame original basada en las etiquetas de fila y columna proporcionadas.
-   * 
+   * Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto.
    * @param rowLabels Arreglo de etiquetas de fila para la selección.
    * @param colLabels Arreglo de etiquetas de columna para la selección.
    * @return Una vista superficial del DataFrame original basada en las etiquetas proporcionadas.
@@ -510,7 +510,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    */
   public DataFrame select(String[] rowLabels, String[] colLabels) throws IllegalArgumentException{
     DataFrame seleccion = this.shallowCopy();
-    System.out.println("Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto");
+    // Cuidado! esta es una copia superficial. Las referencias a las columnas hacen referencia al mismo objeto.
     seleccion.columnOrderMap = new HashMap<>();
     int i = 0;
     
@@ -540,7 +540,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    * 
    * @return Una copia superficial del DataFrame actual.
    */
-  protected DataFrame shallowCopy() {
+  public DataFrame shallowCopy() {
     DataFrame copy = new DataFrame();
     copy.columns = this.columns;
     copy.columnLabelsMap = this.columnLabelsMap;
@@ -954,7 +954,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
 
   /**
-   * Genera un dataframe con una muestra aleatoria en base a un porcentaje dado
+   * Genera un dataframe con una muestra aleatoria en base a un porcentaje dado.
    * 
    * @return a DataFrame object representing the random sample.
   */
@@ -1348,11 +1348,11 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
     }
 
     if (this.numRows > 10 && !showAllRows) {
-        out += "\n[Mostrando solo las primeras 10 filas de " + this.numRows + "]";
+        out += "\n[Mostrando solo las primeras 10 filas de " + this.numRows + "]\n";
     }
 
     if (this.numCols > 5 && !showAllColumns) {
-        out += "\n[Mostrando solo las primeras 5 columnas de " + this.numCols + "]\n";
+        out += "[Mostrando solo las primeras 5 columnas de " + this.numCols + "]\n";
     }
 
     return out;
@@ -1367,6 +1367,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    */
   public DataFrame readCSV(String path) throws IOException {
     DataFrame df = Archivos.readCSV(path);
+    System.out.println("Archivo CSV leido con exito.");
     return df;
   }
 
@@ -1380,6 +1381,7 @@ public List<String> filterSingleCondition(String colLabel, String operador, Obje
    */
   public DataFrame readCSV(String path, String sep) throws IOException {
     DataFrame df = Archivos.readCSV(path, sep);
+    System.out.println("Archivo CSV leido con exito.");
     return df;
   }
 
